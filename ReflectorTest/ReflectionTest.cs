@@ -1513,17 +1513,9 @@ namespace ReflectorTest
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ProcessorSameTest1()
-        {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            ProcessorSameTest.GetProcessorBytes(null).ToList();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CheckSumTest()
         {
-            HashCreator.Checksum(null);
+            HashCreator.GetHash(null);
         }
 
         sealed class ReflectionTestClass : Reflection
@@ -1540,12 +1532,6 @@ namespace ReflectorTest
 
             public new static bool ChangeCount(int[] count, ProcessorContainer[,] processors) =>
                 Reflection.ChangeCount(count, processors);
-        }
-
-        // ReSharper disable once ClassNeverInstantiated.Local
-        sealed class ProcessorSameTest : ProcessorSame
-        {
-            public new static IEnumerable<byte> GetProcessorBytes(Processor p) => ProcessorSame.GetProcessorBytes(p);
         }
     }
 }

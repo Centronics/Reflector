@@ -224,26 +224,6 @@ namespace DynamicReflector
         }
 
         /// <inheritdoc />
-        public override int GetHashCode(Processor obj) =>
-            obj == null ? 0 : HashCreator.Checksum(GetProcessorBytes(obj));
-
-        /// <summary>
-        ///     Представляет содержимое карты в виде последовательности байт. Поле <see cref="Processor.Tag" /> не учитывается.
-        ///     Перечисление строк карты происходит последовательно: от меньшего индекса к большему.
-        /// </summary>
-        /// <param name="p">Карта, содержимое которой необходимо получить.</param>
-        /// <returns>Возвращает содержимое карты в виде последовательности байт.</returns>
-        protected static IEnumerable<byte> GetProcessorBytes(Processor p)
-        {
-            if (p == null)
-                throw new ArgumentNullException(nameof(p), $"{nameof(GetProcessorBytes)}: Карта равна значению null.");
-            for (int y = 0; y < p.Height; y++)
-            for (int x = 0; x < p.Width; x++)
-            {
-                byte[] res = BitConverter.GetBytes(p[x, y].Value);
-                foreach (byte r in res)
-                    yield return r;
-            }
-        }
+        public override int GetHashCode(Processor obj) => HashCreator.GetHash(obj);
     }
 }
