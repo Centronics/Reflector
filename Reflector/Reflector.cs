@@ -22,7 +22,7 @@ namespace DynamicReflector
         /// <summary>
         ///     Процессы, которые будут происходить вне зависимости друг от друга.
         /// </summary>
-        protected readonly Reflex[,] Reflexs;
+        protected readonly ProcessorContainer[,] ProcessorContainers;
 
         /// <summary>
         ///     Инициализирует текущий экземпляр класса, добавляя указанные карты в коллекцию класса, создавая её копию. Массив
@@ -41,12 +41,12 @@ namespace DynamicReflector
                     $"{nameof(Reflector)}: Искомые карты не прошли проверку на размер и/или количество карт в массиве, а также на значение null или значение свойства {nameof(Processor.Tag)}.",
                     nameof(processors));
             int lx = processors.GetLength(0), ly = processors.GetLength(1);
-            Reflexs = new Reflex[lx, ly];
+            ProcessorContainers = new ProcessorContainer[lx, ly];
             for (int y = 0; y < ly; y++)
                 for (int x = 0; x < lx; x++)
                 {
                     ProcessorContainer pc = processors[x, y];
-                    Reflexs[x, y] = new Reflex(pc);
+                    ProcessorContainers[x, y] = CopyContainer(pc);
                     CopyProcessorContainer(pc);
                 }
             MapHeight = processors[0, 0].Height;
@@ -66,12 +66,22 @@ namespace DynamicReflector
         /// <summary>
         ///     Размер, которому должна соответствовать входная распознаваемая карта по ширине.
         /// </summary>
-        public virtual int ProcessorWidth => Reflexs.GetLength(0) * MapWidth;
+        public virtual int ProcessorWidth => ProcessorContainers.GetLength(0) * MapWidth;
 
         /// <summary>
         ///     Размер, которому должна соответствовать входная распознаваемая карта по высоте.
         /// </summary>
-        public virtual int ProcessorHeight => Reflexs.GetLength(1) * MapHeight;
+        public virtual int ProcessorHeight => ProcessorContainers.GetLength(1) * MapHeight;
+
+        static ProcessorContainer CopyContainer(ProcessorContainer pc)
+        {
+            if (pc == null)
+                throw new ArgumentNullException();
+            ProcessorContainer copy = new ProcessorContainer(pc[0]);
+            for (int k = 1; k < pc.Count; ++k)
+                copy.Add(pc[k]);
+            return copy;
+        }
 
         /// <summary>
         ///     Добавляет карты в коллекцию, проверяя их на предмет совпадающих значений свойств <see cref="Processor.Tag" />.
@@ -274,15 +284,16 @@ namespace DynamicReflector
                     nameof(matrix));
             string errString = string.Empty, errStopped = string.Empty;
             bool exThrown = false, exStopped = false, result = true;
-            int mx = Reflexs.GetLength(0);
-            Parallel.For(0, Reflexs.Length, (k, state) =>
+            int mx = ProcessorContainers.GetLength(0);
+            Parallel.For(0, ProcessorContainers.Length, (k, state) =>
             {
                 try
                 {
                     if (state.IsStopped)
                         return;
                     int x = k % mx, y = k / mx;
-                    if (Reflexs[x, y].FindRelation(new Processor(GetMapPiece(proc, x * MapWidth, y * MapHeight), proc.Tag), new string(matrix[x, y], 1)) != null)
+                    if (new Processor(GetMapPiece(proc, x * MapWidth, y * MapHeight), proc.Tag).
+                        GetEqual(ProcessorContainers[x, y]).FindRelation(new string(matrix[x, y], 1)))
                         return;
                     result = false;
                     state.Stop();
@@ -306,7 +317,7 @@ namespace DynamicReflector
                 throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
             if (!result)
                 return null;
-            int my = Reflexs.GetLength(1);
+            int my = ProcessorContainers.GetLength(1);
             Processor[,] processors = new Processor[mx, my];
             for (int y = 0; y < my; y++)
                 for (int x = 0; x < mx; x++)

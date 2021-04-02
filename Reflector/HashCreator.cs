@@ -36,7 +36,7 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="bytes">Последовательность байт, для которой требуется расчёт хеш-кода.</param>
         /// <returns>Возвращает значение хеш-кода.</returns>
-        public static int Checksum(IEnumerable<byte> bytes)
+        public static int Checksum(IEnumerable<byte> bytes)//Можно использовать и для Мастера, в том числе
         {
             if (bytes == null)
                 throw new ArgumentNullException(nameof(bytes),
