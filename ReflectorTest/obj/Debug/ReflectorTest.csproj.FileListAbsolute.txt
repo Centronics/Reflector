@@ -1,2 +1,0 @@
-\\Mac\Home\Desktop\Библиотека Reflector\Исходный код\Reflector\ReflectorTest\obj\Debug\ReflectorTest.csprojAssemblyReference.cache
-\\Mac\Home\Desktop\Библиотека Reflector\Исходный код\Reflector\ReflectorTest\obj\Debug\ReflectorTest.csproj.CoreCompileInputs.cache
