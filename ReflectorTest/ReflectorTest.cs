@@ -2119,7 +2119,7 @@ namespace ReflectorTest
             c[1, 2] = 'F';
             c[2, 2] = 'H';
 
-            Action<char[,]> act = ch =>
+            void Act(char[,] ch)
             {
                 Reflector r = new Reflector(Pcs);
                 Processor p = r.Push(PrMas1, ch);
@@ -2131,13 +2131,13 @@ namespace ReflectorTest
                 CheckParams(p);
 
                 TestEqual(p);
-            };
+            }
 
-            act(c);
+            Act(c);
 
             MasToLower(c);
 
-            act(c);
+            Act(c);
         }
 
         [TestMethod]
@@ -2206,7 +2206,7 @@ namespace ReflectorTest
         [TestMethod]
         public void SearchTest22()
         {
-            Action<char[,]> act = ch =>
+            void Act(char[,] ch)
             {
                 Processor p = new Reflector(Pcs).Push(PrMas1, ch);
                 CheckParams(p);
@@ -2252,7 +2252,7 @@ namespace ReflectorTest
                 Assert.AreEqual(new SignValue(300000), p[3, 5]);
                 Assert.AreEqual(new SignValue(200000), p[4, 5]);
                 Assert.AreEqual(new SignValue(200000), p[5, 5]);
-            };
+            }
 
             char[,] c = new char[3, 3];
 
@@ -2268,11 +2268,11 @@ namespace ReflectorTest
             c[1, 2] = 'F';
             c[2, 2] = 'H';
 
-            act(c);
+            Act(c);
 
             MasToLower(c);
 
-            act(c);
+            Act(c);
         }
 
         [TestMethod]
@@ -3447,7 +3447,7 @@ namespace ReflectorTest
         {
             ReflectorTestClass rt = new ReflectorTestClass(Pcs);
             // ReSharper disable once UnusedVariable
-            bool prop = rt.GetMapByName(' ') == null;
+            rt.GetMapByName(' ');
         }
 
         [TestMethod]

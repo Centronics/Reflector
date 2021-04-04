@@ -42,7 +42,7 @@ namespace DynamicReflector
         {
             if (p is null)
                 throw new ArgumentNullException(nameof(p), $@"Функция {nameof(GetHash)}.");
-            return GetChecksum(GetProcessorBytes(p));
+            return GetProcessorBytes(p).Aggregate(255, (currentValue, currentByte) => Table[(byte)(currentValue ^ currentByte)]);
         }
 
         /// <summary>
@@ -64,17 +64,17 @@ namespace DynamicReflector
             }
         }
 
-        /// <summary>
-        ///     Возвращает значение хеш-кода.
+        /*/// <summary>///              //СТАРОЕ
+        ///     Получает значение хеша для заданной последовательности целых чисел <see cref="int" />.
         /// </summary>
-        /// <param name="bytes">Последовательность байт, для которой требуется расчёт хеш-кода.</param>
-        /// <returns>Возвращает значение хеш-кода.</returns>
-        static int GetChecksum(IEnumerable<byte> bytes)//Можно использовать и для Мастера, в том числе
+        /// <param name="ints">Последовательность, для которой необходимо рассчитать значение хеша.</param>
+        /// <returns>Возвращает значение хеша для заданной последовательности целых чисел <see cref="int" />.</returns>
+        static int GetHash(IEnumerable<int> ints)//Переделать на байты. Списать с ProcessorSame и HashCreator. Надо слить с Reflector, затем использовать класс из него, вместо этого.
         {
-            if (bytes == null)
-                throw new ArgumentNullException(nameof(bytes),
-                    $"{nameof(GetChecksum)}: Для подсчёта хеша необходимо указать массив байт.");
-            return bytes.Aggregate(255, (current, b) => Table[unchecked((byte) (current ^ b))]);
-        }
+            if (ints is null)
+                throw new ArgumentNullException(nameof(ints),
+                    $@"Для подсчёта контрольной суммы необходимо указать массив байт. Функция {nameof(GetHash)}.");
+            return ints.Aggregate(255, (current, t) => Table[(byte)(current ^ t)]);
+        }*/
     }
 }

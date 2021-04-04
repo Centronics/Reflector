@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DynamicMosaic;
 using DynamicParser;
 using DynamicProcessor;
 using Processor = DynamicParser.Processor;
+
+using ErrorStatus = DynamicReflector.FunctionHelper.ErrorStatus;
 
 namespace DynamicReflector
 {
@@ -282,47 +283,47 @@ namespace DynamicReflector
                 throw new ArgumentException(
                     $"{nameof(Push)}: Какой-либо элемент шаблона распознавания равен пробелу и ему подобному.",
                     nameof(matrix));
-            string errString = string.Empty, errStopped = string.Empty;
-            bool exThrown = false, exStopped = false, result = true;
-            int mx = ProcessorContainers.GetLength(0);
-            Parallel.For(0, ProcessorContainers.Length, (k, state) =>
-            {
-                try
-                {
-                    if (state.IsStopped)
-                        return;
-                    int x = k % mx, y = k / mx;
-                    if (new Processor(GetMapPiece(proc, x * MapWidth, y * MapHeight), proc.Tag).
-                        GetEqual(ProcessorContainers[x, y]).FindRelation(new string(matrix[x, y], 1)))
-                        return;
-                    result = false;
-                    state.Stop();
-                }
-                catch (Exception ex)
-                {
-                    try
-                    {
-                        errString = ex.Message;
-                        exThrown = true;
-                        state.Stop();
-                    }
-                    catch (Exception ex1)
-                    {
-                        errStopped = ex1.Message;
-                        exStopped = true;
-                    }
-                }
-            });
-            if (exThrown)
-                throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
-            if (!result)
+            if (!ResearchByPieces(proc, matrix))
                 return null;
+            int mx = ProcessorContainers.GetLength(0);
             int my = ProcessorContainers.GetLength(1);
             Processor[,] processors = new Processor[mx, my];
             for (int y = 0; y < my; y++)
                 for (int x = 0; x < mx; x++)
                     processors[x, y] = GetMapByName(matrix[x, y]);
             return new Processor(MapCreator(processors), proc.Tag);
+        }
+
+        bool ResearchByPieces(Processor proc, char[,] matrix)
+        {
+            ErrorStatus result = new ErrorStatus();
+            Parallel.For(0, ProcessorContainers.Length, (k, state) =>
+            {
+                ErrorStatus status = FunctionHelper.Run(() => ResearchPiece(proc, matrix, k, state), $@"iteration {k}");
+                if (!status.StatusError)
+                    return;
+                result = status;
+                state.Stop();
+            });
+
+            if (result.StatusError)
+                throw new Exception(result.ErrorText);
+            return true;
+        }
+
+        int ResearchPiece(Processor proc, char[,] matrix, int iterator, ParallelLoopState state)
+        {
+            int mx = ProcessorContainers.GetLength(0);
+            int x = iterator % mx, y = iterator / mx;
+            string searchWord = new string(matrix[x, y], 1);
+            SignValue[,] piece = GetMapPiece(proc, x * MapWidth, y * MapHeight);
+            if (state.IsStopped)
+                return 0;
+            Processor p = new Processor(piece, proc.Tag);
+            SearchResults sr = p.GetEqual(ProcessorContainers[x, y]);
+            if (state.IsStopped)
+                return 0;
+            return sr.FindRelation(searchWord) ? 0 : -1;
         }
     }
 }

@@ -65,7 +65,7 @@ namespace DynamicReflector
 
         public bool Add(Processor p)
         {
-            int hash = CRCIntCalc.GetHash(p);
+            int hash = HashCreator.GetHash(p);
             if (_dicProcsWithTag.TryGetValue(hash, out List<Processor> prcs))
             {
                 if (prcs.Any(prc => ProcessorCompare(prc, p)))

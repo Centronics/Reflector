@@ -56,7 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CRCIntCalc.cs" />
+    <Compile Include="DynamicMaster.cs" />
+    <Compile Include="FunctionHelper.cs" />
     <Compile Include="HashCreator.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="ProcessorHandler.cs" />
