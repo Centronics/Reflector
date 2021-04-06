@@ -97,7 +97,7 @@ namespace DynamicReflector
             for (int k = 0; k < pc.Count; k++)
             {
                 Processor p = pc[k];
-                char tag = p.Tag.ToUpper()[0];
+                char tag = char.ToUpper(p.Tag[0]);
                 if (Processors.ContainsKey(tag))
                     throw new ArgumentException(
                         $"{nameof(CopyProcessorContainer)}: Обнаружены повторяющиеся карты: карта с таким названием ({tag}) уже была добавлена.",
@@ -300,15 +300,21 @@ namespace DynamicReflector
             Parallel.For(0, ProcessorContainers.Length, (k, state) =>
             {
                 ErrorStatus status = FunctionHelper.Run(() => ResearchPiece(proc, matrix, k, state), $@"iteration {k}");
-                if (!status.StatusError)
+                if (status.ErrorCode == 0)
                     return;
-                result = status;
                 state.Stop();
+                result = status;
             });
 
-            if (result.StatusError)
-                throw new Exception(result.ErrorText);
-            return true;
+            switch (result.ErrorCode)
+            {
+                case 0:
+                    return true;
+                case -1:
+                    return false;
+                default:
+                    throw new Exception(result.ErrorText);
+            }
         }
 
         int ResearchPiece(Processor proc, char[,] matrix, int iterator, ParallelLoopState state)
@@ -321,9 +327,7 @@ namespace DynamicReflector
                 return 0;
             Processor p = new Processor(piece, proc.Tag);
             SearchResults sr = p.GetEqual(ProcessorContainers[x, y]);
-            if (state.IsStopped)
-                return 0;
-            return sr.FindRelation(searchWord) ? 0 : -1;
+            return state.IsStopped || sr.FindRelation(searchWord) ? 0 : -1;
         }
     }
 }
