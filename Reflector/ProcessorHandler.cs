@@ -65,21 +65,24 @@ namespace DynamicReflector
 
         public bool Add(Processor p)
         {
+            void SetProps()
+            {
+                AddProcessorName(p.Tag[0]);
+                ++Count;
+                IsEmpty = false;
+            }
+
             int hash = HashCreator.GetHash(p);
             if (_dicProcsWithTag.TryGetValue(hash, out List<Processor> prcs))
             {
                 if (prcs.Any(prc => ProcessorCompare(prc, p)))
                     return false;
                 prcs.Add(GetUniqueProcessor(p));
-                AddProcessorName(p.Tag[0]);
-                ++Count;
-                IsEmpty = false;
+                SetProps();
                 return true;
             }
             _dicProcsWithTag.Add(hash, new List<Processor> { GetUniqueProcessor(p) });
-            AddProcessorName(p.Tag[0]);
-            ++Count;
-            IsEmpty = false;
+            SetProps();
             return true;
         }
 
@@ -109,8 +112,8 @@ namespace DynamicReflector
 
             SignValue[,] sv = new SignValue[processor.Width, processor.Height];
             for (int i = 0; i < processor.Width; ++i)
-            for (int j = 0; j < processor.Height; ++j)
-                sv[i, j] = processor[i, j];
+                for (int j = 0; j < processor.Height; ++j)
+                    sv[i, j] = processor[i, j];
             return new Processor(sv, newTag);
         }
 

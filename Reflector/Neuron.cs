@@ -66,7 +66,7 @@ namespace DynamicReflector
             for (int k = start.Count; k < finish.Count; ++k)
             {
                 Processor p = finish[k];
-                yield return ProcessorHandler.RenameProcessor(p, _stringQuery[p.Tag[0]].ToString());
+                yield return ProcessorHandler.RenameProcessor(p, new string(_stringQuery[p.Tag[0]], 1));
             }
         }
 
@@ -74,7 +74,20 @@ namespace DynamicReflector
 
         public ProcessorContainer ToProcessorContainer()
         {
+            Processor GetProcessorWithOriginalTag(Processor p)
+            {
+                if (p == null)
+                    throw new ArgumentNullException();
+                StringBuilder sb = new StringBuilder(new string(_stringQuery[p.Tag[0]], 1));
+                sb.Append(p.Tag, 1, p.Tag.Length - 1);
+                return ProcessorHandler.RenameProcessor(p, sb.ToString());
+            }
 
+            ProcessorContainer pc = new ProcessorContainer(GetProcessorWithOriginalTag(_processorContainer[0]));
+            for (int k = 1; k < _processorContainer.Count; ++k)
+                pc.Add(GetProcessorWithOriginalTag(_processorContainer[k]));
+
+            return pc;
         }
 
         public Neuron FindRelation(Request request)//Никакой "автоподбор" не требуется. Запоминает причины и следствия путём "перебора"... Причина и следствие могут быть любыми, отсюда - любой цвет любого пикселя на карте. Если надо поменять символ карты, можно задать такую карту без ограничений. Это и есть "счётчик".
@@ -118,7 +131,7 @@ namespace DynamicReflector
             get
             {
                 Processor p = _processorContainer[index];
-                return ProcessorHandler.RenameProcessor(p, _stringQuery[p.Tag[0]].ToString());
+                return ProcessorHandler.RenameProcessor(p, new string(_stringQuery[p.Tag[0]], 1));
             }
         }
 
