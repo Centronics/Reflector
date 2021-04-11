@@ -321,7 +321,7 @@ namespace DynamicReflector
         {
             int mx = ProcessorContainers.GetLength(0);
             int x = iterator % mx, y = iterator / mx;
-            string searchWord = new string(matrix[x, y], 1);
+            string searchWord = matrix[x, y].ToString();
             SignValue[,] piece = GetMapPiece(proc, x * MapWidth, y * MapHeight);
             if (state.IsStopped)
                 return 0;

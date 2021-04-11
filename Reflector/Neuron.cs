@@ -26,7 +26,7 @@ namespace DynamicReflector
             StringBuilder sb = new StringBuilder(pc.Count);
             for (char k = char.MinValue; k < pc.Count; ++k)
             {
-                if (!ph.Add(ProcessorHandler.RenameProcessor(pc[k], new string(k, 1))))
+                if (!ph.Add(ProcessorHandler.RenameProcessor(pc[k], k.ToString())))
                     continue;
                 char c = char.ToUpper(pc[k].Tag[0]);
                 _procNames[c] = k;
@@ -66,7 +66,7 @@ namespace DynamicReflector
             for (int k = start.Count; k < finish.Count; ++k)
             {
                 Processor p = finish[k];
-                yield return ProcessorHandler.RenameProcessor(p, new string(_stringQuery[p.Tag[0]], 1));
+                yield return ProcessorHandler.RenameProcessor(p, _stringQuery[p.Tag[0]].ToString());
             }
         }
 
@@ -78,7 +78,7 @@ namespace DynamicReflector
             {
                 if (p == null)
                     throw new ArgumentNullException();
-                StringBuilder sb = new StringBuilder(new string(_stringQuery[p.Tag[0]], 1));
+                StringBuilder sb = new StringBuilder(_stringQuery[p.Tag[0]].ToString());
                 sb.Append(p.Tag, 1, p.Tag.Length - 1);
                 return ProcessorHandler.RenameProcessor(p, sb.ToString());
             }
@@ -92,7 +92,7 @@ namespace DynamicReflector
 
         public Neuron FindRelation(Request request)//Никакой "автоподбор" не требуется. Запоминает причины и следствия путём "перебора"... Причина и следствие могут быть любыми, отсюда - любой цвет любого пикселя на карте. Если надо поменять символ карты, можно задать такую карту без ограничений. Это и есть "счётчик".
         {
-            if (!request.IsActual(ToString()))
+            if (!request.IsActual(_stringQuery))
                 throw new ArgumentException();
             ProcessorHandler ph = new ProcessorHandler();
             foreach ((Processor processor, string query) in request.Queries)
@@ -106,7 +106,7 @@ namespace DynamicReflector
 
         public bool CheckRelation(Request request)
         {
-            if (!request.IsActual(ToString()))
+            if (!request.IsActual(_stringQuery))
                 throw new ArgumentException();
             StringBuilder result = new StringBuilder(request.ToString().Length);
             foreach ((Processor processor, string query) in request.Queries)
@@ -131,7 +131,7 @@ namespace DynamicReflector
             get
             {
                 Processor p = _processorContainer[index];
-                return ProcessorHandler.RenameProcessor(p, new string(_stringQuery[p.Tag[0]], 1));
+                return ProcessorHandler.RenameProcessor(p, _stringQuery[p.Tag[0]].ToString());
             }
         }
 
