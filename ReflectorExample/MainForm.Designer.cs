@@ -117,17 +117,28 @@
             this.btnSaveResultImage = new System.Windows.Forms.Button();
             this.btnNextResult = new System.Windows.Forms.Button();
             this.btnPrevResult = new System.Windows.Forms.Button();
+            this.grpReflectorNeuron = new System.Windows.Forms.GroupBox();
+            this.grpNeuron = new System.Windows.Forms.GroupBox();
+            this.grpDescription = new System.Windows.Forms.GroupBox();
+            this.lblDescription = new System.Windows.Forms.Label();
+            this.txtNeuronString = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnQueryCorrect = new System.Windows.Forms.Button();
+            this.btnCheckRelation = new System.Windows.Forms.Button();
+            this.btnFindRelation = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lstNeurons = new System.Windows.Forms.CheckedListBox();
             this.grpReflector = new System.Windows.Forms.GroupBox();
             this.chkAnyNames = new System.Windows.Forms.CheckBox();
+            this.btnReflector = new System.Windows.Forms.Button();
             this.txtReflectorProcessorHeight = new System.Windows.Forms.TextBox();
+            this.lblReflectorMapHeight = new System.Windows.Forms.Label();
             this.txtReflectorProcessorWidth = new System.Windows.Forms.TextBox();
+            this.lblReflectorProcessorWidth = new System.Windows.Forms.Label();
             this.txtReflectorMapHeight = new System.Windows.Forms.TextBox();
+            this.lblReflectorProcessorHeight = new System.Windows.Forms.Label();
             this.txtReflectorMapWidth = new System.Windows.Forms.TextBox();
             this.lblReflectorMapWidth = new System.Windows.Forms.Label();
-            this.lblReflectorProcessorHeight = new System.Windows.Forms.Label();
-            this.lblReflectorProcessorWidth = new System.Windows.Forms.Label();
-            this.lblReflectorMapHeight = new System.Windows.Forms.Label();
-            this.btnReflector = new System.Windows.Forms.Button();
             this.grpReflection = new System.Windows.Forms.GroupBox();
             this.btnReflectionAdd = new System.Windows.Forms.Button();
             this.btnImageSave = new System.Windows.Forms.Button();
@@ -140,15 +151,6 @@
             this.lblReflectionMapWidth = new System.Windows.Forms.Label();
             this.lblReflectionMapHeight = new System.Windows.Forms.Label();
             this.btnClearReflection = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.picReflection)).BeginInit();
             this.grpSource.SuspendLayout();
             this.grpQuery.SuspendLayout();
@@ -172,11 +174,12 @@
             this.grp22.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic22)).BeginInit();
             this.grpResult.SuspendLayout();
+            this.grpReflectorNeuron.SuspendLayout();
+            this.grpNeuron.SuspendLayout();
+            this.grpDescription.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.grpReflector.SuspendLayout();
             this.grpReflection.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // picReflection
@@ -1155,16 +1158,149 @@
             this.btnPrevResult.UseVisualStyleBackColor = true;
             this.btnPrevResult.Click += new System.EventHandler(this.btnPrevResult_Click);
             // 
+            // grpReflectorNeuron
+            // 
+            this.grpReflectorNeuron.Controls.Add(this.grpNeuron);
+            this.grpReflectorNeuron.Controls.Add(this.grpReflector);
+            this.grpReflectorNeuron.Location = new System.Drawing.Point(357, 12);
+            this.grpReflectorNeuron.Name = "grpReflectorNeuron";
+            this.grpReflectorNeuron.Size = new System.Drawing.Size(599, 608);
+            this.grpReflectorNeuron.TabIndex = 2;
+            this.grpReflectorNeuron.TabStop = false;
+            this.grpReflectorNeuron.Text = "Классы Reflector и Neuron (ЛКМ - рисовать, ПКМ - стереть)";
+            // 
+            // grpNeuron
+            // 
+            this.grpNeuron.Controls.Add(this.grpDescription);
+            this.grpNeuron.Controls.Add(this.txtNeuronString);
+            this.grpNeuron.Controls.Add(this.label1);
+            this.grpNeuron.Controls.Add(this.btnQueryCorrect);
+            this.grpNeuron.Controls.Add(this.btnCheckRelation);
+            this.grpNeuron.Controls.Add(this.btnFindRelation);
+            this.grpNeuron.Controls.Add(this.groupBox3);
+            this.grpNeuron.Location = new System.Drawing.Point(376, 19);
+            this.grpNeuron.Name = "grpNeuron";
+            this.grpNeuron.Size = new System.Drawing.Size(216, 581);
+            this.grpNeuron.TabIndex = 74;
+            this.grpNeuron.TabStop = false;
+            this.grpNeuron.Text = "Neuron";
+            // 
+            // grpDescription
+            // 
+            this.grpDescription.Controls.Add(this.lblDescription);
+            this.grpDescription.Location = new System.Drawing.Point(6, 349);
+            this.grpDescription.Name = "grpDescription";
+            this.grpDescription.Size = new System.Drawing.Size(204, 226);
+            this.grpDescription.TabIndex = 7;
+            this.grpDescription.TabStop = false;
+            this.grpDescription.Text = "Описание";
+            // 
+            // lblDescription
+            // 
+            this.lblDescription.AutoSize = true;
+            this.lblDescription.Location = new System.Drawing.Point(6, 16);
+            this.lblDescription.Name = "lblDescription";
+            this.lblDescription.Size = new System.Drawing.Size(228, 13);
+            this.lblDescription.TabIndex = 0;
+            this.lblDescription.Text = "<ИНСТРУКЦИЯ ПОЛЬЗОВАТЕЛЯ ЗДЕСЬ>";
+            // 
+            // txtNeuronString
+            // 
+            this.txtNeuronString.Location = new System.Drawing.Point(6, 325);
+            this.txtNeuronString.Name = "txtNeuronString";
+            this.txtNeuronString.ReadOnly = true;
+            this.txtNeuronString.Size = new System.Drawing.Size(204, 20);
+            this.txtNeuronString.TabIndex = 6;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 309);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(144, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Строковое представление:";
+            // 
+            // btnQueryCorrect
+            // 
+            this.btnQueryCorrect.Location = new System.Drawing.Point(6, 274);
+            this.btnQueryCorrect.Name = "btnQueryCorrect";
+            this.btnQueryCorrect.Size = new System.Drawing.Size(204, 23);
+            this.btnQueryCorrect.TabIndex = 4;
+            this.btnQueryCorrect.Text = "Проверить правильность запроса";
+            this.btnQueryCorrect.UseVisualStyleBackColor = true;
+            this.btnQueryCorrect.Click += new System.EventHandler(this.BtnQueryCorrect_Click);
+            // 
+            // btnCheckRelation
+            // 
+            this.btnCheckRelation.Location = new System.Drawing.Point(6, 245);
+            this.btnCheckRelation.Name = "btnCheckRelation";
+            this.btnCheckRelation.Size = new System.Drawing.Size(204, 23);
+            this.btnCheckRelation.TabIndex = 3;
+            this.btnCheckRelation.Text = "Проверить связь";
+            this.btnCheckRelation.UseVisualStyleBackColor = true;
+            this.btnCheckRelation.Click += new System.EventHandler(this.BtnCheckRelation_Click);
+            // 
+            // btnFindRelation
+            // 
+            this.btnFindRelation.Location = new System.Drawing.Point(6, 216);
+            this.btnFindRelation.Name = "btnFindRelation";
+            this.btnFindRelation.Size = new System.Drawing.Size(204, 23);
+            this.btnFindRelation.TabIndex = 2;
+            this.btnFindRelation.Text = "Найти связь (создать Neuron)";
+            this.btnFindRelation.UseVisualStyleBackColor = true;
+            this.btnFindRelation.Click += new System.EventHandler(this.BtnFindRelation_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.lstNeurons);
+            this.groupBox3.Location = new System.Drawing.Point(6, 19);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(204, 191);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Созданные нейроны (класс Neuron)";
+            // 
+            // lstNeurons
+            // 
+            this.lstNeurons.FormattingEnabled = true;
+            this.lstNeurons.Items.AddRange(new object[] {
+            "<Создать новый>"});
+            this.lstNeurons.Location = new System.Drawing.Point(8, 15);
+            this.lstNeurons.Name = "lstNeurons";
+            this.lstNeurons.Size = new System.Drawing.Size(189, 169);
+            this.lstNeurons.TabIndex = 1;
+            this.lstNeurons.SelectedIndexChanged += new System.EventHandler(this.LstNeurons_SelectedIndexChanged);
+            this.lstNeurons.DoubleClick += new System.EventHandler(this.LstNeurons_DoubleClick);
+            // 
             // grpReflector
             // 
-            this.grpReflector.Controls.Add(this.groupBox2);
-            this.grpReflector.Controls.Add(this.groupBox1);
-            this.grpReflector.Location = new System.Drawing.Point(357, 12);
+            this.grpReflector.Controls.Add(this.grp00);
+            this.grpReflector.Controls.Add(this.chkAnyNames);
+            this.grpReflector.Controls.Add(this.btnReflector);
+            this.grpReflector.Controls.Add(this.grp01);
+            this.grpReflector.Controls.Add(this.grpQuery);
+            this.grpReflector.Controls.Add(this.txtReflectorProcessorHeight);
+            this.grpReflector.Controls.Add(this.lblReflectorMapHeight);
+            this.grpReflector.Controls.Add(this.grp22);
+            this.grpReflector.Controls.Add(this.grp11);
+            this.grpReflector.Controls.Add(this.txtReflectorProcessorWidth);
+            this.grpReflector.Controls.Add(this.lblReflectorProcessorWidth);
+            this.grpReflector.Controls.Add(this.grp02);
+            this.grpReflector.Controls.Add(this.grp21);
+            this.grpReflector.Controls.Add(this.txtReflectorMapHeight);
+            this.grpReflector.Controls.Add(this.lblReflectorProcessorHeight);
+            this.grpReflector.Controls.Add(this.grp20);
+            this.grpReflector.Controls.Add(this.grp10);
+            this.grpReflector.Controls.Add(this.txtReflectorMapWidth);
+            this.grpReflector.Controls.Add(this.lblReflectorMapWidth);
+            this.grpReflector.Controls.Add(this.grp12);
+            this.grpReflector.Location = new System.Drawing.Point(6, 19);
             this.grpReflector.Name = "grpReflector";
-            this.grpReflector.Size = new System.Drawing.Size(599, 608);
-            this.grpReflector.TabIndex = 2;
+            this.grpReflector.Size = new System.Drawing.Size(364, 581);
+            this.grpReflector.TabIndex = 73;
             this.grpReflector.TabStop = false;
-            this.grpReflector.Text = "Классы Reflector и Neuron (ЛКМ - рисовать, ПКМ - стереть)";
+            this.grpReflector.Text = "Reflector";
             // 
             // chkAnyNames
             // 
@@ -1177,6 +1313,16 @@
             this.chkAnyNames.UseVisualStyleBackColor = true;
             this.chkAnyNames.CheckedChanged += new System.EventHandler(this.chkAnyNames_CheckedChanged);
             // 
+            // btnReflector
+            // 
+            this.btnReflector.Location = new System.Drawing.Point(184, 554);
+            this.btnReflector.Name = "btnReflector";
+            this.btnReflector.Size = new System.Drawing.Size(173, 23);
+            this.btnReflector.TabIndex = 52;
+            this.btnReflector.Text = "Распознать";
+            this.btnReflector.UseVisualStyleBackColor = true;
+            this.btnReflector.Click += new System.EventHandler(this.btnReflector_Click);
+            // 
             // txtReflectorProcessorHeight
             // 
             this.txtReflectorProcessorHeight.Location = new System.Drawing.Point(266, 446);
@@ -1184,6 +1330,15 @@
             this.txtReflectorProcessorHeight.ReadOnly = true;
             this.txtReflectorProcessorHeight.Size = new System.Drawing.Size(91, 20);
             this.txtReflectorProcessorHeight.TabIndex = 42;
+            // 
+            // lblReflectorMapHeight
+            // 
+            this.lblReflectorMapHeight.AutoSize = true;
+            this.lblReflectorMapHeight.Location = new System.Drawing.Point(3, 447);
+            this.lblReflectorMapHeight.Name = "lblReflectorMapHeight";
+            this.lblReflectorMapHeight.Size = new System.Drawing.Size(68, 13);
+            this.lblReflectorMapHeight.TabIndex = 67;
+            this.lblReflectorMapHeight.Text = "MapHeight =";
             // 
             // txtReflectorProcessorWidth
             // 
@@ -1193,6 +1348,15 @@
             this.txtReflectorProcessorWidth.Size = new System.Drawing.Size(91, 20);
             this.txtReflectorProcessorWidth.TabIndex = 40;
             // 
+            // lblReflectorProcessorWidth
+            // 
+            this.lblReflectorProcessorWidth.AutoSize = true;
+            this.lblReflectorProcessorWidth.Location = new System.Drawing.Point(172, 426);
+            this.lblReflectorProcessorWidth.Name = "lblReflectorProcessorWidth";
+            this.lblReflectorProcessorWidth.Size = new System.Drawing.Size(94, 13);
+            this.lblReflectorProcessorWidth.TabIndex = 68;
+            this.lblReflectorProcessorWidth.Text = "ProcessorWidth  =";
+            // 
             // txtReflectorMapHeight
             // 
             this.txtReflectorMapHeight.Location = new System.Drawing.Point(76, 446);
@@ -1200,6 +1364,15 @@
             this.txtReflectorMapHeight.ReadOnly = true;
             this.txtReflectorMapHeight.Size = new System.Drawing.Size(91, 20);
             this.txtReflectorMapHeight.TabIndex = 41;
+            // 
+            // lblReflectorProcessorHeight
+            // 
+            this.lblReflectorProcessorHeight.AutoSize = true;
+            this.lblReflectorProcessorHeight.Location = new System.Drawing.Point(172, 447);
+            this.lblReflectorProcessorHeight.Name = "lblReflectorProcessorHeight";
+            this.lblReflectorProcessorHeight.Size = new System.Drawing.Size(94, 13);
+            this.lblReflectorProcessorHeight.TabIndex = 69;
+            this.lblReflectorProcessorHeight.Text = "ProcessorHeight =";
             // 
             // txtReflectorMapWidth
             // 
@@ -1217,43 +1390,6 @@
             this.lblReflectorMapWidth.Size = new System.Drawing.Size(68, 13);
             this.lblReflectorMapWidth.TabIndex = 70;
             this.lblReflectorMapWidth.Text = "MapWidth  =";
-            // 
-            // lblReflectorProcessorHeight
-            // 
-            this.lblReflectorProcessorHeight.AutoSize = true;
-            this.lblReflectorProcessorHeight.Location = new System.Drawing.Point(172, 447);
-            this.lblReflectorProcessorHeight.Name = "lblReflectorProcessorHeight";
-            this.lblReflectorProcessorHeight.Size = new System.Drawing.Size(94, 13);
-            this.lblReflectorProcessorHeight.TabIndex = 69;
-            this.lblReflectorProcessorHeight.Text = "ProcessorHeight =";
-            // 
-            // lblReflectorProcessorWidth
-            // 
-            this.lblReflectorProcessorWidth.AutoSize = true;
-            this.lblReflectorProcessorWidth.Location = new System.Drawing.Point(172, 426);
-            this.lblReflectorProcessorWidth.Name = "lblReflectorProcessorWidth";
-            this.lblReflectorProcessorWidth.Size = new System.Drawing.Size(94, 13);
-            this.lblReflectorProcessorWidth.TabIndex = 68;
-            this.lblReflectorProcessorWidth.Text = "ProcessorWidth  =";
-            // 
-            // lblReflectorMapHeight
-            // 
-            this.lblReflectorMapHeight.AutoSize = true;
-            this.lblReflectorMapHeight.Location = new System.Drawing.Point(3, 447);
-            this.lblReflectorMapHeight.Name = "lblReflectorMapHeight";
-            this.lblReflectorMapHeight.Size = new System.Drawing.Size(68, 13);
-            this.lblReflectorMapHeight.TabIndex = 67;
-            this.lblReflectorMapHeight.Text = "MapHeight =";
-            // 
-            // btnReflector
-            // 
-            this.btnReflector.Location = new System.Drawing.Point(184, 554);
-            this.btnReflector.Name = "btnReflector";
-            this.btnReflector.Size = new System.Drawing.Size(173, 23);
-            this.btnReflector.TabIndex = 52;
-            this.btnReflector.Text = "Распознать";
-            this.btnReflector.UseVisualStyleBackColor = true;
-            this.btnReflector.Click += new System.EventHandler(this.btnReflector_Click);
             // 
             // grpReflection
             // 
@@ -1360,112 +1496,6 @@
             this.btnClearReflection.UseVisualStyleBackColor = true;
             this.btnClearReflection.Click += new System.EventHandler(this.btnClearReflection_Click);
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.grp00);
-            this.groupBox1.Controls.Add(this.chkAnyNames);
-            this.groupBox1.Controls.Add(this.btnReflector);
-            this.groupBox1.Controls.Add(this.grp01);
-            this.groupBox1.Controls.Add(this.grpQuery);
-            this.groupBox1.Controls.Add(this.txtReflectorProcessorHeight);
-            this.groupBox1.Controls.Add(this.lblReflectorMapHeight);
-            this.groupBox1.Controls.Add(this.grp22);
-            this.groupBox1.Controls.Add(this.grp11);
-            this.groupBox1.Controls.Add(this.txtReflectorProcessorWidth);
-            this.groupBox1.Controls.Add(this.lblReflectorProcessorWidth);
-            this.groupBox1.Controls.Add(this.grp02);
-            this.groupBox1.Controls.Add(this.grp21);
-            this.groupBox1.Controls.Add(this.txtReflectorMapHeight);
-            this.groupBox1.Controls.Add(this.lblReflectorProcessorHeight);
-            this.groupBox1.Controls.Add(this.grp20);
-            this.groupBox1.Controls.Add(this.grp10);
-            this.groupBox1.Controls.Add(this.txtReflectorMapWidth);
-            this.groupBox1.Controls.Add(this.lblReflectorMapWidth);
-            this.groupBox1.Controls.Add(this.grp12);
-            this.groupBox1.Location = new System.Drawing.Point(6, 19);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(364, 581);
-            this.groupBox1.TabIndex = 73;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Reflector";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.textBox1);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Controls.Add(this.button1);
-            this.groupBox2.Controls.Add(this.groupBox3);
-            this.groupBox2.Location = new System.Drawing.Point(376, 19);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(216, 581);
-            this.groupBox2.TabIndex = 74;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Neuron";
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 19);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(190, 160);
-            this.listBox1.TabIndex = 0;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.listBox1);
-            this.groupBox3.Location = new System.Drawing.Point(6, 19);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(204, 191);
-            this.groupBox3.TabIndex = 1;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Созданные нейроны (класс Neuron)";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(6, 216);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(204, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Найти связь (создать Neuron)";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(6, 245);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(204, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Проверить связь";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(6, 274);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(204, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Проверить правильность запроса";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 309);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(144, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Строковое представление:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(6, 325);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(204, 20);
-            this.textBox1.TabIndex = 6;
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1479,7 +1509,7 @@
             this.Controls.Add(this.grpReflection);
             this.Controls.Add(this.grpResult);
             this.Controls.Add(this.btnReflection);
-            this.Controls.Add(this.grpReflector);
+            this.Controls.Add(this.grpReflectorNeuron);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
             this.MaximizeBox = false;
@@ -1513,13 +1543,15 @@
             this.grp22.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pic22)).EndInit();
             this.grpResult.ResumeLayout(false);
-            this.grpReflector.ResumeLayout(false);
-            this.grpReflection.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.grpReflectorNeuron.ResumeLayout(false);
+            this.grpNeuron.ResumeLayout(false);
+            this.grpNeuron.PerformLayout();
+            this.grpDescription.ResumeLayout(false);
+            this.grpDescription.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.grpReflector.ResumeLayout(false);
+            this.grpReflector.PerformLayout();
+            this.grpReflection.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1586,7 +1618,7 @@
         private System.Windows.Forms.TextBox txt11;
         private System.Windows.Forms.TextBox txt20;
         private System.Windows.Forms.TextBox txt01;
-        private System.Windows.Forms.GroupBox grpReflector;
+        private System.Windows.Forms.GroupBox grpReflectorNeuron;
         private System.Windows.Forms.GroupBox grpReflection;
         private System.Windows.Forms.Button btnReflection;
         private System.Windows.Forms.Button btnReflector;
@@ -1639,15 +1671,17 @@
         private System.Windows.Forms.Button btnClear01;
         private System.Windows.Forms.Button btnClear22;
         private System.Windows.Forms.Button btnClearReflection;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox grpReflector;
+        private System.Windows.Forms.GroupBox grpNeuron;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtNeuronString;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnQueryCorrect;
+        private System.Windows.Forms.Button btnCheckRelation;
+        private System.Windows.Forms.Button btnFindRelation;
+        private System.Windows.Forms.GroupBox grpDescription;
+        private System.Windows.Forms.Label lblDescription;
+        private System.Windows.Forms.CheckedListBox lstNeurons;
     }
 }
 

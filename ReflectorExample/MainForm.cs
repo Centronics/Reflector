@@ -18,6 +18,7 @@ namespace ReflectorExample
         readonly List<Processor>[,] _pcs = new List<Processor>[3, 3];
         readonly Painter _reflectionPainter;
         readonly Painter[,] _reflectorPainters = new Painter[3, 3];
+        readonly List<Neuron> _neurons = new List<Neuron>();
         readonly string _resultString;
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace ReflectorExample
         readonly string[,] _strings = new string[3, 3];
         int _currentResult;
         Reflection _reflection;
-        Bitmap[] _reflectionResults;
+        Bitmap[] _recognizeResults;
         Reflector _reflector;
         SaveLoad _saveLoad;
 
@@ -70,16 +71,16 @@ namespace ReflectorExample
             {
                 ProcessorContainer[,] pcs = new ProcessorContainer[_pcs.GetLength(0), _pcs.GetLength(1)];
                 for (int y = 0; y < pcs.GetLength(1); y++)
-                for (int x = 0; x < pcs.GetLength(0); x++)
-                    try
-                    {
-                        pcs[x, y] = new ProcessorContainer(_pcs[x, y]);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(
-                            $"{nameof(Containers)}: Ошибка в поле с координатами ({x}, {y}): {ex.Message}");
-                    }
+                    for (int x = 0; x < pcs.GetLength(0); x++)
+                        try
+                        {
+                            pcs[x, y] = new ProcessorContainer(_pcs[x, y]);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception(
+                                $"{nameof(Containers)}: Ошибка в поле с координатами ({x}, {y}): {ex.Message}");
+                        }
                 return pcs;
             }
         }
@@ -89,13 +90,13 @@ namespace ReflectorExample
             get
             {
                 Bitmap b1 = _reflectionPainter.CurrentBitmap;
-                Bitmap b2 = _reflectionResults[_currentResult];
+                Bitmap b2 = _recognizeResults[_currentResult];
                 if (b2.Width != b1.Width || b2.Height != b1.Height)
                     return false;
                 for (int y = 0; y < b1.Height; y++)
-                for (int x = 0; x < b1.Width; x++)
-                    if (b1.GetPixel(x, y) != b2.GetPixel(x, y))
-                        return false;
+                    for (int x = 0; x < b1.Width; x++)
+                        if (b1.GetPixel(x, y) != b2.GetPixel(x, y))
+                            return false;
                 return true;
             }
         }
@@ -103,14 +104,12 @@ namespace ReflectorExample
         // ReSharper disable once FunctionComplexityOverflow
         bool EnableButtons
         {
-            set
-            {
+            set =>
                 picReflection.Enabled = grpResult.Enabled = grpQuery.Enabled = grp00.Enabled =
                     grp01.Enabled = grp02.Enabled = grp10.Enabled = grp20.Enabled =
                         grp11.Enabled = grp21.Enabled = grp12.Enabled = grp22.Enabled = btnImageLoad.Enabled =
                             btnImageSave.Enabled = btnReflectionAdd.Enabled =
-                                btnReflector.Enabled = chkAnyNames.Enabled = btnClearReflection.Enabled = value;
-            }
+                                btnReflector.Enabled = chkAnyNames.Enabled = btnClearReflection.Enabled = grpNeuron.Enabled = value;
         }
 
         void FrmMain_Shown(object sender, EventArgs e)
@@ -120,16 +119,16 @@ namespace ReflectorExample
                 VerifyPictureBoxSizes();
                 _saveLoad = new SaveLoad();
                 for (int y = 0; y < _pcs.GetLength(1); y++)
-                for (int x = 0; x < _pcs.GetLength(0); x++)
-                {
-                    _pcs[x, y] = new List<Processor>(_saveLoad.GetProcessors(x, y));
-                    if (!VerifyMapsImageSizes(_pcs[x, y]))
+                    for (int x = 0; x < _pcs.GetLength(0); x++)
                     {
-                        Application.Exit();
-                        return;
+                        _pcs[x, y] = new List<Processor>(_saveLoad.GetProcessors(x, y));
+                        if (!VerifyMapsImageSizes(_pcs[x, y]))
+                        {
+                            Application.Exit();
+                            return;
+                        }
+                        PrevButton(x, y);
                     }
-                    PrevButton(x, y);
-                }
                 string main = Path.Combine(Application.StartupPath, "main.bmp");
                 if (!File.Exists(main))
                     return;
@@ -148,10 +147,10 @@ namespace ReflectorExample
 
         void chkAnyNames_CheckedChanged(object sender, EventArgs e)
         {
-            bool ch = ((CheckBox) sender).Checked;
+            bool ch = ((CheckBox)sender).Checked;
             for (int y = 0; y < 3; y++)
-            for (int x = 0; x < 3; x++)
-                GetTextBox(x, y).MaxLength = ch ? 32767 : 1;
+                for (int x = 0; x < 3; x++)
+                    GetTextBox(x, y).MaxLength = ch ? 32767 : 1;
         }
 
         void VerifyPictureBoxSizes()
@@ -171,25 +170,24 @@ namespace ReflectorExample
         {
             foreach (Control c in from Control c in grpQuery.Controls where c.GetType() == typeof(TextBox) select c)
             {
-                int px, py;
-                if (!GetControlCoords(out px, out py, c.Name, "txt"))
+                if (!GetControlCoords(out int px, out int py, c.Name, "txt"))
                     continue;
                 if (px != x || py != y)
                     continue;
-                return (TextBox) c;
+                return (TextBox)c;
             }
             throw new Exception($"Требуемый {nameof(TextBox)} почему-то отсутствует на поле ({x}, {y}).");
         }
 
         string GetCurrentName(int x, int y)
         {
-            string fileName = GetTextBox(x, y).Text;
-            if (string.IsNullOrWhiteSpace(fileName))
+            string pName = GetTextBox(x, y).Text;
+            if (string.IsNullOrWhiteSpace(pName))
                 throw new ArgumentException($@"Название карты в соответствующем поле ({x}, {y}) не указано.");
-            if (fileName.Length <= 0)
+            if (pName.Length <= 0)
                 throw new ArgumentException(
                     $"Название карты должно быть указано в соответствующем поле ({x}, {y}) \"запроса\" и его длина может быть равна только одному символу.");
-            return fileName;
+            return pName;
         }
 
         static string GetImagePath(string name) => Path.Combine(Application.StartupPath, $@"{name}.bmp");
@@ -211,13 +209,13 @@ namespace ReflectorExample
             Painter p = _reflectorPainters[x, y];
             _saveLoad.Save(x, y, path, p.CurrentBitmap);
             p.CurrentProcessorName = mapName;
-            _pcs[x, y].Add(p.CurrentProcessor);
+            _pcs[x, y].Add(p.CurrentProcessor);//работу с картами взять отсюда
             _imageCounter[x, y] = _pcs[x, y].Count - 1;
             DisplayCountMapsOnControl(x, y, _pcs[x, y].Count - 1);
             return true;
         }
 
-        void DeleteImage(int x, int y)
+        void DeleteImage(int x, int y)//исправить баг с удалением всех карт, которые называются по указанному имени
         {
             string mapName = GetCurrentName(x, y);
             _saveLoad.Delete(x, y, GetImagePath(mapName));
@@ -249,8 +247,7 @@ namespace ReflectorExample
 
         void PicMouseMoveDown(object sender, MouseEventArgs e)
         {
-            int x, y;
-            if (!GetControlCoords(out x, out y, ((PictureBox) sender).Name, "pic"))
+            if (!GetControlCoords(out int x, out int y, ((PictureBox)sender).Name, "pic"))
                 return;
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (e.Button)
@@ -268,16 +265,16 @@ namespace ReflectorExample
         {
             char[,] ch = new char[3, 3];
             for (int y = 0; y < 3; y++)
-            for (int x = 0; x < 3; x++)
-            {
-                string s = GetTextBox(x, y).Text;
-                if (s.Length != 1)
+                for (int x = 0; x < 3; x++)
                 {
-                    MessageBox.Show($@"В клетке {x}, {y} должен присутствовать запрос из одной буквы или цифры.");
-                    return null;
+                    string s = GetTextBox(x, y).Text;
+                    if (s.Length != 1)
+                    {
+                        MessageBox.Show($@"В клетке {x}, {y} должен присутствовать запрос из одной буквы или цифры.");
+                        return null;
+                    }
+                    ch[x, y] = s[0];
                 }
-                ch[x, y] = s[0];
-            }
             return ch;
         }
 
@@ -298,22 +295,22 @@ namespace ReflectorExample
                     return;
                 }
                 for (int y = 0; y < 3; y++)
-                for (int x = 0; x < 3; x++)
-                {
-                    if (SaveImage(x, y, true))
-                        continue;
-                    MessageBox.Show(this,
-                        $@"Файл ({x}, {y}) невозможно сохранить, т.к. он уже существует. Задайте другое имя.",
-                        @"Файл уже существует.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+                    for (int x = 0; x < 3; x++)
+                    {
+                        if (SaveImage(x, y, true))
+                            continue;
+                        MessageBox.Show(this,
+                            $@"Файл ({x}, {y}) невозможно сохранить, т.к. он уже существует. Задайте другое имя.",
+                            @"Файл уже существует.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
                 for (int y = 0, px = 0; y < 3; y++)
-                for (int x = 0; x < 3; x++)
-                {
-                    _reflectorPainters[x, y].CurrentProcessor = new Processor(btms[px++], GetCurrentName(x, y));
-                    SaveImage(x, y);
-                    NextButton(x, y, true);
-                }
+                    for (int x = 0; x < 3; x++)
+                    {
+                        _reflectorPainters[x, y].CurrentProcessor = new Processor(btms[px++], GetCurrentName(x, y));
+                        SaveImage(x, y);
+                        NextButton(x, y, true);
+                    }
                 _reflection = null;
                 _reflector = null;
             }
@@ -338,19 +335,19 @@ namespace ReflectorExample
                 throw new ArgumentException(
                     $@"Ширина делимого изображения должна быть кратна ширине делителя: {prc.Width} % {mx}.");
             for (int qy = 0; qy < prc.Height; qy += my)
-            for (int qx = 0; qx < prc.Width; qx += mx)
-            {
-                Bitmap b = new Bitmap(mx, my);
-                for (int y = qy, ry = qy + my, ty = 0; y < ry; y++, ty++)
-                for (int x = qx, rx = qx + mx, tx = 0; x < rx; x++, tx++)
-                    b.SetPixel(tx, ty, prc[x, y].ValueColor);
-                yield return b;
-            }
+                for (int qx = 0; qx < prc.Width; qx += mx)
+                {
+                    Bitmap b = new Bitmap(mx, my);
+                    for (int y = qy, ry = qy + my, ty = 0; y < ry; y++, ty++)
+                        for (int x = qx, rx = qx + mx, tx = 0; x < rx; x++, tx++)
+                            b.SetPixel(tx, ty, prc[x, y].ValueColor);
+                    yield return b;
+                }
         }
 
         void ResetResults()
         {
-            _reflectionResults = null;
+            _recognizeResults = null;
             _currentResult = 0;
             btnNextResult_Click(btnNextResult, new EventArgs());
             btnPrevResult.Enabled = btnNextResult.Enabled = btnSaveResultImage.Enabled = false;
@@ -388,24 +385,24 @@ namespace ReflectorExample
                                 MessageBoxButtons.OK, MessageBoxIcon.Error));
                             return;
                         }
-                        _reflectionResults = new Bitmap[prs.Length];
+                        _recognizeResults = new Bitmap[prs.Length];
                         for (int k = 0; k < prs.Length; k++)
                         {
                             Processor p = prs[k];
                             Bitmap btm = new Bitmap(p.Width, p.Height);
                             for (int y = 0; y < p.Height; y++)
-                            for (int x = 0; x < p.Width; x++)
-                                btm.SetPixel(x, y, p[x, y].ValueColor);
-                            _reflectionResults[k] = btm;
+                                for (int x = 0; x < p.Width; x++)
+                                    btm.SetPixel(x, y, p[x, y].ValueColor);
+                            _recognizeResults[k] = btm;
                         }
                         InvokeFunction(() =>
                         {
                             btnSaveResultImage.Enabled = true;
-                            btnPrevResult.Enabled = btnNextResult.Enabled = _reflectionResults.Length > 1;
+                            btnPrevResult.Enabled = btnNextResult.Enabled = _recognizeResults.Length > 1;
                             btnPrevResult_Click(btnPrevResult, new EventArgs());
                         });
                     }))
-                    {IsBackground = true, Name = nameof(Reflection), Priority = ThreadPriority.Highest};
+                { IsBackground = true, Name = nameof(Reflection), Priority = ThreadPriority.Highest };
                 _workThread.Start();
             });
         }
@@ -439,20 +436,19 @@ namespace ReflectorExample
                 }
                 btnReflector.Text =
                     $@"{_stopwatch.Elapsed.Hours:00}:{_stopwatch.Elapsed.Minutes:00}:{_stopwatch.Elapsed.Seconds:00}:{
-                            _stopwatch.Elapsed.Milliseconds
-                        :000}";
+                            _stopwatch.Elapsed.Milliseconds:000}";
                 if (p == null)
                 {
                     MessageBox.Show(this, $@"{nameof(Reflector)}: Результатов нет.", @"Результат", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                     return;
                 }
-                _reflectionResults = new Bitmap[1];
+                _recognizeResults = new Bitmap[1];
                 Bitmap btm = new Bitmap(p.Width, p.Height);
                 for (int y = 0; y < btm.Height; y++)
-                for (int x = 0; x < btm.Width; x++)
-                    btm.SetPixel(x, y, p[x, y].ValueColor);
-                _reflectionResults[0] = btm;
+                    for (int x = 0; x < btm.Width; x++)
+                        btm.SetPixel(x, y, p[x, y].ValueColor);
+                _recognizeResults[0] = btm;
                 btnSaveResultImage.Enabled = true;
                 btnPrevResult.Enabled = btnNextResult.Enabled = false;
                 btnPrevResult_Click(btnPrevResult, new EventArgs());
@@ -537,9 +533,9 @@ namespace ReflectorExample
         {
             try
             {
-                if (_reflectionResults == null || SaveFile.ShowDialog(this) != DialogResult.OK)
+                if (_recognizeResults == null || SaveFile.ShowDialog(this) != DialogResult.OK)
                     return;
-                Bitmap btm = _reflectionResults[_currentResult];
+                Bitmap btm = _recognizeResults[_currentResult];
                 if (btm == null)
                     return;
                 btm.Save(SaveFile.FileName, ImageFormat.Bmp);
@@ -554,17 +550,17 @@ namespace ReflectorExample
         {
             try
             {
-                if (_reflectionResults == null)
+                if (_recognizeResults == null)
                 {
                     picResult.Image = null;
                     grpResult.Text = _resultString;
                     return;
                 }
-                if (_currentResult < _reflectionResults.Length - 1)
+                if (_currentResult < _recognizeResults.Length - 1)
                     _currentResult++;
                 else
                     _currentResult = 0;
-                picResult.Image = _reflectionResults[_currentResult];
+                picResult.Image = _recognizeResults[_currentResult];
                 PrintResultComment();
             }
             catch (Exception ex)
@@ -577,7 +573,7 @@ namespace ReflectorExample
         {
             try
             {
-                if (_reflectionResults == null)
+                if (_recognizeResults == null)
                 {
                     picResult.Image = null;
                     grpResult.Text = _resultString;
@@ -586,8 +582,8 @@ namespace ReflectorExample
                 if (_currentResult > 0)
                     _currentResult--;
                 else
-                    _currentResult = _reflectionResults.Length - 1;
-                picResult.Image = _reflectionResults[_currentResult];
+                    _currentResult = _recognizeResults.Length - 1;
+                picResult.Image = _recognizeResults[_currentResult];
                 PrintResultComment();
             }
             catch (Exception ex)
@@ -597,7 +593,7 @@ namespace ReflectorExample
         }
 
         void PrintResultComment() => grpResult.Text =
-            $@"{_resultString} ({_reflectionResults.Length}) - {(CompareWithResult ? "Совпадает" : "Различается")} [{
+            $@"{_resultString} ({_recognizeResults.Length}) - {(CompareWithResult ? "Совпадает" : "Различается")} [{
                     _currentResult + 1
                 }]";
 
@@ -658,9 +654,8 @@ namespace ReflectorExample
         {
             try
             {
-                string name = ((Button) sender).Name;
-                int x, y;
-                if (!GetControlCoords(out x, out y, name, "btnNext"))
+                string name = ((Button)sender).Name;
+                if (!GetControlCoords(out int x, out int y, name, "btnNext"))
                     if (GetControlCoords(out x, out y, name, "btnPrev"))
                         PrevButton(x, y);
                     else
@@ -678,8 +673,7 @@ namespace ReflectorExample
         {
             try
             {
-                int x, y;
-                if (!GetControlCoords(out x, out y, ((Button) sender).Name, "btnOK"))
+                if (!GetControlCoords(out int x, out int y, ((Button)sender).Name, "btnOK"))
                     return;
                 if (!SaveImage(x, y))
                     return;
@@ -696,8 +690,7 @@ namespace ReflectorExample
         {
             try
             {
-                int x, y;
-                if (!GetControlCoords(out x, out y, ((Button) sender).Name, "btnDel"))
+                if (!GetControlCoords(out int x, out int y, ((Button)sender).Name, "btnDel"))
                     return;
                 DeleteImage(x, y);
                 _reflection = null;
@@ -713,8 +706,7 @@ namespace ReflectorExample
         {
             try
             {
-                int x, y;
-                if (!GetControlCoords(out x, out y, ((Button) sender).Name, "btnClear"))
+                if (!GetControlCoords(out int x, out int y, ((Button)sender).Name, "btnClear"))
                     return;
                 _reflectorPainters[x, y].Clear();
             }
@@ -727,10 +719,10 @@ namespace ReflectorExample
         void DisplayCountMapsOnControl(int x, int y, int index = -1)
         {
             string sname = $"grp{x}{y}";
-            Control[] grpBox = (from Control c in grpReflector.Controls
-                where c.GetType() == typeof(GroupBox)
-                where c.Name == sname
-                select c).ToArray();
+            Control[] grpBox = (from Control c in grpReflectorNeuron.Controls
+                                where c.GetType() == typeof(GroupBox)
+                                where c.Name == sname
+                                select c).ToArray();
             if (grpBox.Length != 1)
                 throw new Exception(
                     $"Найдены {nameof(GroupBox)} с одинаковыми именами или требуемый элемент отсутствует.");
@@ -756,7 +748,7 @@ namespace ReflectorExample
             if (_txtInProcessing)
                 return;
             _txtInProcessing = true;
-            TextBox tb = (TextBox) sender;
+            TextBox tb = (TextBox)sender;
             int selectionStart = tb.SelectionStart;
             tb.Text = tb.Text.ToUpper();
             tb.SelectionStart = selectionStart;
@@ -765,22 +757,34 @@ namespace ReflectorExample
 
         void FrmMain_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode != Keys.Escape || e.Control || e.Alt || e.Shift)
+            if (e.Control || e.Alt || e.Shift)
                 return;
-            Application.Exit();
+
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    Application.Exit();
+                    return;
+                case Keys.Delete:
+                    if (lstNeurons.SelectedIndex < 1)
+                        return;
+                    _neurons.RemoveAt(lstNeurons.SelectedIndex - 1);
+                    lstNeurons.Items.RemoveAt(lstNeurons.SelectedIndex);
+                    return;
+            }
         }
 
         void txt_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if ((Keys) e.KeyChar == Keys.Escape || (Keys) e.KeyChar == Keys.Enter || (Keys) e.KeyChar == Keys.Tab ||
-                (Keys) e.KeyChar == Keys.Pause || (Keys) e.KeyChar == Keys.XButton1 || e.KeyChar == 15)
+            if ((Keys)e.KeyChar == Keys.Escape || (Keys)e.KeyChar == Keys.Enter || (Keys)e.KeyChar == Keys.Tab ||
+                (Keys)e.KeyChar == Keys.Pause || (Keys)e.KeyChar == Keys.XButton1 || e.KeyChar == 15)
             {
                 e.Handled = true;
                 return;
             }
             if (chkAnyNames.Checked)
                 return;
-            ((TextBox) sender).Text = string.Empty;
+            ((TextBox)sender).Text = string.Empty;
         }
 
         void WaitableTimer(Control btnWriteText)
@@ -795,8 +799,7 @@ namespace ReflectorExample
                         InvokeFunction(() =>
                             btnWriteText.Text =
                                 $@"{_stopwatch.Elapsed.Hours:00}:{_stopwatch.Elapsed.Minutes:00}:{
-                                        _stopwatch.Elapsed.Seconds
-                                    :00}");
+                                        _stopwatch.Elapsed.Seconds:00}");
                         Thread.Sleep(100);
                         if (_workThread?.IsAlive != true)
                             return;
@@ -805,7 +808,7 @@ namespace ReflectorExample
                 finally
                 {
                     _stopwatch.Stop();
-                    Invoke((Action) (() => EnableButtons = true));
+                    Invoke((Action)(() => EnableButtons = true));
                 }
             }))
             {
@@ -825,7 +828,7 @@ namespace ReflectorExample
                 return;
             try
             {
-                Action act = delegate
+                void Act()
                 {
                     try
                     {
@@ -835,21 +838,20 @@ namespace ReflectorExample
                     {
                         try
                         {
-                            MessageBox.Show(this, ex.Message, @"Ошибка", MessageBoxButtons.OK,
-                                MessageBoxIcon.Exclamation);
+                            MessageBox.Show(this, ex.Message, @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             catchAction?.Invoke();
                         }
                         catch (Exception ex1)
                         {
-                            MessageBox.Show(this, ex1.Message, @"Ошибка", MessageBoxButtons.OK,
-                                MessageBoxIcon.Exclamation);
+                            MessageBox.Show(this, ex1.Message, @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
-                };
+                }
+
                 if (InvokeRequired)
-                    Invoke(act);
+                    Invoke((Action)Act);
                 else
-                    act();
+                    Act();
             }
             catch (Exception ex)
             {
@@ -903,5 +905,182 @@ namespace ReflectorExample
                 }
             }
         }
+
+        Neuron CurrentNeuron
+        {
+            get
+            {
+                IEnumerable<Processor> GetProcessors()
+                {
+                    for (int y = 0; y < 3; y++)
+                        for (int x = 0; x < 3; x++)
+                        {
+                            Painter p = _reflectorPainters[x, y];
+                            p.CurrentProcessorName = GetCurrentName(x, y);
+                            yield return p.CurrentProcessor;
+                        }
+                }
+
+                return new Neuron(new ProcessorContainer(GetProcessors().ToArray()));
+            }
+        }
+
+        Request NeuronQuery
+        {
+            get
+            {
+                IEnumerable<(Processor, string)> GetQuery()
+                {
+                    for (int y = 0; y < 3; y++)
+                        for (int x = 0; x < 3; x++)
+                        {
+                            Painter p = _reflectorPainters[x, y];
+                            p.CurrentProcessorName = GetCurrentName(x, y);
+                            yield return (p.CurrentProcessor, p.CurrentProcessorName[0].ToString());
+                        }
+                }
+
+                return new Request(GetQuery());
+            }
+        }
+
+        void BtnFindRelation_Click(object sender, EventArgs e) => SafetyExecute(() =>
+        {
+            if (_workThread?.IsAlive ?? false)
+                return;
+            if (lstNeurons.SelectedIndex < 0)
+            {
+                MessageBox.Show(this, @"Ошибка! Выберите нейрон, с помощью которого будет создан новый нейрон!", @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            ResetResults();
+            EnableButtons = false;
+            _workThread = new Thread(() => SafetyExecute(() =>
+            {
+                WaitableTimer((Control)sender);
+
+                int selIndex = -1;
+                InvokeFunction(() => selIndex = lstNeurons.SelectedIndex - 1);
+
+                if (selIndex < 0)
+                {
+                    Neuron n = CurrentNeuron;
+                    InvokeFunction(() =>
+                    {
+                        _neurons.Insert(0, n);
+                        lstNeurons.Items.Insert(1, $@"({n.Count}) {DateTime.Now:HH:mm:ss}");
+                        lstNeurons.SetItemCheckState(1, CheckState.Indeterminate);
+                        lstNeurons.SelectedIndex = 1;
+                        txtNeuronString.Text = n.ToString();
+                    });
+                    return;
+                }
+
+                Neuron workNeuron = _neurons[selIndex];
+                Neuron neuron = workNeuron.FindRelation(NeuronQuery);
+
+                if (neuron == null)
+                {
+                    InvokeFunction(() => MessageBox.Show(this, $@"{nameof(Neuron)} не создался.",
+                        @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Information));
+                    return;
+                }
+
+                if (neuron.Count != workNeuron.Count)
+                {
+                    InvokeFunction(() => MessageBox.Show(this, $@"{nameof(Neuron)}: Количество карт различается в порождённом {nameof(Neuron)
+                            } ({neuron.Count}) и базовом (родительском) {nameof(Neuron)} ({workNeuron.Count}).",
+                        @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Information));
+                    return;
+                }
+
+                InvokeFunction(() =>
+                {
+                    _neurons.Insert(0, neuron);
+                    lstNeurons.Items.Insert(1, $@"({_neurons.Count}) {DateTime.Now:HH:mm:ss}");
+                    lstNeurons.SetItemCheckState(1, CheckState.Indeterminate);
+                    lstNeurons.SelectedIndex = 1;
+                    txtNeuronString.Text = neuron.ToString();
+                });
+
+                for (int y = 0, j = 0; y < 3; y++)
+                    for (int x = 0; x < 3; x++, j++)
+                    {
+                        Processor p = neuron[j];
+                        _reflectorPainters[x, y].CurrentProcessor = p;
+                        GetTextBox(x, y).Text = p.Tag;
+                    }
+
+                InvokeFunction(() =>
+                {
+                    btnSaveResultImage.Enabled = true;
+                    btnPrevResult.Enabled = btnNextResult.Enabled = _recognizeResults.Length > 1;
+                    btnPrevResult_Click(btnPrevResult, new EventArgs());
+                });
+            }))
+            { IsBackground = true, Name = nameof(Reflection), Priority = ThreadPriority.Highest };
+            _workThread.Start();
+        });
+
+        void BtnCheckRelation_Click(object sender, EventArgs e) => SafetyExecute(() =>
+        {
+            if (_workThread?.IsAlive ?? false)
+                return;
+            if (lstNeurons.SelectedIndex < 0)
+            {
+                MessageBox.Show(this, @"Ошибка! Выберите нейрон, с помощью которого будет создан новый нейрон!", @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            ResetResults();
+            EnableButtons = false;
+            _workThread = new Thread(() => SafetyExecute(() =>
+            {
+                WaitableTimer((Control)sender);
+
+                int selIndex = -1;
+                InvokeFunction(() => selIndex = lstNeurons.SelectedIndex - 1);
+
+                if (selIndex < 0)
+                {
+                    Neuron n = CurrentNeuron;
+                    InvokeFunction(() =>
+                    {
+                        _neurons.Insert(0, n);
+                        lstNeurons.Items.Insert(1, $@"({n.Count}) {DateTime.Now:HH:mm:ss}");
+                        lstNeurons.SetItemCheckState(1, CheckState.Indeterminate);
+                        lstNeurons.SelectedIndex = 1;
+                        txtNeuronString.Text = n.ToString();
+                    });
+                    return;
+                }
+
+                bool result = _neurons[selIndex].CheckRelation(NeuronQuery);
+
+                InvokeFunction(() =>
+                {
+                    lstNeurons.SetItemChecked(selIndex + 1, result);
+                    btnSaveResultImage.Enabled = true;
+                    btnPrevResult.Enabled = btnNextResult.Enabled = _recognizeResults.Length > 1;
+                    btnPrevResult_Click(btnPrevResult, new EventArgs());
+                });
+            }))
+            {
+                IsBackground = true,
+                Name = nameof(Reflection),
+                Priority = ThreadPriority.Highest
+            };
+            _workThread.Start();
+        });
+
+        void BtnQueryCorrect_Click(object sender, EventArgs e) => SafetyExecute(() =>
+        {
+            string answer = lstNeurons.SelectedIndex < 1 ? @"Ошибка! Выберите нейрон, с помощью которого будет создан новый нейрон!" :
+                _neurons[lstNeurons.SelectedIndex - 1].IsActual(NeuronQuery) ? $"Запрос может быть выполнен на выбранном {nameof(Neuron)}." : $"Этот запрос неактуален для выбранного {nameof(Neuron)}.";
+            MessageBox.Show(this, answer, @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        });
+
+        void LstNeurons_DoubleClick(object sender, EventArgs e) => SafetyExecute(() => lstNeurons.SetItemCheckState(lstNeurons.SelectedIndex, lstNeurons.GetItemCheckState(lstNeurons.SelectedIndex)));
+
+        void LstNeurons_SelectedIndexChanged(object sender, EventArgs e) => lstNeurons.SetItemCheckState(lstNeurons.SelectedIndex, lstNeurons.GetItemCheckState(lstNeurons.SelectedIndex));
     }
 }
