@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DynamicMosaic;
 using DynamicParser;
@@ -11,8 +12,7 @@ namespace DynamicReflector
     {
         readonly ProcessorContainer _processorContainer;
         readonly Reflex _workReflex;
-        readonly Dictionary<char, char> _procNames;
-        readonly string _stringQuery;
+        readonly string _stringOriginalQuery;
 
         public Neuron(ProcessorContainer pc)
         {
@@ -21,21 +21,19 @@ namespace DynamicReflector
             if (pc.Count > char.MaxValue)
                 throw new ArgumentException();
 
-            _procNames = new Dictionary<char, char>(pc.Count);
             ProcessorHandler ph = new ProcessorHandler();
-            StringBuilder sb = new StringBuilder(pc.Count);
+            StringBuilder sbOriginal = new StringBuilder(pc.Count);
             for (char k = char.MinValue; k < pc.Count; ++k)
             {
                 if (!ph.Add(ProcessorHandler.RenameProcessor(pc[k], k.ToString())))
                     continue;
                 char c = char.ToUpper(pc[k].Tag[0]);
-                _procNames[c] = k;
-                sb.Append(c);
+                sbOriginal.Append(c);
             }
 
             _processorContainer = ph.Processors;
             _workReflex = new Reflex(_processorContainer);
-            _stringQuery = sb.ToString();
+            _stringOriginalQuery = sbOriginal.ToString();
         }
 
         /// <summary>
@@ -47,14 +45,20 @@ namespace DynamicReflector
         {
             if (string.IsNullOrEmpty(query))
                 throw new ArgumentException();
-            StringBuilder sb = new StringBuilder(query.Length);
-            foreach (char c in query)
-            {
-                if (!_procNames.TryGetValue(char.ToUpper(c), out char index))
-                    return string.Empty;
-                sb.Append(index);
-            }
-            return sb.ToString();
+            return new string(query.SelectMany(GetPositionByChar).ToArray());
+        }
+
+        IEnumerable<char> GetPositionByChar(char symbol)
+        {
+            bool result = false;
+            for (char k = char.MinValue; k < _stringOriginalQuery.Length; ++k)
+                if (_stringOriginalQuery[k] == symbol)
+                {
+                    result = true;
+                    yield return k;
+                }
+            if (!result)
+                throw new Exception("Символ обязательно должен быть найден!");
         }
 
         IEnumerable<Processor> GetNewProcessors(Reflex start, Reflex finish)
@@ -66,7 +70,7 @@ namespace DynamicReflector
             for (int k = start.Count; k < finish.Count; ++k)
             {
                 Processor p = finish[k];
-                yield return ProcessorHandler.RenameProcessor(p, _stringQuery[p.Tag[0]].ToString());
+                yield return ProcessorHandler.RenameProcessor(p, _stringOriginalQuery[p.Tag[0]].ToString());
             }
         }
 
@@ -78,7 +82,7 @@ namespace DynamicReflector
             {
                 if (p == null)
                     throw new ArgumentNullException();
-                StringBuilder sb = new StringBuilder(_stringQuery[p.Tag[0]].ToString());
+                StringBuilder sb = new StringBuilder(_stringOriginalQuery[p.Tag[0]].ToString());
                 sb.Append(p.Tag, 1, p.Tag.Length - 1);
                 return ProcessorHandler.RenameProcessor(p, sb.ToString());
             }
@@ -92,38 +96,51 @@ namespace DynamicReflector
 
         public Neuron FindRelation(Request request)//Никакой "автоподбор" не требуется. Запоминает причины и следствия путём "перебора"... Причина и следствие могут быть любыми, отсюда - любой цвет любого пикселя на карте. Если надо поменять символ карты, можно задать такую карту без ограничений. Это и есть "счётчик".
         {
-            if (!request.IsActual(_stringQuery))
+            if (!IsActual(request))
                 throw new ArgumentException();
             ProcessorHandler ph = new ProcessorHandler();
+            HashSet<char> strHash = new HashSet<char>();
             foreach ((Processor processor, string query) in request.Queries)
             {
-                Reflex refResult = _workReflex.FindRelation(processor, TranslateQuery(query));
-                if (refResult != null)
-                    ph.AddRange(GetNewProcessors(_workReflex, refResult));
+                string translatedQuery = TranslateQuery(query);
+                Reflex refResult = _workReflex.FindRelation(processor, translatedQuery);
+                if (refResult == null)
+                    continue;
+
+                foreach (char c in translatedQuery)
+                    strHash.Add(c);
+                    
+                ph.AddRange(GetNewProcessors(_workReflex, refResult));
             }
-            return request.IsActual(ph.ToString()) ? new Neuron(ph.Processors) : null;
+
+            return strHash.SetEquals(new HashSet<char>(TranslateQuery(request.ToString()))) ? new Neuron(ph.Processors) : null; // ПРИМЕРНО ТАК!
+            //Проверить наличие ВСЕХ имеющихся карт!!
+            //return request.IsActual(ph.ToString()) ? new Neuron(ph.Processors) : null;
         }
 
         public bool CheckRelation(Request request)
         {
-            if (!request.IsActual(_stringQuery))
+            if (!IsActual(request))
                 throw new ArgumentException();
-            StringBuilder result = new StringBuilder(request.ToString().Length);
+            HashSet<char> strHash = new HashSet<char>();
             foreach ((Processor processor, string query) in request.Queries)
             {
-                if (!processor.GetEqual(_processorContainer).FindRelation(TranslateQuery(query)))
+                string translatedQuery = TranslateQuery(query);//Разобраться с выполнением запроса, так не будет работать, сделать его выполнение параллельным, т.е. каждую букву запроса обрабатывать отдельно.
+                if (!processor.GetEqual(_processorContainer).FindRelation(translatedQuery))
                     continue;
-                foreach (char c in query)
-                    result.Append(_stringQuery[c]);
+
+                foreach (char c in translatedQuery)
+                    strHash.Add(c);
             }
-            return request.IsActual(result.ToString());
+
+            return strHash.SetEquals(new HashSet<char>(TranslateQuery(request.ToString()))); // request.IsActual(result.ToString());
         }
 
         public bool IsActual(Request request)
         {
             if (request == null)
                 throw new ArgumentNullException();
-            return request.IsActual(_stringQuery);
+            return request.IsActual(_stringOriginalQuery);
         }
 
         public Processor this[int index]
@@ -131,12 +148,12 @@ namespace DynamicReflector
             get
             {
                 Processor p = _processorContainer[index];
-                return ProcessorHandler.RenameProcessor(p, _stringQuery[p.Tag[0]].ToString());
+                return ProcessorHandler.RenameProcessor(p, _stringOriginalQuery[p.Tag[0]].ToString());
             }
         }
 
         public int Count => _processorContainer.Count;
 
-        public override string ToString() => _stringQuery;
+        public override string ToString() => _stringOriginalQuery;
     }
 }

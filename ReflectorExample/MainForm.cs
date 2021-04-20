@@ -1082,5 +1082,25 @@ namespace ReflectorExample
         void LstNeurons_DoubleClick(object sender, EventArgs e) => SafetyExecute(() => lstNeurons.SetItemCheckState(lstNeurons.SelectedIndex, lstNeurons.GetItemCheckState(lstNeurons.SelectedIndex)));
 
         void LstNeurons_SelectedIndexChanged(object sender, EventArgs e) => lstNeurons.SetItemCheckState(lstNeurons.SelectedIndex, lstNeurons.GetItemCheckState(lstNeurons.SelectedIndex));
+
+        /*if (chkboxlist.SelectedItem!=null) //КАК ВАРИАНТ
+{chkboxlist.SelectedItem.Enabled = false;}*/
+
+        // ИЛИ
+
+        /*private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e) {
+        if (e.Index == 0) e.NewValue = e.CurrentValue;
+    }
+        
+         ИЛИ
+
+        checkedListBox1.SetItemCheckState(0, CheckState.Indeterminate);
+
+        ИЛИ
+
+        _myCheckedListBox.ItemChecking += (s, e) => e.Cancel = true;
+
+         */
+
     }
 }
