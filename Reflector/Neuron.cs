@@ -41,13 +41,23 @@ namespace DynamicReflector
         /// <summary>
         /// Преобразует запрос из человекочитаемой формы во внутреннее его представление.
         /// </summary>
-        /// <param name="query"></param>
+        /// <param name="origQuery"></param>
         /// <returns>В случае ошибки возвращается <see cref="string.Empty"/>. В противном случае, строка внутреннего запроса.</returns>
-        string TranslateQuery(string query)
+        string TranslateQueryToInternal(string origQuery)
         {
-            if (string.IsNullOrEmpty(query))
+            if (origQuery == null)
                 throw new ArgumentException();
-            return new string(query.SelectMany(GetPositionByChar).ToArray());
+            return new string(origQuery.SelectMany(GetPositionByChar).ToArray());
+        }
+
+        string TranslateQueryFromInternal(string intQuery)
+        {
+            if (intQuery == null)
+                throw new ArgumentException();
+            StringBuilder sbResult = new StringBuilder(intQuery.Length);
+            foreach (char c in intQuery)
+                sbResult.Append(_stringOriginalQuery[c]);
+            return sbResult.ToString();
         }
 
         IEnumerable<char> GetPositionByChar(char symbol)
@@ -76,7 +86,9 @@ namespace DynamicReflector
 
         public Reflex ToReflex() => _workReflex;
 
-        public ProcessorContainer ToProcessorContainer()
+        public ProcessorContainer ToProcessorContainer() => ConvertProcessorContainerToOriginal(_processorContainer);
+
+        ProcessorContainer ConvertProcessorContainerToOriginal(ProcessorContainer toConvert)
         {
             Processor GetProcessorWithOriginalTag(Processor p)
             {
@@ -87,9 +99,9 @@ namespace DynamicReflector
                 return ProcessorHandler.RenameProcessor(p, sb.ToString());
             }
 
-            ProcessorContainer pc = new ProcessorContainer(GetProcessorWithOriginalTag(_processorContainer[0]));
-            for (int k = 1; k < _processorContainer.Count; ++k)
-                pc.Add(GetProcessorWithOriginalTag(_processorContainer[k]));
+            ProcessorContainer pc = new ProcessorContainer(GetProcessorWithOriginalTag(toConvert[0]));
+            for (int k = 1; k < toConvert.Count; ++k)
+                pc.Add(GetProcessorWithOriginalTag(toConvert[k]));
 
             return pc;
         }
@@ -99,21 +111,23 @@ namespace DynamicReflector
             if (!IsActual(request))
                 throw new ArgumentException();
             ProcessorHandler ph = new ProcessorHandler();
-            HashSet<char> strHash = new HashSet<char>();
             foreach ((Processor processor, string query) in request.Queries)
+                foreach (string qMatrix in Matrixes(query))
+                {
+                    Reflex refResult = _workReflex.FindRelation(processor, qMatrix);
+                    if (refResult != null)
+                        ph.AddRange(GetNewProcessors(_workReflex, refResult));
+                }
+
+            return request.IsActual(TranslateQueryFromInternal(ph.ToString())) ? new Neuron(ConvertProcessorContainerToOriginal(ph.Processors)) : null;
+
+            /*if (strHash.SetEquals(new HashSet<char>(ph.ToString())))
             {
-                string translatedQuery = TranslateQuery(query);
-                Reflex refResult = _workReflex.FindRelation(processor, translatedQuery);
-                if (refResult == null)
-                    continue;
+                ProcessorHandler tph = new ProcessorHandler();
 
-                foreach (char c in translatedQuery)
-                    strHash.Add(c);
-
-                ph.AddRange(GetNewProcessors(_workReflex, refResult));
             }
 
-            return strHash.SetEquals(new HashSet<char>(TranslateQuery(request.ToString()))) ? new Neuron(ph.Processors) : null; // ПРИМЕРНО ТАК!
+            return  ? new Neuron(ph.Processors) : null;*/ // ПРИМЕРНО ТАК!
             //Проверить наличие ВСЕХ имеющихся карт!!
             //return request.IsActual(ph.ToString()) ? new Neuron(ph.Processors) : null;
         }
@@ -125,7 +139,7 @@ namespace DynamicReflector
             HashSet<char> strHash = new HashSet<char>();
             foreach ((Processor processor, string query) in request.Queries)
             {
-                string translatedQuery = TranslateQuery(query);//Разобраться с выполнением запроса, так не будет работать, сделать его выполнение параллельным, т.е. каждую букву запроса обрабатывать отдельно.
+                string translatedQuery = TranslateQueryToInternal(query);//Разобраться с выполнением запроса, так не будет работать, сделать его выполнение параллельным, т.е. каждую букву запроса обрабатывать отдельно.
                 if (!processor.GetEqual(_processorContainer).FindRelation(translatedQuery))
                     continue;
 
@@ -133,7 +147,7 @@ namespace DynamicReflector
                     strHash.Add(c);
             }
 
-            return strHash.SetEquals(new HashSet<char>(TranslateQuery(request.ToString()))); // request.IsActual(result.ToString());
+            return strHash.SetEquals(new HashSet<char>(TranslateQueryToInternal(request.ToString()))); // request.IsActual(result.ToString());
         }
 
         /*public string FindRelation(Processor processor)
@@ -179,30 +193,24 @@ namespace DynamicReflector
             return result.ToString();
         }*/
 
-        public Neuron FindRelation(Request request)//МОЖНО РАБОТАТЬ!
+        /*public Neuron FindRelation(Request request)
         {
             if (!request.IsActual(ToString()))
                 return null;
             ProcessorContainer preResult = null;
-            foreach (ProcessorContainer prc in Matrixes)
-            {
-                foreach ((Processor processor, string query) in request.Queries)
+            foreach ((Processor processor, string query) in request.Queries)
+                foreach (string qMatrix in Matrixes(query))
                 {
-                    Reflex workReflex = new Reflex(prc);
-                    Reflex refResult = workReflex.FindRelation(processor, TranslateQuery(query));
-                    if (refResult == null)
-                        break;
                     List<Processor> lstProcs = new List<Processor>(GetNewProcessors(workReflex, refResult));
                     if (preResult == null)
                         preResult = new ProcessorContainer(lstProcs);
                     else
                         preResult.AddRange(lstProcs);
                 }
-            }
             if (preResult != null)
                 return new Neuron(preResult);
             return null;
-        }
+        }*/
 
         /// <summary>
         ///     Возвращает все варианты запросов для распознавания какой-либо карты.
@@ -229,9 +237,10 @@ namespace DynamicReflector
                 for (int x = 0; x < mx; ++x)
                     if (count[x] < mx)
                     {
-                        char c = _stringOriginalQuery[_processorContainer[count[x]].Tag[0]];
+                        char cInternal = _processorContainer[count[x]].Tag[0];
+                        char c = _stringOriginalQuery[cInternal];
                         charSet.Add(c);
-                        result.Append(c);
+                        result.Append(cInternal);
                     }
                 if (subSet.IsSubsetOf(charSet))
                     yield return result.ToString();
