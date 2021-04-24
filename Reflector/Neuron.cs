@@ -76,7 +76,7 @@ namespace DynamicReflector
             if (start == null)
                 throw new ArgumentNullException();
             if (finish == null)
-                throw new ArgumentNullException();
+                yield break;
             for (int k = start.Count; k < finish.Count; ++k)
             {
                 Processor p = finish[k];
@@ -111,25 +111,12 @@ namespace DynamicReflector
             if (!IsActual(request))
                 throw new ArgumentException();
             ProcessorHandler ph = new ProcessorHandler();
+
             foreach ((Processor processor, string query) in request.Queries)
                 foreach (string qMatrix in Matrixes(query))
-                {
-                    Reflex refResult = _workReflex.FindRelation(processor, qMatrix);
-                    if (refResult != null)
-                        ph.AddRange(GetNewProcessors(_workReflex, refResult));
-                }
+                        ph.AddRange(GetNewProcessors(_workReflex, _workReflex.FindRelation(processor, qMatrix)));
 
             return request.IsActual(TranslateQueryFromInternal(ph.ToString())) ? new Neuron(ConvertProcessorContainerToOriginal(ph.Processors)) : null;
-
-            /*if (strHash.SetEquals(new HashSet<char>(ph.ToString())))
-            {
-                ProcessorHandler tph = new ProcessorHandler();
-
-            }
-
-            return  ? new Neuron(ph.Processors) : null;*/ // ПРИМЕРНО ТАК!
-            //Проверить наличие ВСЕХ имеющихся карт!!
-            //return request.IsActual(ph.ToString()) ? new Neuron(ph.Processors) : null;
         }
 
         public bool CheckRelation(Request request)
@@ -227,22 +214,23 @@ namespace DynamicReflector
             HashSet<char> subSet = new HashSet<char>();
             foreach (char c in query)
                 subSet.Add(char.ToUpper(c));
-            int[] count = new int[query.Length];
+            if (!subSet.IsSubsetOf(_mainCharSet))
+                throw new ArgumentException();
+            int[] count = new int[subSet.Count];
             HashSet<char> charSet = new HashSet<char>();
-            StringBuilder result = new StringBuilder(query.Length);
+            StringBuilder result = new StringBuilder(subSet.Count);
             do
             {
                 result.Clear();
                 charSet.Clear();
-                for (int x = 0; x < mx; ++x)
-                    if (count[x] < mx)
-                    {
-                        char cInternal = _processorContainer[count[x]].Tag[0];
-                        char c = _stringOriginalQuery[cInternal];
-                        charSet.Add(c);
-                        result.Append(cInternal);
-                    }
-                if (subSet.IsSubsetOf(charSet))
+                foreach (int t in count)
+                {
+                    char cInternal = _processorContainer[t].Tag[0];
+                    charSet.Add(_stringOriginalQuery[cInternal]);
+                    result.Append(cInternal);
+                }
+
+                if (subSet.SetEquals(charSet))
                     yield return result.ToString();
             } while (ChangeCount(count));
         }
@@ -307,7 +295,7 @@ namespace DynamicReflector
                 throw new ArgumentException($"{nameof(ChangeCount)}: Массив карт пустой (ось X).", nameof(_processorContainer));
             for (int k = count.Length - 1; k >= 0; k--)
             {
-                if (count[k] > _processorContainer.Count - 1)
+                if (count[k] >= _processorContainer.Count - 1)
                     continue;
                 count[k]++;
                 for (int x = k + 1; x < count.Length; x++)
