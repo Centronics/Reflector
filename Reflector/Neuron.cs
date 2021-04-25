@@ -114,7 +114,7 @@ namespace DynamicReflector
 
             foreach ((Processor processor, string query) in request.Queries)
                 foreach (string qMatrix in Matrixes(query))
-                        ph.AddRange(GetNewProcessors(_workReflex, _workReflex.FindRelation(processor, qMatrix)));
+                    ph.AddRange(GetNewProcessors(_workReflex, _workReflex.FindRelation(processor, qMatrix)));
 
             return request.IsActual(TranslateQueryFromInternal(ph.ToString())) ? new Neuron(ConvertProcessorContainerToOriginal(ph.Processors)) : null;
         }
@@ -199,10 +199,60 @@ namespace DynamicReflector
             return null;
         }*/
 
+        struct StringCounter
+        {
+            char _currentValue;
+            readonly char _maxValue;
+            readonly char[] _values;
+
+            public StringCounter(IEnumerable<char> values)
+            {
+                if (values == null)
+                    throw new ArgumentNullException();
+                _values = values.ToArray();
+                if (_values == null || _values.Length <= 0)
+                    throw new ArgumentException();
+                _currentValue = char.MinValue;
+                _maxValue = Convert.ToChar(_values.Length - 1);
+            }
+
+            public void Reset()
+            {
+                _currentValue = char.MinValue;
+            }
+
+            public static StringCounter operator ++(StringCounter conv)
+            {
+                ++conv._currentValue;
+                return conv;
+            }
+
+            public static implicit operator bool(StringCounter conv)
+            {
+                return conv._currentValue < conv._maxValue;
+            }
+
+            public static implicit operator char(StringCounter conv)
+            {
+                return conv._values[conv._currentValue];
+            }
+        }
+
+        StringCounter[] GetElementNumbers(ICollection<char> chs)
+        {
+            StringCounter[] qTextArray = new StringCounter[chs.Count];
+
+            int k = 0;
+            foreach (char c in chs)
+                qTextArray[k++] = new StringCounter(GetPositionByChar(c));
+
+            return qTextArray;
+        }
+
         /// <summary>
         ///     Возвращает все варианты запросов для распознавания какой-либо карты.
         /// </summary>
-        /// <param name="_processorContainer">Массив карт для чтения первых символов их названий. Остальные символы игнорируются.</param>
+        /// <param name="query"></param>
         /// <returns>Возвращает все варианты запросов для распознавания какой-либо карты.</returns>
         IEnumerable<string> Matrixes(string query)
         {
@@ -212,27 +262,15 @@ namespace DynamicReflector
             if (mx <= 0)
                 throw new ArgumentException($"{nameof(Matrixes)}: Массив карт пустой (ось X).", nameof(_processorContainer));
             HashSet<char> subSet = new HashSet<char>();
+
             foreach (char c in query)
                 subSet.Add(char.ToUpper(c));
+
             if (!subSet.IsSubsetOf(_mainCharSet))
                 throw new ArgumentException();
-            int[] count = new int[subSet.Count];
-            HashSet<char> charSet = new HashSet<char>();
-            StringBuilder result = new StringBuilder(subSet.Count);
-            do
-            {
-                result.Clear();
-                charSet.Clear();
-                foreach (int t in count)
-                {
-                    char cInternal = _processorContainer[t].Tag[0];
-                    charSet.Add(_stringOriginalQuery[cInternal]);
-                    result.Append(cInternal);
-                }
 
-                if (subSet.SetEquals(charSet))
-                    yield return result.ToString();
-            } while (ChangeCount(count));
+            foreach (string qs in GetQueryStrings(GetElementNumbers(subSet)))
+                yield return qs;
         }
 
         /* /// <summary> //OLDDDDDDDDDDDDDDD
@@ -277,32 +315,35 @@ namespace DynamicReflector
         ///     Если увеличение было произведено, возвращается значение <see langword="true" />, в противном случае -
         ///     <see langword="false" />.
         /// </summary>
-        /// <param name="count">Массив-счётчик.</param>
+        /// <param name="counters">Массив-счётчик.</param>
         /// <returns>
         ///     Если увеличение было произведено, возвращается значение <see langword="true" />, в противном случае -
         ///     <see langword="false" />.
         /// </returns>
-        bool ChangeCount(int[] count)
+        IEnumerable<string> GetQueryStrings(StringCounter[] counters)
         {
-            if (count == null)
-                throw new ArgumentNullException(nameof(count), $"{nameof(ChangeCount)}: Массив-счётчик равен null.");
-            if (count.Length <= 0)
+            if (counters == null)
+                throw new ArgumentNullException(nameof(counters), $"{nameof(GetQueryStrings)}: Массив-счётчик равен null.");
+            if (counters.Length <= 0)
                 throw new ArgumentException(
-                    $"{nameof(ChangeCount)}: Длина массива-счётчика некорректна ({count.Length}).", nameof(count));
-            if (_processorContainer == null)
-                throw new ArgumentNullException(nameof(_processorContainer), $"{nameof(ChangeCount)}: Массив карт равен null.");
-            if (_processorContainer.Count <= 0)
-                throw new ArgumentException($"{nameof(ChangeCount)}: Массив карт пустой (ось X).", nameof(_processorContainer));
-            for (int k = count.Length - 1; k >= 0; k--)
+                    $"{nameof(GetQueryStrings)}: Длина массива-счётчика некорректна ({counters.Length}).", nameof(counters));
+
+            char[] output = new char[counters.Length];
+            for (int k = counters.Length - 1; k >= 0; --k)
             {
-                if (count[k] >= _processorContainer.Count - 1)
+                if (!counters[k])
                     continue;
-                count[k]++;
-                for (int x = k + 1; x < count.Length; x++)
-                    count[x] = 0;
-                return true;
+
+                output[k] = ++counters[k];
+
+                for (int x = k + 1; x < counters.Length; x++)
+                {
+                    counters[x].Reset();
+                    output[x] = counters[x];
+                }
+
+                yield return new string(output);
             }
-            return false;
         }
 
         public bool IsActual(Request request)
