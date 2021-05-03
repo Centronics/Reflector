@@ -224,6 +224,6 @@ namespace DynamicReflector
         }
 
         /// <inheritdoc />
-        public override int GetHashCode(Processor obj) => HashCreator.GetHash(obj);
+        public override int GetHashCode(Processor obj) => HashCreator.GetHash(obj, false);
     }
 }

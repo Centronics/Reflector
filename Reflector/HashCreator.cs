@@ -20,11 +20,11 @@ namespace DynamicReflector
         /// </summary>
         static HashCreator()
         {
-            for (int k = 0; k < Table.Length; ++k)
+            for (int k = 0; k < Table.Length; k++)
             {
                 int num = k;
-                for (int i = 0; i < 8; ++i)
-                    if ((uint) (num & 128) > 0U)
+                for (int i = 0; i < 8; i++)
+                    if ((uint)(num & 128) > 0U)
                         num = (num << 1) ^ 49;
                     else
                         num <<= 1;
@@ -38,11 +38,14 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="p">Карта, для которой необходимо вычислить значение хеша.</param>
         /// <returns>Возвращает хеш заданной карты.</returns>
-        public static int GetHash(Processor p)
+        public static int GetHash(Processor p, bool includeTag)
         {
             if (p is null)
                 throw new ArgumentNullException(nameof(p), $@"Функция {nameof(GetHash)}.");
-            return GetProcessorBytes(p).Aggregate(255, (currentValue, currentByte) => Table[(byte)(currentValue ^ currentByte)]);
+            List<byte> lstBytes = GetProcessorBytes(p).ToList();
+            if (includeTag)
+                lstBytes.AddRange(BitConverter.GetBytes(p.Tag[0]));
+            return lstBytes.Aggregate(255, (currentValue, currentByte) => Table[(byte)(currentValue ^ currentByte)]);
         }
 
         /// <summary>
@@ -56,12 +59,12 @@ namespace DynamicReflector
             if (p == null)
                 throw new ArgumentNullException(nameof(p), $"{nameof(GetProcessorBytes)}: Карта равна значению null.");
             for (int y = 0; y < p.Height; y++)
-            for (int x = 0; x < p.Width; x++)
-            {
-                byte[] res = BitConverter.GetBytes(p[x, y].Value);
-                foreach (byte r in res)
-                    yield return r;
-            }
+                for (int x = 0; x < p.Width; x++)
+                {
+                    byte[] res = BitConverter.GetBytes(p[x, y].Value);
+                    foreach (byte r in res)
+                        yield return r;
+                }
         }
 
         /*/// <summary>///              //СТАРОЕ

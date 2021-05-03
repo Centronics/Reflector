@@ -79,7 +79,7 @@ namespace DynamicReflector
             if (pc == null)
                 throw new ArgumentNullException();
             ProcessorContainer copy = new ProcessorContainer(pc[0]);
-            for (int k = 1; k < pc.Count; ++k)
+            for (int k = 1; k < pc.Count; k++)
                 copy.Add(pc[k]);
             return copy;
         }

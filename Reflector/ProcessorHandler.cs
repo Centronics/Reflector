@@ -68,11 +68,11 @@ namespace DynamicReflector
             void SetProps()
             {
                 AddProcessorName(p.Tag[0]);
-                ++Count;
+                Count++;
                 IsEmpty = false;
             }
 
-            int hash = HashCreator.GetHash(p);
+            int hash = HashCreator.GetHash(p, true);
             if (_dicProcsWithTag.TryGetValue(hash, out List<Processor> prcs))
             {
                 if (prcs.Any(prc => ProcessorCompare(prc, p)))
@@ -96,8 +96,10 @@ namespace DynamicReflector
                 throw new ArgumentException();
             if (p1.Width != p2.Width)
                 throw new ArgumentException();
-            for (int i = 0; i < p1.Width; ++i)
-                for (int j = 0; j < p1.Height; ++j)
+            if (char.ToUpper(p1.Tag[0]) != char.ToUpper(p2.Tag[0]))
+                return false;
+            for (int i = 0; i < p1.Width; i++)
+                for (int j = 0; j < p1.Height; j++)
                     if (p1[i, j] != p2[i, j])
                         return false;
             return true;
@@ -111,15 +113,14 @@ namespace DynamicReflector
                 throw new ArgumentException($"\"{nameof(newTag)}\" не может быть пустым или содержать только пробел.", nameof(newTag));
 
             SignValue[,] sv = new SignValue[processor.Width, processor.Height];
-            for (int i = 0; i < processor.Width; ++i)
-                for (int j = 0; j < processor.Height; ++j)
+            for (int i = 0; i < processor.Width; i++)
+                for (int j = 0; j < processor.Height; j++)
                     sv[i, j] = processor[i, j];
             return new Processor(sv, newTag);
         }
 
-        public override string ToString()
-        {
-            return _sbQuery.ToString();
-        }
+        public bool SetEquals(string values) => _procNames.SetEquals(values);
+
+        public override string ToString() => _sbQuery.ToString();
     }
 }

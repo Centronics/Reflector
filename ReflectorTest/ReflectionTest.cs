@@ -1515,7 +1515,7 @@ namespace ReflectorTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void CheckSumTest()
         {
-            HashCreator.GetHash(null);
+            HashCreator.GetHash(null, false);
         }
 
         sealed class ReflectionTestClass : Reflection
