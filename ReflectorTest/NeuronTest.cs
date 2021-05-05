@@ -78,7 +78,6 @@ namespace ReflectorTest
                 if (parentNeuron.ToString().Any(c => !charSet.Contains(char.ToUpper(c))))
                     throw new Exception($"{nameof(NeuronTest0)}_1");
 
-                Assert.AreEqual(true, parentNeuron.IsActual(request));
                 Assert.AreEqual(4, parentNeuron.Count);
                 Assert.AreEqual(4, parentNeuron.ToString().Length);
                 Assert.AreEqual(true, parentNeuron.CheckRelation(request));
@@ -97,7 +96,6 @@ namespace ReflectorTest
                 Neuron derivedNeuron = parentNeuron.FindRelation(request);
                 Assert.AreNotEqual(null, derivedNeuron);
                 Assert.AreEqual("1234", derivedNeuron.ToString());
-                Assert.AreEqual(true, derivedNeuron.IsActual(request));
                 Assert.AreEqual(parentNeuron.Count, derivedNeuron.Count);
                 Assert.AreEqual(true, parentNeuron.CheckRelation(request));
                 Assert.AreNotEqual(null, derivedNeuron.FindRelation(request));

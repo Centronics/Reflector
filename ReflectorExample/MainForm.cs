@@ -1072,13 +1072,6 @@ namespace ReflectorExample
             _workThread.Start();
         });
 
-        void BtnQueryCorrect_Click(object sender, EventArgs e) => SafetyExecute(() =>
-        {
-            string answer = lstNeurons.SelectedIndex < 1 ? @"Ошибка! Выберите нейрон, с помощью которого будет создан новый нейрон!" :
-                _neurons[lstNeurons.SelectedIndex - 1].IsActual(NeuronQuery) ? $"Запрос может быть выполнен на выбранном {nameof(Neuron)}." : $"Этот запрос неактуален для выбранного {nameof(Neuron)}.";
-            MessageBox.Show(this, answer, @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        });
-
         void LstNeurons_DoubleClick(object sender, EventArgs e) => SafetyExecute(() => lstNeurons.SetItemCheckState(lstNeurons.SelectedIndex, lstNeurons.GetItemCheckState(lstNeurons.SelectedIndex)));
 
         void LstNeurons_SelectedIndexChanged(object sender, EventArgs e) => lstNeurons.SetItemCheckState(lstNeurons.SelectedIndex, lstNeurons.GetItemCheckState(lstNeurons.SelectedIndex));

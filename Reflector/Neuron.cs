@@ -36,7 +36,7 @@ namespace DynamicReflector
             _stringOriginalQuery = sbOriginal.ToString();
         }
 
-        char[] GetPositionsOfChar(char symbol)
+        IEnumerable<char> GetPositionsOfChar(char symbol)
         {
             IEnumerable<char> GetPositions()
             {
@@ -45,7 +45,7 @@ namespace DynamicReflector
                         yield return k;
             }
 
-            return GetPositions().ToArray();
+            return GetPositions();
         }
 
         static IEnumerable<Processor> GetNewProcessors(Reflex start, Reflex finish)
@@ -80,8 +80,6 @@ namespace DynamicReflector
 
         public Neuron FindRelation(Request request)
         {
-            if (!IsActual(request))
-                throw new ArgumentException();
             ProcessorHandler ph = new ProcessorHandler();
 
             foreach ((Processor processor, string query) in request.Queries)
@@ -93,8 +91,6 @@ namespace DynamicReflector
 
         public bool CheckRelation(Request request)
         {
-            if (!IsActual(request))
-                throw new ArgumentException();
             HashSet<char> strHash = new HashSet<char>();
 
             foreach ((Processor processor, string query) in request.Queries)
@@ -121,7 +117,7 @@ namespace DynamicReflector
                 if (values == null)
                     throw new ArgumentNullException();
                 _values = values.ToArray();
-                if (_values == null || _values.Length <= 0)
+                if (_values.Length <= 0)
                     throw new ArgumentException();
                 _currentValue = char.MinValue;
                 _maxValue = Convert.ToChar(_values.Length);
@@ -153,9 +149,12 @@ namespace DynamicReflector
             if (string.IsNullOrWhiteSpace(query))
                 throw new ArgumentException($"{nameof(Matrixes)}: {nameof(query)} пустой.", nameof(query));
 
-            List<StringCounter> lst = query.Select(GetPositionsOfChar).TakeWhile(chars => chars.Length > 0).Select(chars => new StringCounter(chars)).ToList();//ДОДЕЛАТЬ
+            StringCounter[] stringCounters = query.Select(c => GetPositionsOfChar(c).ToArray()).TakeWhile(chx => chx.Length > 0).Select(chx => new StringCounter(chx)).ToArray();
 
-            foreach (string qs in GetQueryStrings(query.Select(c => new StringCounter(GetPositionsOfChar(c))).ToArray()))
+            if (stringCounters.Length != query.Length)
+                throw new Exception();
+
+            foreach (string qs in GetQueryStrings(stringCounters))
                 yield return qs;
         }
 
@@ -169,16 +168,16 @@ namespace DynamicReflector
         ///     Если увеличение было произведено, возвращается значение <see langword="true" />, в противном случае -
         ///     <see langword="false" />.
         /// </returns>
-        IEnumerable<string> GetQueryStrings(StringCounter[] counters)
+        IEnumerable<string> GetQueryStrings(IList<StringCounter> counters)
         {
             if (counters == null)
                 throw new ArgumentNullException(nameof(counters), $"{nameof(GetQueryStrings)}: Массив-счётчик равен null.");
-            if (counters.Length <= 0)
+            if (counters.Count <= 0)
                 throw new ArgumentException(
-                    $"{nameof(GetQueryStrings)}: Длина массива-счётчика некорректна ({counters.Length}).", nameof(counters));
+                    $"{nameof(GetQueryStrings)}: Длина массива-счётчика некорректна ({counters.Count}).", nameof(counters));
 
-            char[] output = new char[counters.Length];
-            for (int k = counters.Length - 1; k >= 0; --k)
+            char[] output = new char[counters.Count];
+            for (int k = counters.Count - 1; k >= 0; --k)
             {
                 output[k] = counters[k];
 
@@ -187,7 +186,7 @@ namespace DynamicReflector
 
                 counters[k]++;
 
-                for (int x = k + 1; x < counters.Length; x++)
+                for (int x = k + 1; x < counters.Count; x++)
                 {
                     counters[x].Reset();
                     output[x] = counters[x];
@@ -195,13 +194,6 @@ namespace DynamicReflector
 
                 yield return new string(output);
             }
-        }
-
-        public bool IsActual(Request request)
-        {
-            if (request == null)
-                throw new ArgumentNullException();
-            return request.IsActual(_stringOriginalQuery);
         }
 
         public Processor this[int index]
