@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DynamicMosaic;
 using DynamicParser;
 using DynamicProcessor;
 using DynamicReflector;
@@ -26,6 +25,38 @@ namespace ReflectorTest
             yield return (new Processor(svq, "p9"), "4");
         }
 
+        static void CheckQueries(Processor processor)
+        {
+            (Processor p, string)[] queries = GetQueries0().ToArray();
+            Assert.AreEqual(4, queries.Length);
+
+            Processor p;
+            switch (processor.Tag)
+            {
+                case "1":
+                    p = queries[0].p;
+                    break;
+
+                case "2":
+                    p = queries[1].p;
+                    break;
+
+                case "3":
+                    p = queries[2].p;
+                    break;
+
+                case "4":
+                    p = queries[3].p;
+                    break;
+
+                default:
+                    throw new Exception();
+            }
+            Assert.AreEqual(p.Height, processor.Height);
+            Assert.AreEqual(p.Width, processor.Width);
+            Assert.AreEqual(p[0, 0], processor[0, 0]);
+        }
+
         static ProcessorContainer GetProcessorContainer0()
         {
             SignValue[,] sv = new SignValue[1, 1];
@@ -38,6 +69,38 @@ namespace ReflectorTest
             sv[0, 0] = new SignValue(4444);
             Processor p4 = new Processor(sv, "4");
             return new ProcessorContainer(p1, p2, p3, p4);
+        }
+
+        static void CheckMapValue(Processor processor)
+        {
+            ProcessorContainer pc = GetProcessorContainer0();
+            Assert.AreEqual(4, pc.Count);
+
+            Processor p;
+            switch (processor.Tag)
+            {
+                case "1":
+                    p = pc[0];
+                    break;
+
+                case "2":
+                    p = pc[1];
+                    break;
+
+                case "3":
+                    p = pc[2];
+                    break;
+
+                case "4":
+                    p = pc[3];
+                    break;
+
+                default:
+                    throw new Exception();
+            }
+            Assert.AreEqual(p.Height, processor.Height);
+            Assert.AreEqual(p.Width, processor.Width);
+            Assert.AreEqual(p[0, 0], processor[0, 0]);
         }
 
         static void GetException(string errorString, Type exType, Action act)//ПРОВЕРИТЬ работоспособность
@@ -62,31 +125,29 @@ namespace ReflectorTest
         public void NeuronTest0()
         {
             ProcessorContainer pcParent = GetProcessorContainer0();
-            Neuron parentNeuron = new Neuron(GetProcessorContainer0());
+            Neuron parentNeuron = new Neuron(pcParent);
             Request request = new Request(GetQueries0());
+
+            HashSet<char> charSet = new HashSet<char>();
+            for (int k = 0; k < pcParent.Count; k++)
+                charSet.Add(char.ToUpper(pcParent[k].Tag[0]));
 
             void CheckParentNeuron()
             {
                 Assert.AreNotEqual(null, parentNeuron);
-
-                HashSet<char> charSet = new HashSet<char>();
-                for (int k = 0; k < pcParent.Count; k++)
-                    charSet.Add(char.ToUpper(pcParent[k].Tag[0]));
                 for (int k = 0; k < parentNeuron.Count; k++)
-                    if (!charSet.Contains(char.ToUpper(parentNeuron[0].Tag[0])))
-                        throw new Exception($@"{nameof(NeuronTest0)}_0");
+                    CheckMapValue(parentNeuron[k]);
+                ProcessorContainer parentContainer = parentNeuron.ToProcessorContainer();
+                for (int k = 0; k < parentContainer.Count; k++)
+                    CheckMapValue(parentContainer[k]);
                 if (parentNeuron.ToString().Any(c => !charSet.Contains(char.ToUpper(c))))
                     throw new Exception($"{nameof(NeuronTest0)}_1");
 
                 Assert.AreEqual(4, parentNeuron.Count);
                 Assert.AreEqual(4, parentNeuron.ToString().Length);
                 Assert.AreEqual(true, parentNeuron.CheckRelation(request));
-                Assert.AreEqual("1", parentNeuron[0]);
                 GetException("Neuron1", typeof(ArgumentOutOfRangeException), () => { Processor unused = parentNeuron[-1]; });
                 GetException("Neuron2", typeof(ArgumentOutOfRangeException), () => { Processor unused = parentNeuron[5]; });
-
-                ProcessorContainer pc = parentNeuron.ToProcessorContainer();
-
             }
 
             CheckParentNeuron();
@@ -95,10 +156,19 @@ namespace ReflectorTest
             {
                 Neuron derivedNeuron = parentNeuron.FindRelation(request);
                 Assert.AreNotEqual(null, derivedNeuron);
-                Assert.AreEqual("1234", derivedNeuron.ToString());
+                for (int k = 0; k < derivedNeuron.Count; k++)
+                    CheckQueries(derivedNeuron[k]);
+                ProcessorContainer derivedContainer = derivedNeuron.ToProcessorContainer();
+                for (int k = 0; k < derivedContainer.Count; k++)
+                    CheckQueries(derivedContainer[k]);
+                if (derivedNeuron.ToString().Any(c => !charSet.Contains(char.ToUpper(c))))
+                    throw new Exception($"{nameof(NeuronTest0)}_2");
                 Assert.AreEqual(parentNeuron.Count, derivedNeuron.Count);
-                Assert.AreEqual(true, parentNeuron.CheckRelation(request));
+                Assert.AreEqual(parentNeuron.ToString().Length, derivedNeuron.ToString().Length);
+                Assert.AreEqual(true, derivedNeuron.CheckRelation(request));
                 Assert.AreNotEqual(null, derivedNeuron.FindRelation(request));
+                GetException("Neuron3", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[-1]; });
+                GetException("Neuron4", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[5]; });
             }
 
             CheckDerivedNeuron();

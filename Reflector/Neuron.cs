@@ -38,14 +38,9 @@ namespace DynamicReflector
 
         IEnumerable<char> GetPositionsOfChar(char symbol)
         {
-            IEnumerable<char> GetPositions()
-            {
-                for (char k = char.MinValue; k < _stringOriginalQuery.Length; k++)
-                    if (_stringOriginalQuery[k] == symbol)
-                        yield return k;
-            }
-
-            return GetPositions();
+            for (char k = char.MinValue; k < _stringOriginalQuery.Length; k++)
+                if (_stringOriginalQuery[k] == symbol)
+                    yield return k;
         }
 
         static IEnumerable<Processor> GetNewProcessors(Reflex start, Reflex finish)
