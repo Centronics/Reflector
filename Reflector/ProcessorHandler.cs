@@ -35,6 +35,19 @@ namespace DynamicReflector
 
         public bool IsEmpty { get; private set; } = true;
 
+        Processor FirstProcessor => _dicProcsWithTag.Values.FirstOrDefault()?.FirstOrDefault();
+
+        void CheckProcessorSizes(Processor p)
+        {
+            if (p == null)
+                throw new ArgumentNullException();
+            Processor t = FirstProcessor;
+            if (t == null)
+                return;
+            if (t.Size != p.Size)
+                throw new ArgumentException();
+        }
+
         Processor GetUniqueProcessor(Processor p)
         {
             if (!_hashProcs.Contains(p.Tag))
@@ -65,6 +78,8 @@ namespace DynamicReflector
 
         public bool Add(Processor p)
         {
+            CheckProcessorSizes(p);
+
             void SetProps()
             {
                 AddProcessorName(p.Tag[0]);
@@ -72,10 +87,10 @@ namespace DynamicReflector
                 IsEmpty = false;
             }
 
-            int hash = HashCreator.GetHash(p, true);
+            int hash = HashCreator.GetHash(p, false);
             if (_dicProcsWithTag.TryGetValue(hash, out List<Processor> prcs))
             {
-                if (prcs.Any(prc => ProcessorCompare(prc, p)))
+                if (prcs.Any(prc => ProcessorCompare(prc, p, true)))
                     return false;
                 prcs.Add(GetUniqueProcessor(p));
                 SetProps();
@@ -86,17 +101,22 @@ namespace DynamicReflector
             return true;
         }
 
-        static bool ProcessorCompare(Processor p1, Processor p2)
+        public IEnumerable<Processor> Find(Processor p)
+        {
+            CheckProcessorSizes(p);
+            if (!_dicProcsWithTag.TryGetValue(HashCreator.GetHash(p, false), out List<Processor> prcs))
+                yield break;
+            foreach (Processor prc in prcs.Where(prc => ProcessorCompare(prc, p, false)))
+                yield return prc;
+        }
+
+        static bool ProcessorCompare(Processor p1, Processor p2, bool includeTag)
         {
             if (p1 == null)
                 throw new ArgumentNullException();
             if (p2 == null)
                 throw new ArgumentNullException();
-            if (p1.Height != p2.Height)
-                throw new ArgumentException();
-            if (p1.Width != p2.Width)
-                throw new ArgumentException();
-            if (char.ToUpper(p1.Tag[0]) != char.ToUpper(p2.Tag[0]))
+            if (includeTag && char.ToUpper(p1.Tag[0]) != char.ToUpper(p2.Tag[0]))
                 return false;
             for (int i = 0; i < p1.Width; i++)
                 for (int j = 0; j < p1.Height; j++)

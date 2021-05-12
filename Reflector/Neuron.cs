@@ -25,9 +25,14 @@ namespace DynamicReflector
             StringBuilder sbOriginal = new StringBuilder(pc.Count);
             for (char k = char.MinValue; k < pc.Count; k++)
             {
-                Processor p = pc[k];
-                if (ph.Add(ProcessorHandler.RenameProcessor(p, k.ToString())))
-                    sbOriginal.Append(char.ToUpper(p.Tag[0]));
+                Processor proc = pc[k];
+                char pTag = char.ToUpper(proc.Tag[0]);
+                if (ph.Find(proc).Any(p => sbOriginal[p.Tag[0]] == pTag))
+                    continue;
+
+                if (!ph.Add(ProcessorHandler.RenameProcessor(proc, Convert.ToChar(sbOriginal.Length).ToString())))
+                    throw new Exception();
+                sbOriginal.Append(pTag);
             }
 
             _processorContainer = ph.Processors;
@@ -144,6 +149,7 @@ namespace DynamicReflector
             if (string.IsNullOrWhiteSpace(query))
                 throw new ArgumentException($"{nameof(Matrixes)}: {nameof(query)} пустой.", nameof(query));
 
+            query = query.ToUpper();
             StringCounter[] stringCounters = query.Select(c => GetPositionsOfChar(c).ToArray()).TakeWhile(chx => chx.Length > 0).Select(chx => new StringCounter(chx)).ToArray();
 
             if (stringCounters.Length != query.Length)
@@ -163,7 +169,7 @@ namespace DynamicReflector
         ///     Если увеличение было произведено, возвращается значение <see langword="true" />, в противном случае -
         ///     <see langword="false" />.
         /// </returns>
-        IEnumerable<string> GetQueryStrings(IList<StringCounter> counters)
+        static IEnumerable<string> GetQueryStrings(IList<StringCounter> counters)
         {
             if (counters == null)
                 throw new ArgumentNullException(nameof(counters), $"{nameof(GetQueryStrings)}: Массив-счётчик равен null.");
