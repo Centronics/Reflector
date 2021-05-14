@@ -58,8 +58,6 @@ namespace DynamicReflector
                 yield return finish[k];
         }
 
-        public ProcessorContainer ToProcessorContainer() => ConvertProcessorContainerToOriginal(_processorContainer);
-
         ProcessorContainer ConvertProcessorContainerToOriginal(ProcessorContainer toConvert)
         {
             Processor GetProcessorWithOriginalTag(Processor p)
