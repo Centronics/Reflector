@@ -12,19 +12,6 @@ namespace ReflectorTest
     [TestClass]
     public class NeuronTest
     {
-        static IEnumerable<(Processor, string)> GetCorrectQueries0()
-        {
-            SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
-        }
-
         static IEnumerable<(Processor, string)> GetCorrectQueries1()
         {
             SignValue[,] svq = new SignValue[1, 1];
@@ -154,6 +141,8 @@ namespace ReflectorTest
             yield return (new Processor(svq, "pa"), "2");
         }
 
+        #region Test1
+
         static IEnumerable<Processor> GetProcessorContainer0()
         {
             SignValue[,] sv = new SignValue[1, 1];
@@ -169,6 +158,21 @@ namespace ReflectorTest
             yield return new Processor(sv, "5");
             yield return new Processor(sv, "6");
         }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries0()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "1");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "2");
+            svq[0, 0] = new SignValue(3444);
+            yield return (new Processor(svq, "p8"), "3");
+            svq[0, 0] = new SignValue(4555);
+            yield return (new Processor(svq, "p9"), "4");
+        }
+
+        #endregion
 
         static void GetException(string errorString, Type exType, Action act)//ПРОВЕРИТЬ работоспособность
         {

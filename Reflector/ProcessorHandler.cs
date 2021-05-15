@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DynamicParser;
 using DynamicProcessor;
 using Processor = DynamicParser.Processor;
@@ -12,7 +11,6 @@ namespace DynamicReflector
     {
         readonly Dictionary<int, List<Processor>> _dicProcsWithTag = new Dictionary<int, List<Processor>>();
         readonly HashSet<string> _hashProcs = new HashSet<string>();
-        readonly StringBuilder _sbQuery = new StringBuilder();
         readonly HashSet<char> _procNames = new HashSet<char>();
 
         public ProcessorContainer Processors
@@ -67,22 +65,13 @@ namespace DynamicReflector
                 Add(processor);
         }
 
-        void AddProcessorName(char c)
-        {
-            c = char.ToUpper(c);
-            if (_procNames.Contains(c))
-                return;
-            _sbQuery.Append(c);
-            _procNames.Add(c);
-        }
-
-        public bool Add(Processor p)
+        public void Add(Processor p)
         {
             CheckProcessorSizes(p);
 
             void SetProps()
             {
-                AddProcessorName(p.Tag[0]);
+                _procNames.Add(char.ToUpper(p.Tag[0]));
                 Count++;
                 IsEmpty = false;
             }
@@ -91,14 +80,13 @@ namespace DynamicReflector
             if (_dicProcsWithTag.TryGetValue(hash, out List<Processor> prcs))
             {
                 if (prcs.Any(prc => ProcessorCompare(prc, p, true)))
-                    return false;
+                    return;
                 prcs.Add(GetUniqueProcessor(p));
                 SetProps();
-                return true;
+                return;
             }
             _dicProcsWithTag.Add(hash, new List<Processor> { GetUniqueProcessor(p) });
             SetProps();
-            return true;
         }
 
         public IEnumerable<Processor> Find(Processor p)
@@ -116,7 +104,7 @@ namespace DynamicReflector
                 throw new ArgumentNullException();
             if (p2 == null)
                 throw new ArgumentNullException();
-            if (includeTag && char.ToUpper(p1.Tag[0]) != char.ToUpper(p2.Tag[0]))
+            if (includeTag && string.Compare(p1.Tag, p2.Tag, StringComparison.OrdinalIgnoreCase) != 0)
                 return false;
             for (int i = 0; i < p1.Width; i++)
                 for (int j = 0; j < p1.Height; j++)
@@ -139,8 +127,8 @@ namespace DynamicReflector
             return new Processor(sv, newTag);
         }
 
-        public bool SetEquals(string values) => _procNames.SetEquals(values);
+        public bool SetEquals(IEnumerable<char> values) => _procNames.SetEquals(values);
 
-        public override string ToString() => _sbQuery.ToString();
+        public override string ToString() => new string(_procNames.ToArray());
     }
 }
