@@ -1054,7 +1054,7 @@ namespace ReflectorExample
                     return;
                 }
 
-                bool result = _neurons[selIndex].CheckRelation(NeuronQuery);
+                bool result = true; //_neurons[selIndex].CheckRelation(NeuronQuery);
 
                 InvokeFunction(() =>
                 {

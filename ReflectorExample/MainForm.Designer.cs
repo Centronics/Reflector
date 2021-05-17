@@ -123,7 +123,6 @@
             this.lblDescription = new System.Windows.Forms.Label();
             this.txtNeuronString = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnCheckRelation = new System.Windows.Forms.Button();
             this.btnFindRelation = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lstNeurons = new System.Windows.Forms.CheckedListBox();
@@ -1173,7 +1172,6 @@
             this.grpNeuron.Controls.Add(this.grpDescription);
             this.grpNeuron.Controls.Add(this.txtNeuronString);
             this.grpNeuron.Controls.Add(this.label1);
-            this.grpNeuron.Controls.Add(this.btnCheckRelation);
             this.grpNeuron.Controls.Add(this.btnFindRelation);
             this.grpNeuron.Controls.Add(this.groupBox3);
             this.grpNeuron.Location = new System.Drawing.Point(376, 19);
@@ -1218,16 +1216,6 @@
             this.label1.Size = new System.Drawing.Size(144, 13);
             this.label1.TabIndex = 5;
             this.label1.Text = "Строковое представление:";
-            // 
-            // btnCheckRelation
-            // 
-            this.btnCheckRelation.Location = new System.Drawing.Point(6, 245);
-            this.btnCheckRelation.Name = "btnCheckRelation";
-            this.btnCheckRelation.Size = new System.Drawing.Size(204, 23);
-            this.btnCheckRelation.TabIndex = 3;
-            this.btnCheckRelation.Text = "Проверить связь";
-            this.btnCheckRelation.UseVisualStyleBackColor = true;
-            this.btnCheckRelation.Click += new System.EventHandler(this.BtnCheckRelation_Click);
             // 
             // btnFindRelation
             // 
@@ -1664,7 +1652,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox txtNeuronString;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnCheckRelation;
         private System.Windows.Forms.Button btnFindRelation;
         private System.Windows.Forms.GroupBox grpDescription;
         private System.Windows.Forms.Label lblDescription;

@@ -59,17 +59,15 @@ namespace DynamicReflector
             return ph.SetEquals(_stringOriginalUniqueQuery) ? new Neuron(ph.Processors) : null;
         }
 
-        public bool CheckRelation(Request request)
+        public ProcessorContainer ToProcessorContainer()
         {
-            if (request == null)
-                throw new ArgumentNullException();
+            IEnumerable<Processor> GetProcessors()
+            {
+                for (int k = 0; k < _processorContainer.Count; k++)
+                    yield return _processorContainer[k];
+            }
 
-            HashSet<char> strHash = new HashSet<char>();
-            foreach ((Processor processor, string query) in request.Queries)
-                if (processor.GetEqual(_processorContainer).FindRelation(query))
-                    strHash.UnionWith(query);
-
-            return strHash.SetEquals(_stringOriginalUniqueQuery);
+            return new ProcessorContainer(GetProcessors().ToArray());
         }
 
         public Processor this[int index] => _processorContainer[index];

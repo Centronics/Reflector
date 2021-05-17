@@ -141,7 +141,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "pa"), "2");
         }
 
-        #region Test1
+        #region TestCorrectQueries
 
         static IEnumerable<Processor> GetProcessorContainer0()
         {
@@ -242,7 +242,7 @@ namespace ReflectorTest
                     throw new Exception($"{nameof(CheckParentNeuron)}");
 
                 Assert.AreEqual(expected.Length, parentNeuron.Count);
-                Assert.AreEqual(true, parentNeuron.CheckRelation(request));
+                //Assert.AreEqual(true, parentNeuron.CheckRelation(request));
                 GetException("Neuron1", typeof(ArgumentOutOfRangeException), () => { Processor unused = parentNeuron[-1]; });
                 GetException("Neuron2", typeof(ArgumentOutOfRangeException), () => { Processor unused = parentNeuron[parentNeuron.Count]; });
             }
@@ -260,7 +260,7 @@ namespace ReflectorTest
 
                 Assert.AreEqual(parentNeuron.Count, derivedNeuron.Count);
                 Assert.AreEqual(parentNeuron.ToString().Length, derivedNeuron.ToString().Length);
-                Assert.AreEqual(true, derivedNeuron.CheckRelation(request));
+                //Assert.AreEqual(true, derivedNeuron.CheckRelation(request));
                 Assert.AreNotEqual(null, derivedNeuron.FindRelation(request));
                 GetException("Neuron3", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[-1]; });
                 GetException("Neuron4", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[derivedNeuron.Count]; });
@@ -386,4 +386,40 @@ namespace ReflectorTest
 
             for (int k = 0; k < steps; k++)
                 thrs[k].Join();
+
+public SearchResults[] GetEqual(IList<ProcessorContainer> processors)
+        {
+            if (processors == null)
+                throw new ArgumentNullException(nameof(processors),
+                    $@"{nameof(GetEqual)}: Массив искомых карт не указан.");
+            if (processors.Count <= 0)
+                throw new ArgumentException($@"{nameof(GetEqual)}: Массив искомых карт пустой.", nameof(processors));
+            SearchResults[] sr = new SearchResults[processors.Count];
+            string errString = string.Empty, errStopped = string.Empty;
+            bool exThrown = false, exStopped = false;
+            Parallel.For(0, processors.Count, (k, state) =>
+            {
+                try
+                {
+                    sr[k] = GetEqual(processors[k]);
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        errString = ex.Message;
+                        exThrown = true;
+                        state.Stop();
+                    }
+                    catch (Exception ex1)
+                    {
+                        errStopped = ex1.Message;
+                        exStopped = true;
+                    }
+                }
+            });
+            if (exThrown)
+                throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
+            return sr;
+        }
         }*/
