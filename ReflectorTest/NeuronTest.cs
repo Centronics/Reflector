@@ -12,17 +12,70 @@ namespace ReflectorTest
     [TestClass]
     public class NeuronTest
     {
+        #region Tests
+
+        #region GetProcessors
+
+        static IEnumerable<Processor> GetProcessors0()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return new Processor(sv, "1");
+            sv[0, 0] = new SignValue(2222);
+            yield return new Processor(sv, "2");
+            sv[0, 0] = new SignValue(3333);
+            yield return new Processor(sv, "3");
+            sv[0, 0] = new SignValue(4444);
+            yield return new Processor(sv, "4");
+        }
+
+        static IEnumerable<Processor> GetProcessors1() //написать тесты
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return new Processor(sv, "1");
+            sv[0, 0] = new SignValue(2222);
+            yield return new Processor(sv, "1A");
+            sv[0, 0] = new SignValue(3333);
+            yield return new Processor(sv, "3");
+            sv[0, 0] = new SignValue(4444);
+            yield return new Processor(sv, "4");
+            sv[0, 0] = new SignValue(5555);
+            yield return new Processor(sv, "5");
+            yield return new Processor(sv, "6");
+            sv[0, 0] = new SignValue(7777);
+            yield return new Processor(sv, "7");
+            yield return new Processor(sv, "7B");
+        }
+
+        #endregion //GetProcessors
+
+        #region Correct
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries0()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "1");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "2");
+            svq[0, 0] = new SignValue(3444);
+            yield return (new Processor(svq, "p8"), "3");
+            svq[0, 0] = new SignValue(4555);
+            yield return (new Processor(svq, "p9"), "4");
+        }
+
         static IEnumerable<(Processor, string)> GetCorrectQueries1()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "11");
+            yield return (new Processor(svq, "p6"), "1a");
             svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "22");
+            yield return (new Processor(svq, "p7"), "2b");
             svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "33");
+            yield return (new Processor(svq, "p8"), "3c");
             svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "44");
+            yield return (new Processor(svq, "p9"), "4d");
         }
 
         static IEnumerable<(Processor, string)> GetCorrectQueries2()
@@ -73,6 +126,10 @@ namespace ReflectorTest
             yield return (new Processor(svq, "p9"), "4");
             yield return (new Processor(svq, "p4"), "4");
         }
+
+        #endregion //Correct
+
+        #region Incorrect
 
         static IEnumerable<(Processor, string)> GetInCorrectQueries0()
         {
@@ -141,38 +198,9 @@ namespace ReflectorTest
             yield return (new Processor(svq, "pa"), "2");
         }
 
-        #region TestCorrectQueries
+        #endregion //Incorrect
 
-        static IEnumerable<Processor> GetProcessorContainer0()
-        {
-            SignValue[,] sv = new SignValue[1, 1];
-            sv[0, 0] = new SignValue(1111);
-            yield return new Processor(sv, "1");
-            sv[0, 0] = new SignValue(2222);
-            yield return new Processor(sv, "1A");
-            sv[0, 0] = new SignValue(3333);
-            yield return new Processor(sv, Convert.ToChar(1).ToString());
-            sv[0, 0] = new SignValue(4444);
-            yield return new Processor(sv, "4");
-            sv[0, 0] = new SignValue(5555);
-            yield return new Processor(sv, "5");
-            yield return new Processor(sv, "6");
-        }
-
-        static IEnumerable<(Processor, string)> GetCorrectQueries0()
-        {
-            SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
-        }
-
-        #endregion
+        #endregion //Tests
 
         static void GetException(string errorString, Type exType, Action act)//ПРОВЕРИТЬ работоспособность
         {
@@ -196,16 +224,33 @@ namespace ReflectorTest
             throw new Exception(errorString);
         }
 
-        static void CheckNeuronMapValue(Neuron neuronActual, IEnumerable<Processor> pcExpected)
+        static IEnumerable<Processor> NeuronToEnumerable(Neuron neuron)
         {
-            Dictionary<string, Processor> dicActual = new Dictionary<string, Processor>();
+            Assert.AreNotEqual(null, neuron);
 
-            for (int k = 0; k < neuronActual.Count; k++)
+            for (int k = 0; k < neuron.Count; k++)
             {
-                Processor p = neuronActual[k];
+                Processor p = neuron[k];
                 Assert.AreNotEqual(null, p);
-                dicActual.Add(p.Tag, p);
+                yield return p;
             }
+        }
+
+        static IEnumerable<Processor> PCToEnumerable(ProcessorContainer pc)
+        {
+            Assert.AreNotEqual(null, pc);
+
+            for (int k = 0; k < pc.Count; k++)
+            {
+                Processor p = pc[k];
+                Assert.AreNotEqual(null, p);
+                yield return p;
+            }
+        }
+
+        static void CheckNeuronMapValue(IEnumerable<Processor> actual, IEnumerable<Processor> pcExpected)
+        {
+            Dictionary<string, Processor> dicActual = actual.ToDictionary(p => p.Tag);
 
             foreach (Processor pExpected in pcExpected)
             {
@@ -237,12 +282,12 @@ namespace ReflectorTest
             void CheckParentNeuron()
             {
                 Assert.AreNotEqual(null, parentNeuron);
-                CheckNeuronMapValue(parentNeuron, expected);
+                CheckNeuronMapValue(NeuronToEnumerable(parentNeuron), expected);
+                CheckNeuronMapValue(PCToEnumerable(parentNeuron.ToProcessorContainer()), expected);
                 if (!charSetParent.SetEquals(parentNeuron.ToString()))
                     throw new Exception($"{nameof(CheckParentNeuron)}");
 
                 Assert.AreEqual(expected.Length, parentNeuron.Count);
-                //Assert.AreEqual(true, parentNeuron.CheckRelation(request));
                 GetException("Neuron1", typeof(ArgumentOutOfRangeException), () => { Processor unused = parentNeuron[-1]; });
                 GetException("Neuron2", typeof(ArgumentOutOfRangeException), () => { Processor unused = parentNeuron[parentNeuron.Count]; });
             }
@@ -254,13 +299,14 @@ namespace ReflectorTest
                 Assert.AreNotEqual(null, parentNeuron);
                 Neuron derivedNeuron = parentNeuron.FindRelation(request);
                 Assert.AreNotEqual(null, derivedNeuron);
-                CheckNeuronMapValue(derivedNeuron, pcRequestProcessors);
+                Processor[] requestProcessors = pcRequestProcessors as Processor[] ?? pcRequestProcessors.ToArray();
+                CheckNeuronMapValue(NeuronToEnumerable(derivedNeuron), requestProcessors);
+                CheckNeuronMapValue(PCToEnumerable(derivedNeuron.ToProcessorContainer()), requestProcessors);
                 if (!charSetParent.SetEquals(derivedNeuron.ToString()))
                     throw new Exception($"{nameof(CheckDerivedNeuron)}");
 
                 Assert.AreEqual(parentNeuron.Count, derivedNeuron.Count);
                 Assert.AreEqual(parentNeuron.ToString().Length, derivedNeuron.ToString().Length);
-                //Assert.AreEqual(true, derivedNeuron.CheckRelation(request));
                 Assert.AreNotEqual(null, derivedNeuron.FindRelation(request));
                 GetException("Neuron3", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[-1]; });
                 GetException("Neuron4", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[derivedNeuron.Count]; });
@@ -273,7 +319,9 @@ namespace ReflectorTest
         [TestMethod]
         public void NeuronTest0()
         {
-            NeuronTestSub(GetProcessorContainer0(), GetProcessorContainer0(), GetCorrectQueries0(), GetCorrectQueries0().Select((tuple => tuple.Item1)));
+            NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries0(), GetCorrectQueries0().Select((tuple => tuple.Item1)));
+
+            NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries0(), GetCorrectQueries0().Select((tuple => tuple.Item1)));
         }
     }
 }
