@@ -81,6 +81,35 @@ namespace ReflectorTest
             yield return new Processor(sv, "w");
         }
 
+        static IEnumerable<Processor> GetProcessors1()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return new Processor(sv, "a");
+            sv[0, 0] = new SignValue(2222);
+            yield return new Processor(sv, "b");
+        }
+
+        static IEnumerable<Processor> GetIncorrectProcessors1()//добавить в основные функции в виде аргументов
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return new Processor(sv, "c");
+            sv[0, 0] = new SignValue(2222);
+            yield return new Processor(sv, "d");
+        }
+
+        static IEnumerable<Processor> GetIncorrectProcessors2()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(100000);
+            yield return new Processor(sv, "g");
+            sv[0, 0] = new SignValue(999999);
+            yield return new Processor(sv, "h");
+        }
+
+        #region Results
+
         static IEnumerable<Processor> GetProcessors0Result()
         {
             SignValue[,] sv = new SignValue[1, 1];
@@ -93,8 +122,8 @@ namespace ReflectorTest
             sv[0, 0] = new SignValue(2222);
             yield return new Processor(sv, "2");
             sv[0, 0] = new SignValue(5555);
-            yield return new Processor(sv, "4");
-            yield return new Processor(sv, "5");
+            yield return new Processor(sv, "Y");
+            yield return new Processor(sv, "I");
             sv[0, 0] = new SignValue(7777);
             yield return new Processor(sv, "F");
             sv[0, 0] = new SignValue(18888);
@@ -123,8 +152,6 @@ namespace ReflectorTest
             yield return new Processor(sv, "m");
             sv[0, 0] = new SignValue(100004);
             yield return new Processor(sv, "p");
-            sv[0, 0] = new SignValue(100004);
-            yield return new Processor(sv, "p");
             sv[0, 0] = new SignValue(100005);
             yield return new Processor(sv, "t");
             sv[0, 0] = new SignValue(100006);
@@ -135,6 +162,8 @@ namespace ReflectorTest
             yield return new Processor(sv, "w");
         }
 
+        #endregion //Results
+
         #endregion //GetProcessors
 
         #region Correct
@@ -142,148 +171,398 @@ namespace ReflectorTest
         static IEnumerable<(Processor, string)> GetCorrectQueries0()
         {
             SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1111);
-            yield return (new Processor(svq, "p1"), "1");
-            svq[0, 0] = new SignValue(4000);
-            yield return (new Processor(svq, "p2"), "1");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p3"), "3");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p4"), "2");
-            yield return (new Processor(svq, "p41"), "2");
-            svq[0, 0] = new SignValue(5000);
-            yield return (new Processor(svq, "p5"), "4");
-            yield return (new Processor(svq, "p51"), "5");
-            svq[0, 0] = new SignValue(5555);
-            yield return (new Processor(svq, "p52"), "4");
-            svq[0, 0] = new SignValue(5666);
-            yield return (new Processor(svq, "p53"), "5");
-            svq[0, 0] = new SignValue(9000);
-            yield return (new Processor(svq, "p6"), "f");
-            svq[0, 0] = new SignValue(9999);
-            yield return (new Processor(svq, "p61"), "F");
-            svq[0, 0] = new SignValue(19000);
-            yield return (new Processor(svq, "p7"), "v");
-            svq[0, 0] = new SignValue(19999);
-            yield return (new Processor(svq, "p71"), "V");
-            svq[0, 0] = new SignValue(90688);
-            yield return (new Processor(svq, "p8"), "s");
-            svq[0, 0] = new SignValue(67699);
-            yield return (new Processor(svq, "p9"), "z");
-            svq[0, 0] = new SignValue(67699);
-            yield return (new Processor(svq, "p91"), "z");
-            svq[0, 0] = new SignValue(67800);
-            yield return (new Processor(svq, "p92"), "Z");
-            svq[0, 0] = new SignValue(67800);
-            yield return (new Processor(svq, "p93"), "Z");
-            svq[0, 0] = new SignValue(100000);
-            yield return (new Processor(svq, "pG"), "G");
-            svq[0, 0] = new SignValue(100001);
-            yield return (new Processor(svq, "pJ"), "J");
-            svq[0, 0] = new SignValue(100002);
-            yield return (new Processor(svq, "pG"), "L");
-            yield return (new Processor(svq, "pG1"), "l");
-            svq[0, 0] = new SignValue(1000021);
-            yield return (new Processor(svq, "pG2"), "l");
-            svq[0, 0] = new SignValue(1009021);
-            yield return (new Processor(svq, "pG3"), "L");
-            svq[0, 0] = new SignValue(1002021);
-            yield return (new Processor(svq, "pG4"), "L");
-            svq[0, 0] = new SignValue(1000021);
-            yield return (new Processor(svq, "pG5"), "l");
-            svq[0, 0] = new SignValue(1003021);
-            yield return (new Processor(svq, "pG6"), "L");
-            svq[0, 0] = new SignValue(100003);
-            yield return (new Processor(svq, "pG"), "m");
-            svq[0, 0] = new SignValue(100003);
-            yield return (new Processor(svq, "pG"), "M");
-            svq[0, 0] = new SignValue(100004);
-            yield return (new Processor(svq, "pG"), "p");
-            svq[0, 0] = new SignValue(100004);
-            yield return (new Processor(svq, "pG"), "P");
-            svq[0, 0] = new SignValue(100005);
-            yield return (new Processor(svq, "pG"), "T");
-            svq[0, 0] = new SignValue(100006);
-            yield return (new Processor(svq, "pG"), "u");
-            svq[0, 0] = new SignValue(100007);
-            yield return (new Processor(svq, "pG"), "h");
-            svq[0, 0] = new SignValue(100008);
-            yield return (new Processor(svq, "pG"), "w");
+            for (int k = 0; k < 2; k++)
+            {
+                svq[0, 0] = new SignValue(999);
+                yield return (new Processor(svq, "p1"), "1");
+                svq[0, 0] = new SignValue(1111);
+                yield return (new Processor(svq, "p1"), "1");
+                svq[0, 0] = new SignValue(4000);
+                yield return (new Processor(svq, "p2"), "1");
+                svq[0, 0] = new SignValue(3444);
+                yield return (new Processor(svq, "p3"), "3");
+                svq[0, 0] = new SignValue(2333);
+                yield return (new Processor(svq, "p4"), "2");
+                yield return (new Processor(svq, "p41"), "2");
+                svq[0, 0] = new SignValue(5000);
+                yield return (new Processor(svq, "p5"), "Y");
+                yield return (new Processor(svq, "p51"), "I");
+                yield return (new Processor(svq, "p6"), "y");
+                yield return (new Processor(svq, "p61"), "i");
+                svq[0, 0] = new SignValue(5555);
+                yield return (new Processor(svq, "p52"), "Y");
+                svq[0, 0] = new SignValue(5666);
+                yield return (new Processor(svq, "p53"), "I");
+                svq[0, 0] = new SignValue(5444);
+                yield return (new Processor(svq, "p52"), "Y");
+                svq[0, 0] = new SignValue(5555);
+                yield return (new Processor(svq, "p53"), "I");
+                svq[0, 0] = new SignValue(5555);
+                yield return (new Processor(svq, "p52"), "y");
+                svq[0, 0] = new SignValue(5666);
+                yield return (new Processor(svq, "p53"), "i");
+                svq[0, 0] = new SignValue(5444);
+                yield return (new Processor(svq, "p52"), "y");
+                svq[0, 0] = new SignValue(5555);
+                yield return (new Processor(svq, "p53"), "i");
+                svq[0, 0] = new SignValue(7000);
+                yield return (new Processor(svq, "p6"), "f");
+                svq[0, 0] = new SignValue(13332);
+                yield return (new Processor(svq, "p61"), "f");
+                svq[0, 0] = new SignValue(13333);
+                yield return (new Processor(svq, "p62"), "v");
+                yield return (new Processor(svq, "p62"), "V");
+                svq[0, 0] = new SignValue(9999);
+                yield return (new Processor(svq, "p63"), "F");
+                svq[0, 0] = new SignValue(19000);
+                yield return (new Processor(svq, "p7"), "v");
+                svq[0, 0] = new SignValue(19999);
+                yield return (new Processor(svq, "p71"), "V");
+                svq[0, 0] = new SignValue(25656);
+                yield return (new Processor(svq, "p72"), "V");
+                svq[0, 0] = new SignValue(25656);
+                yield return (new Processor(svq, "p73"), "v");
+                svq[0, 0] = new SignValue(25657);
+                yield return (new Processor(svq, "p74"), "s");
+                svq[0, 0] = new SignValue(25657);
+                yield return (new Processor(svq, "p75"), "S");
+                svq[0, 0] = new SignValue(90688);
+                yield return (new Processor(svq, "p8"), "s");
+                svq[0, 0] = new SignValue(32535);
+                yield return (new Processor(svq, "p80"), "s");
+                yield return (new Processor(svq, "p81"), "S");
+                svq[0, 0] = new SignValue(35100);
+                yield return (new Processor(svq, "p82"), "S");
+                yield return (new Processor(svq, "p83"), "s");
+                svq[0, 0] = new SignValue(35101);
+                yield return (new Processor(svq, "p84"), "S");
+                yield return (new Processor(svq, "p85"), "s");
+                svq[0, 0] = new SignValue(63666);
+                yield return (new Processor(svq, "p86"), "S");
+                yield return (new Processor(svq, "p87"), "s");
+                svq[0, 0] = new SignValue(63667);
+                yield return (new Processor(svq, "p88"), "z");
+                yield return (new Processor(svq, "p89"), "Z");
+                svq[0, 0] = new SignValue(67699);
+                yield return (new Processor(svq, "p9"), "z");
+                svq[0, 0] = new SignValue(67699);
+                yield return (new Processor(svq, "p91"), "z");
+                svq[0, 0] = new SignValue(67800);
+                yield return (new Processor(svq, "p92"), "Z");
+                svq[0, 0] = new SignValue(67800);
+                yield return (new Processor(svq, "p93"), "Z");
+                svq[0, 0] = new SignValue(100000);
+                yield return (new Processor(svq, "pG"), "G");
+                svq[0, 0] = new SignValue(100001);
+                yield return (new Processor(svq, "pJ"), "J");
+                svq[0, 0] = new SignValue(100002);
+                yield return (new Processor(svq, "pG"), "L");
+                yield return (new Processor(svq, "pG1"), "l");
+                svq[0, 0] = new SignValue(1000021);
+                yield return (new Processor(svq, "pG2"), "l");
+                svq[0, 0] = new SignValue(1009021);
+                yield return (new Processor(svq, "pG3"), "L");
+                svq[0, 0] = new SignValue(1002021);
+                yield return (new Processor(svq, "pG4"), "L");
+                svq[0, 0] = new SignValue(1000021);
+                yield return (new Processor(svq, "pG5"), "l");
+                svq[0, 0] = new SignValue(1003021);
+                yield return (new Processor(svq, "pG6"), "L");
+                svq[0, 0] = new SignValue(100003);
+                yield return (new Processor(svq, "pG"), "m");
+                svq[0, 0] = new SignValue(100003);
+                yield return (new Processor(svq, "pG"), "M");
+                svq[0, 0] = new SignValue(100004);
+                yield return (new Processor(svq, "pG"), "p");
+                svq[0, 0] = new SignValue(100004);
+                yield return (new Processor(svq, "pG"), "P");
+                svq[0, 0] = new SignValue(100005);
+                yield return (new Processor(svq, "pG"), "T");
+                svq[0, 0] = new SignValue(100006);
+                yield return (new Processor(svq, "pG"), "u");
+                svq[0, 0] = new SignValue(100007);
+                yield return (new Processor(svq, "pG"), "h");
+                svq[0, 0] = new SignValue(100008);
+                yield return (new Processor(svq, "pG"), "w");
+            }
         }
-
-        /*static IEnumerable<(Processor, string)> GetCorrectQueries0()
-        {
-            SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
-        }*/
 
         static IEnumerable<(Processor, string)> GetCorrectQueries1()
         {
             SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1a");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2b");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3c");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4d");
+            svq[0, 0] = new SignValue(1227);
+            yield return (new Processor(svq, "0"), "a");
+            svq[0, 0] = new SignValue(1449);
+            yield return (new Processor(svq, "1"), "A");
+            svq[0, 0] = new SignValue(2338);
+            yield return (new Processor(svq, "2"), "b");
+            svq[0, 0] = new SignValue(2005);
+            yield return (new Processor(svq, "3"), "B");
         }
 
         static IEnumerable<(Processor, string)> GetCorrectQueries2()
         {
             SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
-            svq[0, 0] = new SignValue(4666);
-            yield return (new Processor(svq, "p9"), "4");
+            svq[0, 0] = new SignValue(1229);
+            yield return (new Processor(svq, "q"), "A");
+            svq[0, 0] = new SignValue(1451);
+            yield return (new Processor(svq, "w"), "a");
+            svq[0, 0] = new SignValue(2340);
+            yield return (new Processor(svq, "e"), "B");
+            svq[0, 0] = new SignValue(2007);
+            yield return (new Processor(svq, "r"), "b");
         }
 
         static IEnumerable<(Processor, string)> GetCorrectQueries3()
         {
             SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
-            yield return (new Processor(svq, "p1"), "1");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            yield return (new Processor(svq, "p2"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            yield return (new Processor(svq, "p3"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
-            yield return (new Processor(svq, "p4"), "4");
+            svq[0, 0] = new SignValue(1225);
+            yield return (new Processor(svq, "t"), "a");
+            svq[0, 0] = new SignValue(1447);
+            yield return (new Processor(svq, "y"), "a");
+            svq[0, 0] = new SignValue(2336);
+            yield return (new Processor(svq, "u"), "b");
+            svq[0, 0] = new SignValue(2003);
+            yield return (new Processor(svq, "i"), "b");
         }
 
         static IEnumerable<(Processor, string)> GetCorrectQueries4()
         {
             SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), char.MinValue.ToString());
-            yield return (new Processor(svq, "p1"), char.MinValue.ToString());
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            yield return (new Processor(svq, "p2"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            yield return (new Processor(svq, "p3"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
-            yield return (new Processor(svq, "p4"), "4");
+            svq[0, 0] = new SignValue(1223);
+            yield return (new Processor(svq, "o"), "A");
+            svq[0, 0] = new SignValue(1445);
+            yield return (new Processor(svq, "p"), "A");
+            svq[0, 0] = new SignValue(2334);
+            yield return (new Processor(svq, "s"), "B");
+            svq[0, 0] = new SignValue(2001);
+            yield return (new Processor(svq, "d"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries5()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1227);
+            yield return (new Processor(svq, "0"), "a");
+            yield return (new Processor(svq, "a"), "a");
+            svq[0, 0] = new SignValue(1449);
+            yield return (new Processor(svq, "1"), "A");
+            yield return (new Processor(svq, "b"), "A");
+            svq[0, 0] = new SignValue(2338);
+            yield return (new Processor(svq, "2"), "b");
+            yield return (new Processor(svq, "c"), "b");
+            svq[0, 0] = new SignValue(2005);
+            yield return (new Processor(svq, "3"), "B");
+            yield return (new Processor(svq, "d"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries5_1()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2338);
+            yield return (new Processor(svq, "2"), "b");
+            yield return (new Processor(svq, "c"), "b");
+            svq[0, 0] = new SignValue(2005);
+            yield return (new Processor(svq, "3"), "B");
+            yield return (new Processor(svq, "d"), "B");
+            svq[0, 0] = new SignValue(1227);
+            yield return (new Processor(svq, "0"), "a");
+            yield return (new Processor(svq, "a"), "a");
+            svq[0, 0] = new SignValue(1449);
+            yield return (new Processor(svq, "1"), "A");
+            yield return (new Processor(svq, "b"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries6()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1229);
+            yield return (new Processor(svq, "q"), "A");
+            yield return (new Processor(svq, "1"), "A");
+            svq[0, 0] = new SignValue(1451);
+            yield return (new Processor(svq, "w"), "a");
+            yield return (new Processor(svq, "2"), "a");
+            svq[0, 0] = new SignValue(2340);
+            yield return (new Processor(svq, "e"), "B");
+            yield return (new Processor(svq, "3"), "B");
+            svq[0, 0] = new SignValue(2007);
+            yield return (new Processor(svq, "r"), "b");
+            yield return (new Processor(svq, "4"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries6_1()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2340);
+            yield return (new Processor(svq, "e"), "B");
+            yield return (new Processor(svq, "3"), "B");
+            svq[0, 0] = new SignValue(2007);
+            yield return (new Processor(svq, "r"), "b");
+            yield return (new Processor(svq, "4"), "b");
+            svq[0, 0] = new SignValue(1229);
+            yield return (new Processor(svq, "q"), "A");
+            yield return (new Processor(svq, "1"), "A");
+            svq[0, 0] = new SignValue(1451);
+            yield return (new Processor(svq, "w"), "a");
+            yield return (new Processor(svq, "2"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries7()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1225);
+            yield return (new Processor(svq, "t"), "a");
+            yield return (new Processor(svq, "a"), "a");
+            svq[0, 0] = new SignValue(1447);
+            yield return (new Processor(svq, "y"), "a");
+            yield return (new Processor(svq, "b"), "a");
+            svq[0, 0] = new SignValue(2336);
+            yield return (new Processor(svq, "u"), "b");
+            yield return (new Processor(svq, "c"), "b");
+            svq[0, 0] = new SignValue(2003);
+            yield return (new Processor(svq, "i"), "b");
+            yield return (new Processor(svq, "d"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries7_1()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2336);
+            yield return (new Processor(svq, "u"), "b");
+            yield return (new Processor(svq, "c"), "b");
+            svq[0, 0] = new SignValue(2003);
+            yield return (new Processor(svq, "i"), "b");
+            yield return (new Processor(svq, "d"), "b");
+            svq[0, 0] = new SignValue(1225);
+            yield return (new Processor(svq, "t"), "a");
+            yield return (new Processor(svq, "a"), "a");
+            svq[0, 0] = new SignValue(1447);
+            yield return (new Processor(svq, "y"), "a");
+            yield return (new Processor(svq, "b"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries8()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1223);
+            yield return (new Processor(svq, "o"), "A");
+            yield return (new Processor(svq, "4"), "A");
+            svq[0, 0] = new SignValue(1445);
+            yield return (new Processor(svq, "p"), "A");
+            yield return (new Processor(svq, "5"), "A");
+            svq[0, 0] = new SignValue(2334);
+            yield return (new Processor(svq, "s"), "B");
+            yield return (new Processor(svq, "6"), "B");
+            svq[0, 0] = new SignValue(2001);
+            yield return (new Processor(svq, "d"), "B");
+            yield return (new Processor(svq, "7"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries8_1()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2334);
+            yield return (new Processor(svq, "s"), "B");
+            yield return (new Processor(svq, "6"), "B");
+            svq[0, 0] = new SignValue(2001);
+            yield return (new Processor(svq, "d"), "B");
+            yield return (new Processor(svq, "7"), "B");
+            svq[0, 0] = new SignValue(1223);
+            yield return (new Processor(svq, "o"), "A");
+            yield return (new Processor(svq, "4"), "A");
+            svq[0, 0] = new SignValue(1445);
+            yield return (new Processor(svq, "p"), "A");
+            yield return (new Processor(svq, "5"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries9_0()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "a"), "a");
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "b"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries9_1()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "A"), "A");
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "B"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries9_1_1()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "a"), "A");
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "b"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries9_2()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "a"), "a");
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "B"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries9_3()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "A"), "A");
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "b"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries10_0()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "b"), "b");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "a"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries10_1()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "B"), "B");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "A"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries10_1_1()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "b"), "B");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "a"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries10_2()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "B"), "B");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "a"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries10_3()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "b"), "b");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "A"), "A");
         }
 
         #endregion //Correct
