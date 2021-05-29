@@ -90,24 +90,6 @@ namespace ReflectorTest
             yield return new Processor(sv, "b");
         }
 
-        static IEnumerable<Processor> GetIncorrectProcessors1()//добавить в основные функции в виде аргументов
-        {
-            SignValue[,] sv = new SignValue[1, 1];
-            sv[0, 0] = new SignValue(1111);
-            yield return new Processor(sv, "c");
-            sv[0, 0] = new SignValue(2222);
-            yield return new Processor(sv, "d");
-        }
-
-        static IEnumerable<Processor> GetIncorrectProcessors2()
-        {
-            SignValue[,] sv = new SignValue[1, 1];
-            sv[0, 0] = new SignValue(100000);
-            yield return new Processor(sv, "g");
-            sv[0, 0] = new SignValue(999999);
-            yield return new Processor(sv, "h");
-        }
-
         #region Results
 
         static IEnumerable<Processor> GetProcessors0Result()
@@ -161,6 +143,8 @@ namespace ReflectorTest
             sv[0, 0] = new SignValue(100008);
             yield return new Processor(sv, "w");
         }
+
+        //написать результаты для второго теста
 
         #endregion //Results
 
@@ -475,6 +459,23 @@ namespace ReflectorTest
             yield return (new Processor(svq, "5"), "A");
         }
 
+        static IEnumerable<(Processor, string)> GetCorrectQueries8_2()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2341);
+            yield return (new Processor(svq, "B"), "B");
+            yield return (new Processor(svq, "B"), "B");
+            svq[0, 0] = new SignValue(2008);
+            yield return (new Processor(svq, "B"), "B");
+            yield return (new Processor(svq, "B"), "B");
+            svq[0, 0] = new SignValue(1230);
+            yield return (new Processor(svq, "A"), "A");
+            yield return (new Processor(svq, "A"), "A");
+            svq[0, 0] = new SignValue(1452);
+            yield return (new Processor(svq, "A"), "A");
+            yield return (new Processor(svq, "A"), "A");
+        }
+
         static IEnumerable<(Processor, string)> GetCorrectQueries9_0()
         {
             SignValue[,] svq = new SignValue[1, 1];
@@ -565,75 +566,1154 @@ namespace ReflectorTest
             yield return (new Processor(svq, "A"), "A");
         }
 
+        static IEnumerable<(Processor, string)> GetCorrectQueries11()
+        {
+            SignValue[,] svq = new SignValue[1, 2];
+            svq[0, 0] = new SignValue(2351);
+            svq[0, 1] = new SignValue(1239);
+            yield return (new Processor(svq, "fg"), "ab");
+            svq[0, 0] = new SignValue(1238);
+            svq[0, 1] = new SignValue(1238);
+            yield return (new Processor(svq, "s"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[1, 2];
+            svq[0, 0] = new SignValue(2361);
+            svq[0, 1] = new SignValue(1349);
+            yield return (new Processor(svq, "ab"), "AB");
+            svq[0, 0] = new SignValue(1248);
+            svq[0, 1] = new SignValue();
+            yield return (new Processor(svq, "b"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries11()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[0, 0] = new SignValue(1258);
+            yield return (new Processor(svq, "s"), "A");
+            svq[0, 0] = new SignValue(2371);
+            svq[1, 0] = new SignValue(1278);
+            yield return (new Processor(svq, "fg"), "ab");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[0, 0] = new SignValue(1328);
+            yield return (new Processor(svq, "b"), "B");
+            svq[0, 0] = new SignValue(2441);
+            svq[1, 0] = new SignValue(1320);
+            yield return (new Processor(svq, "ab"), "AB");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries11()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "fg"), "jkl");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "s"), "A");
+            svq[0, 0] = new SignValue(2446);
+            yield return (new Processor(svq, "b"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2445);
+            yield return (new Processor(svq, "b"), "B");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "b"), "a");
+            svq[0, 0] = new SignValue(2445);
+            yield return (new Processor(svq, "ab"), "jkl");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries11()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "fg"), "JKL");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "s"), "A");
+            svq[0, 0] = new SignValue(2446);
+            yield return (new Processor(svq, "b"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2445);
+            yield return (new Processor(svq, "b"), "B");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "b"), "a");
+            svq[0, 0] = new SignValue(2445);
+            yield return (new Processor(svq, "ab"), "JKL");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[1, 0] = new SignValue(2222);
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "b"), "AB");
+            svq[0, 0] = new SignValue(1335);
+            svq[1, 0] = new SignValue(3999);
+            yield return (new Processor(svq, "b"), "ba");
+            yield return (new Processor(svq, "ab"), "JKL");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[0, 0] = new SignValue(1138);
+            svq[1, 0] = new SignValue(5229);
+            yield return (new Processor(svq, "abc"), "ab");
+            svq[0, 0] = new SignValue(1228);
+            svq[1, 0] = new SignValue(5329);
+            yield return (new Processor(svq, "b"), "BA");
+            svq[0, 0] = new SignValue(2341);
+            svq[1, 0] = new SignValue(1000);
+            yield return (new Processor(svq, "ab"), "JKL");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[1, 2];
+            svq[0, 0] = new SignValue(2341);
+            svq[0, 1] = new SignValue(1237);
+            yield return (new Processor(svq, "ab"), "JKL");
+            svq[0, 0] = new SignValue(1500);
+            svq[0, 1] = new SignValue(2671);
+            yield return (new Processor(svq, "b"), "AB");
+            svq[0, 0] = new SignValue(1129);
+            svq[0, 1] = new SignValue(5641);
+            yield return (new Processor(svq, "b"), "ba");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[0, 0] = new SignValue(1009);
+            svq[1, 0] = new SignValue(3008);
+            yield return (new Processor(svq, "ab"), "JKL");
+            svq[0, 0] = new SignValue(1001);
+            svq[1, 0] = new SignValue(2002);
+            yield return (new Processor(svq, "b"), "ba");
+            svq[0, 0] = new SignValue(9341);
+            svq[1, 0] = new SignValue(91);
+            yield return (new Processor(svq, "b"), "AB");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[0, 0] = new SignValue(1256);
+            svq[1, 0] = new SignValue(2356);
+            yield return (new Processor(svq, "b"), "AB");
+            svq[0, 0] = new SignValue(1116);
+            svq[1, 0] = new SignValue(2226);
+            yield return (new Processor(svq, "ab"), "JKL");
+            svq[0, 0] = new SignValue(1156);
+            svq[1, 0] = new SignValue(2156);
+            yield return (new Processor(svq, "b"), "ba");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        {
+            SignValue[,] svq = new SignValue[1, 2];
+            svq[0, 0] = new SignValue(801);
+            svq[0, 1] = new SignValue(2411);
+            yield return (new Processor(svq, "a"), "ba");
+            svq[0, 0] = new SignValue(701);
+            svq[0, 1] = new SignValue(2968);
+            yield return (new Processor(svq, "ab"), "JKL");
+            svq[0, 0] = new SignValue(1205);
+            svq[0, 1] = new SignValue(4164);
+            yield return (new Processor(svq, "a"), "AB");
+        }
+
+        //дописать последние тесты в разными размерами карт
+
         #endregion //Correct
 
         #region Incorrect
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries0()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries0()
         {
-            SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "f");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "c");
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "d");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries1()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries1()
         {
-            SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "c");
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "d");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries2()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries2()
         {
-            SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "1");
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "c");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries3()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries3()
         {
-            SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
-            svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
-            svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
-            svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "pa"), "5");
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "c"), "d");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries4()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries4()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "c"), "d");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "d"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries5()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "a");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries6()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "a");
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries7()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "b");
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries8()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1000);
+            yield return (new Processor(sv, "a"), "c");
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "b"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries9()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1000);
+            yield return (new Processor(sv, "a"), "d");
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "b"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries10()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1000);
+            yield return (new Processor(sv, "c"), "c");
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries11()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1000);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries12()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2245);
+            yield return (new Processor(sv, "b"), "a");
+            sv[0, 0] = new SignValue(999);
+            yield return (new Processor(sv, "a"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries13()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "b"), "a");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "a"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries14()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(978);
+            yield return (new Processor(sv, "b"), "a");
+            sv[0, 0] = new SignValue(900);
+            yield return (new Processor(sv, "a"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries15()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "b"), "b");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "a"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries16()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "b"), "b");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "a"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries17()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(978);
+            yield return (new Processor(sv, "b"), "b");
+            sv[0, 0] = new SignValue(900);
+            yield return (new Processor(sv, "a"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries18()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1300);
+            yield return (new Processor(sv, "a"), "a");
+            sv[0, 0] = new SignValue(2265);
+            yield return (new Processor(sv, "b"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries19()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "b");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries20()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "a");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries21()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "B");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries22()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "A");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries23()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "b");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries24()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "a");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries25()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "B");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries26()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "A");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries27()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1222);
-            yield return (new Processor(svq, "p6"), "1");
+            yield return (new Processor(svq, "F"), "f");
             svq[0, 0] = new SignValue(2333);
-            yield return (new Processor(svq, "p7"), "2");
+            yield return (new Processor(svq, "22"), "2");
             svq[0, 0] = new SignValue(3444);
-            yield return (new Processor(svq, "p8"), "3");
+            yield return (new Processor(svq, "3"), "3");
             svq[0, 0] = new SignValue(4555);
-            yield return (new Processor(svq, "p9"), "4");
-            svq[0, 0] = new SignValue(1000);
-            yield return (new Processor(svq, "pa"), "2");
+            yield return (new Processor(svq, "444"), "4");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries28()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "a");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries29()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries30()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "b");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries31()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p"), "b");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "e"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries32()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p"), "b");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "e"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries33()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "a");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries34()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "a");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries35()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries36()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2222);
+            yield return (new Processor(svq, "p"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries37()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2222);
+            yield return (new Processor(svq, "p"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries38()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1111);
+            yield return (new Processor(svq, "p"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries39()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1111);
+            yield return (new Processor(svq, "p"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries40()
+        {
+            yield break;
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries40_1()
+        {
+            return null;
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries41()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "a");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries42()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "b"), "b");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "a"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries43()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "b"), "d");
+            sv[0, 0] = new SignValue(1000);
+            yield return (new Processor(sv, "a"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries44()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "b"), "c");
+            sv[0, 0] = new SignValue(1000);
+            yield return (new Processor(sv, "a"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries45()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(1000);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries46()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "c"), "c");
+            sv[0, 0] = new SignValue(1000);
+            yield return (new Processor(sv, "d"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries47()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p6"), "b");
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p7"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries48()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "e"), "c");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries49()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "e"), "d");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries50()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "c");
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries51()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "d");
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries52()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2245);
+            yield return (new Processor(sv, "d"), "a");
+            sv[0, 0] = new SignValue(999);
+            yield return (new Processor(sv, "c"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries53()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "a");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries54()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(978);
+            yield return (new Processor(sv, "d"), "a");
+            sv[0, 0] = new SignValue(900);
+            yield return (new Processor(sv, "c"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries55()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "b");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries56()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "b");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries57()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(978);
+            yield return (new Processor(sv, "d"), "b");
+            sv[0, 0] = new SignValue(900);
+            yield return (new Processor(sv, "c"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries58()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1300);
+            yield return (new Processor(sv, "c"), "a");
+            sv[0, 0] = new SignValue(2265);
+            yield return (new Processor(sv, "d"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries59()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "b");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries60()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "a");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries61()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "B");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries62()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "A");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries63()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "b");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries64()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "a");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries65()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "B");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries66()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "A");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries67()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2245);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(999);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries68()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries69()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(978);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(900);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries70()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries71()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries72()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(978);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(900);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries73()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1300);
+            yield return (new Processor(sv, "c"), "c");
+            sv[0, 0] = new SignValue(2265);
+            yield return (new Processor(sv, "d"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries74()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries75()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries76()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "D");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries77()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "C");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries78()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "D");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries79()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "C");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries80()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "D");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "D");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries81()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "C");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "C");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries82()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2245);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(999);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries83()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries84()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(978);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(900);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries85()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries86()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2000);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(3000);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries87()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(978);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(900);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries88()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(1300);
+            yield return (new Processor(sv, "c"), "c");
+            sv[0, 0] = new SignValue(2265);
+            yield return (new Processor(sv, "d"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries89()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries90()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries91()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "D");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "d");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries92()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "C");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries93()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "d");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "D");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries94()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "c");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "C");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries95()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "D");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "D");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries96()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(2222);
+            yield return (new Processor(sv, "d"), "C");
+            sv[0, 0] = new SignValue(1111);
+            yield return (new Processor(sv, "c"), "C");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries98()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "a");
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries99()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "b");
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries100()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "e"), "c");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries101()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "e"), "d");
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries102()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "c");
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries103()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "d");
+            svq[0, 0] = new SignValue(1222);
+            yield return (new Processor(svq, "p6"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries104()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "ab");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries105()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "p7"), "aaaabbbbb");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries106()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "ab"), "AB");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries107()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "BA"), "cdABvdgd");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries108()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "cdABvdgd"), "cdABvdgd");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries109()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "ab"), "ABC");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries110()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "cdgd"), "cdvdgd");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries111()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2333);
+            yield return (new Processor(svq, "cdvdgd"), "cdvdgd");
         }
 
         #endregion //Incorrect
