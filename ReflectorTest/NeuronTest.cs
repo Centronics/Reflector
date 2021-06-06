@@ -106,13 +106,28 @@ namespace ReflectorTest
             yield return new Processor(sv, "k1");
         }
 
-        static IEnumerable<Processor> GetProcessors4()//тестировать немного...
+        static IEnumerable<Processor> GetProcessors4()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
             yield return new Processor(sv, "y");
             sv[0, 0] = new SignValue(7777);
             yield return new Processor(sv, "y1");
+        }
+        // TODO написать тест, где используется одна и та же карта (физически)
+        static IEnumerable<Processor> GetProcessors8Exception()
+        {
+            yield return new Processor(new SignValue[2, 2], "Exception8");
+        }
+
+        static IEnumerable<Processor> GetProcessors9Exception()
+        {
+            yield return new Processor(new SignValue[1, 2], "Exception9");
+        }
+
+        static IEnumerable<Processor> GetProcessors10Exception()
+        {
+            yield return new Processor(new SignValue[2, 1], "Exception10");
         }
 
         #region Results
@@ -613,7 +628,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "b"), "B");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries11()
+        static IEnumerable<(Processor, string)> GetCorrectQueries13()
         {
             SignValue[,] svq = new SignValue[2, 1];
             svq[0, 0] = new SignValue(1258);
@@ -623,7 +638,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "fg"), "ab");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries14()
         {
             SignValue[,] svq = new SignValue[2, 1];
             svq[0, 0] = new SignValue(1328);
@@ -633,7 +648,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "ab"), "AB");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries11()
+        static IEnumerable<(Processor, string)> GetCorrectQueries15()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1228);
@@ -644,7 +659,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "b"), "B");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries16()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2445);
@@ -655,7 +670,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "ab"), "jkl");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries11()
+        static IEnumerable<(Processor, string)> GetCorrectQueries17()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1228);
@@ -666,7 +681,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "b"), "B");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries18()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2445);
@@ -677,7 +692,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "ab"), "JKL");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries19()
         {
             SignValue[,] svq = new SignValue[2, 1];
             svq[1, 0] = new SignValue(2222);
@@ -689,7 +704,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "ab"), "JKL");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries20()
         {
             SignValue[,] svq = new SignValue[2, 1];
             svq[0, 0] = new SignValue(1138);
@@ -703,7 +718,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "ab"), "JKL");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries21()
         {
             SignValue[,] svq = new SignValue[1, 2];
             svq[0, 0] = new SignValue(2341);
@@ -717,7 +732,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "b"), "ba");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries22()
         {
             SignValue[,] svq = new SignValue[2, 1];
             svq[0, 0] = new SignValue(1009);
@@ -731,7 +746,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "b"), "AB");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries23()
         {
             SignValue[,] svq = new SignValue[2, 1];
             svq[0, 0] = new SignValue(1256);
@@ -745,7 +760,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "b"), "ba");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries24()
         {
             SignValue[,] svq = new SignValue[1, 2];
             svq[0, 0] = new SignValue(801);
@@ -759,7 +774,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "a"), "AB");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries25()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -767,7 +782,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "k"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries26()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -775,7 +790,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "p"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries27()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
@@ -783,7 +798,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "h"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries28()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -791,7 +806,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "i1"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries29()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
@@ -799,7 +814,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "A"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries30()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(3333);
@@ -807,7 +822,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "A"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries31()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6464);
@@ -815,28 +830,28 @@ namespace ReflectorTest
             yield return (new Processor(sv, "A"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries32()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(8989);
             yield return (new Processor(sv, "t"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries33()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(2222);
             yield return (new Processor(sv, "t"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries34()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
             yield return (new Processor(sv, "t"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries35()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -847,7 +862,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "S"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries36()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -858,7 +873,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "L"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries37()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(2222);
@@ -869,7 +884,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "A"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries38()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5556);
@@ -880,7 +895,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "S"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries39()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6669);
@@ -891,7 +906,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "L"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries40()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(2226);
@@ -902,7 +917,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "A"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries41()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -911,35 +926,35 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries42()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
             yield return (new Processor(sv, "u"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries43()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(7777);
             yield return (new Processor(sv, "u"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries44()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(8888);
             yield return (new Processor(sv, "u"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries45()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
             yield return (new Processor(sv, "u"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries46()
         {
             SignValue[,] sv = new SignValue[2, 1];
             sv[0, 0] = new SignValue(4545);
@@ -947,7 +962,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "qw");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries47()
         {
             SignValue[,] sv = new SignValue[2, 1];
             sv[0, 0] = new SignValue(4545);
@@ -960,7 +975,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "v"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries48()
         {
             SignValue[,] sv = new SignValue[2, 1];
             sv[0, 0] = new SignValue(4444);
@@ -972,7 +987,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "qw");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries49()
         {
             SignValue[,] sv = new SignValue[2, 1];
             sv[0, 0] = new SignValue(4444);
@@ -985,7 +1000,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries50()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4545);
@@ -995,7 +1010,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "qw");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries51()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1005,7 +1020,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "qw");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries52()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1015,7 +1030,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "qw");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries53()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4545);
@@ -1026,7 +1041,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries54()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1037,7 +1052,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries55()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1048,7 +1063,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries56()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4545);
@@ -1059,7 +1074,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "q");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries57()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1070,7 +1085,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "q");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries58()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1081,7 +1096,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "q");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries59()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4545);
@@ -1098,7 +1113,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries60()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1115,7 +1130,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries61()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1132,7 +1147,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries62()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4545);
@@ -1151,7 +1166,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries63()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1168,7 +1183,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries64()
         {
             SignValue[,] sv = new SignValue[4, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1185,21 +1200,21 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries65()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
             yield return (new Processor(sv, "u"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries66()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
             yield return (new Processor(sv, "u"), "K");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries67()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1208,7 +1223,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries68()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1217,7 +1232,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "l"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries69()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1226,7 +1241,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries70()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1237,7 +1252,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "c"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries71()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1247,7 +1262,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "l"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries72()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1257,7 +1272,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries73()
         {
             SignValue[,] sv = new SignValue[1, 3];
             sv[0, 0] = new SignValue(4444);
@@ -1266,7 +1281,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries74()
         {
             SignValue[,] sv = new SignValue[1, 3];
             sv[0, 0] = new SignValue(5555);
@@ -1275,7 +1290,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "l"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries75()
         {
             SignValue[,] sv = new SignValue[3, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1284,14 +1299,14 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries76()
         {
             SignValue[,] sv = new SignValue[3, 1];
             sv[0, 0] = new SignValue(6666);
             yield return (new Processor(sv, "3"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries77()
         {
             SignValue[,] sv = new SignValue[3, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1300,7 +1315,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "c"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries78()
         {
             SignValue[,] sv = new SignValue[3, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1312,7 +1327,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "l"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries79()
         {
             SignValue[,] sv = new SignValue[3, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1324,7 +1339,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries80()
         {
             SignValue[,] sv = new SignValue[3, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1334,7 +1349,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries81()
         {
             SignValue[,] sv = new SignValue[3, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1343,7 +1358,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries82()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1358,7 +1373,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "c"), "K1");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries83()
         {
             SignValue[,] sv = new SignValue[1, 5];
             sv[0, 0] = new SignValue(4444);
@@ -1369,7 +1384,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "c"), "K");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries84()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(6666);
@@ -1382,7 +1397,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "4"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries85()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(6666);
@@ -1396,7 +1411,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "4"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries86()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(6666);
@@ -1410,7 +1425,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "4"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries87()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(6666);
@@ -1424,7 +1439,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "4"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries88()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1437,7 +1452,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "4"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries89()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(4444);
@@ -1451,7 +1466,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "4"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries90()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1465,7 +1480,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "4"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries91()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1479,7 +1494,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "4"), "k");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries92()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1490,7 +1505,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries93()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(8888);
@@ -1501,7 +1516,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "Qw");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries94()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1513,7 +1528,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries95()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1525,7 +1540,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "O"), "b");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries96()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(8888);
@@ -1533,7 +1548,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "n"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries97()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(8888);
@@ -1544,7 +1559,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "y"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries98()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(8888);
@@ -1555,7 +1570,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "y"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries99()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1566,7 +1581,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "m"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries100()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1577,7 +1592,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "m"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries101()
         {
             SignValue[,] sv = new SignValue[2, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1585,7 +1600,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "m"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries102()
         {
             SignValue[,] sv = new SignValue[2, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1593,21 +1608,103 @@ namespace ReflectorTest
             yield return (new Processor(sv, "m"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries103()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
             yield return (new Processor(sv, "m"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries104()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
             yield return (new Processor(sv, "h"), "qqQWww");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries96_1()
+        {
+            SignValue[,] sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(8888);
+            sv[0, 1] = new SignValue(2222);
+            yield return (new Processor(sv, "n"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries97_1()
+        {
+            SignValue[,] sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(8888);
+            sv[0, 1] = new SignValue(2222);
+            yield return (new Processor(sv, "n"), "WwwqqQ");
+            sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(8888);
+            yield return (new Processor(sv, "y"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries98_1()
+        {
+            SignValue[,] sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(8888);
+            sv[0, 1] = new SignValue(3333);
+            yield return (new Processor(sv, "n"), "WwwqqQ");
+            sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(9999);
+            yield return (new Processor(sv, "y"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries99_1()
+        {
+            SignValue[,] sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(5555);
+            sv[0, 1] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "WwwqqQ");
+            sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries100_1()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "h"), "WwwqqQ");
+            sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(5555);
+            sv[0, 1] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries101_1()
+        {
+            SignValue[,] sv = new SignValue[2, 1];
+            sv[0, 0] = new SignValue(5555);
+            sv[1, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries102_1()
+        {
+            SignValue[,] sv = new SignValue[2, 1];
+            sv[0, 0] = new SignValue(6666);
+            sv[1, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "m"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries103_1()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries104_1()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "h"), "WwwqqQ");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries105()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1616,7 +1713,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "d"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries106()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1625,7 +1722,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "d"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries107()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1636,7 +1733,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "d"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries108()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1645,7 +1742,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "d"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries109()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1654,35 +1751,35 @@ namespace ReflectorTest
             yield return (new Processor(sv, "d"), "y1");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries110()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
             yield return (new Processor(sv, "u"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries111()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(7777);
             yield return (new Processor(sv, "u"), "Y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries112()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
             yield return (new Processor(sv, "u"), "Y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries113()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(7777);
             yield return (new Processor(sv, "u"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries114()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1691,7 +1788,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "u"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries115()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1700,7 +1797,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "l"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries116()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1709,7 +1806,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries117()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1720,7 +1817,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "c"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries118()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1730,7 +1827,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "l"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries119()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1740,7 +1837,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries120()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(4444);
@@ -1755,7 +1852,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "c"), "Y1");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries121()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(6666);
@@ -1765,7 +1862,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries122()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(6666);
@@ -1776,7 +1873,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries123()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(6666);
@@ -1787,7 +1884,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "l"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries124()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(6666);
@@ -1798,7 +1895,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "l"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries125()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1808,7 +1905,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries126()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(4444);
@@ -1819,7 +1916,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries127()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1830,7 +1927,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries128()
         {
             SignValue[,] sv = new SignValue[1, 5];
             sv[0, 0] = new SignValue(5555);
@@ -1841,7 +1938,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries129()
         {
             SignValue[,] sv = new SignValue[1, 5];
             sv[0, 0] = new SignValue(5555);
@@ -1854,7 +1951,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "3"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries130()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(8888);
@@ -1865,7 +1962,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "y"), "Y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries131()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(8888);
@@ -1876,7 +1973,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "y"), "Y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries132()
         {
             SignValue[,] sv = new SignValue[1, 2];
             sv[0, 0] = new SignValue(5555);
@@ -1887,7 +1984,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "m"), "Y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries133()
         {
             SignValue[,] sv = new SignValue[1, 1];
             sv[0, 0] = new SignValue(6666);
@@ -1898,7 +1995,40 @@ namespace ReflectorTest
             yield return (new Processor(sv, "m"), "Y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries134()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "h"), "Y");
+            sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(6666);
+            sv[0, 1] = new SignValue(6666);
+            yield return (new Processor(sv, "m"), "Y");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries135()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(7777);
+            yield return (new Processor(sv, "h"), "Y");
+            sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(5555);
+            sv[0, 1] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "Y");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries136()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "h"), "Y");
+            sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(7777);
+            sv[0, 1] = new SignValue(7777);
+            yield return (new Processor(sv, "m"), "Y");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries137()
         {
             SignValue[,] sv = new SignValue[2, 1];
             sv[0, 0] = new SignValue(5555);
@@ -1906,7 +2036,7 @@ namespace ReflectorTest
             yield return (new Processor(sv, "m"), "Y");
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12()
+        static IEnumerable<(Processor, string)> GetCorrectQueries138()
         {
             SignValue[,] sv = new SignValue[2, 1];
             sv[0, 0] = new SignValue(6666);
@@ -3308,77 +3438,77 @@ namespace ReflectorTest
             yield return (new Processor(svq, "W"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries112()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries166()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "w"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries113()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries167()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "k"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries114()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries168()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "w"), "K5");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries115()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries169()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "k"), "W");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries116()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries170()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(8888);
             yield return (new Processor(svq, "K"), "K2");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries117()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries171()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(9999);
             yield return (new Processor(svq, "W"), "W");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries118()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries172()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1114);
             yield return (new Processor(svq, "k"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries119()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries173()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2225);
             yield return (new Processor(svq, "W"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries120()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries174()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1111);
             yield return (new Processor(svq, "K"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries121()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries175()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2222);
             yield return (new Processor(svq, "w"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries122()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries176()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1112);
@@ -3386,7 +3516,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries123()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries177()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2223);
@@ -3394,7 +3524,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries124()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries178()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(100);
@@ -3403,7 +3533,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries125()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries179()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(9956);
@@ -3412,7 +3542,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "k"), "W");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries126()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries180()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(9947);
@@ -3421,7 +3551,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "k"), "K1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries127()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries181()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(107);
@@ -3430,7 +3560,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries128()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries182()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(9927);
@@ -3439,7 +3569,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries129()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries189()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(9958);
@@ -3448,7 +3578,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "B");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries130()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries190()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(9960);
@@ -3457,7 +3587,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "k"), "C");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries131()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries191()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(104);
@@ -3466,7 +3596,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "d");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries132()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries192()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1117);
@@ -3474,7 +3604,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries133()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries193()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2123);
@@ -3482,21 +3612,21 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "o");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries134()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries194()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1166);
             yield return (new Processor(svq, "k"), "o");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries135()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries195()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2189);
             yield return (new Processor(svq, "w"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries136()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries196()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1117);
@@ -3504,7 +3634,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "W"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries137()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries197()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2123);
@@ -3512,21 +3642,21 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "o");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries138()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries198()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(1166);
             yield return (new Processor(svq, "K"), "o");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries139()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries199()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(2189);
             yield return (new Processor(svq, "W"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries140()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries200()
         {
             SignValue[,] svq = new SignValue[1, 2];
             svq[0, 0] = new SignValue(5555);
@@ -3534,7 +3664,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "W"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries141()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries201()
         {
             SignValue[,] svq = new SignValue[1, 2];
             svq[0, 0] = new SignValue(5555);
@@ -3542,49 +3672,49 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries142()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries202()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "K"), "K1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries143()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries203()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "W"), "W");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries144()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries204()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "k"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries145()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries205()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "W"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries146()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries206()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "K"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries147()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries207()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "w"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries148()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries208()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3592,7 +3722,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries149()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries209()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3600,7 +3730,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries150()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries210()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3609,7 +3739,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "k1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries151()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries211()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3618,7 +3748,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "k"), "W");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries152()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries212()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3627,7 +3757,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "k"), "K1");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries153()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries213()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3636,7 +3766,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "w");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries154()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries214()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3645,7 +3775,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries155()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries215()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3654,7 +3784,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "B");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries156()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries216()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3663,7 +3793,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "k"), "C");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries157()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries217()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3672,7 +3802,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "d");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries158()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries218()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3680,7 +3810,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "w"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries159()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries219()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3688,21 +3818,21 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "o");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries160()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries220()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "k"), "o");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries161()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries221()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "w"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries162()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries222()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3710,7 +3840,7 @@ namespace ReflectorTest
             yield return (new Processor(svq, "W"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries163()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries223()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3718,28 +3848,28 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "o");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries164()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries224()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "K"), "o");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries165()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries225()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "W"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries165()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries226()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(7777);
             yield return (new Processor(svq, "W"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries165()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries227()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(5555);
@@ -3748,13 +3878,107 @@ namespace ReflectorTest
             yield return (new Processor(svq, "q"), "p");
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries165()
+        static IEnumerable<(Processor, string)> GetIncorrectQueries228()
         {
             SignValue[,] svq = new SignValue[1, 1];
             svq[0, 0] = new SignValue(7777);
             yield return (new Processor(svq, "q"), "p");
             svq[0, 0] = new SignValue(5555);
             yield return (new Processor(svq, "W"), "k");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries229()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(4444);
+            yield return (new Processor(sv, "a"), "Y1");
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "c"), "y1");
+            sv[0, 0] = new SignValue(4444);
+            yield return (new Processor(sv, "a"), "k1");
+            sv[0, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "b"), "K1");
+            sv[0, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "b"), "K1");
+            sv[0, 0] = new SignValue(7777);
+            yield return (new Processor(sv, "c"), "y1");
+            sv[0, 0] = new SignValue(7777);
+            yield return (new Processor(sv, "c"), "Y1");
+            sv[0, 0] = new SignValue(8888);
+            yield return (new Processor(sv, "c"), "k1");
+            sv[0, 0] = new SignValue(9999);
+            yield return (new Processor(sv, "c"), "Y1");
+            sv[0, 0] = new SignValue(7777);
+            yield return (new Processor(sv, "c"), "y1");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries230()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(4444);
+            yield return (new Processor(sv, "a"), "Y1");
+            sv[0, 0] = new SignValue(7777);
+            yield return (new Processor(sv, "c"), "y1");
+            sv[0, 0] = new SignValue(4445);
+            yield return (new Processor(sv, "a"), "k1");
+            sv[0, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "b"), "K1");
+            sv[0, 0] = new SignValue(6667);
+            yield return (new Processor(sv, "b"), "K1");
+            sv[0, 0] = new SignValue(7778);
+            yield return (new Processor(sv, "c"), "y1");
+            sv[0, 0] = new SignValue(7779);
+            yield return (new Processor(sv, "c"), "Y1");
+            sv[0, 0] = new SignValue(8888);
+            yield return (new Processor(sv, "c"), "k1");
+            sv[0, 0] = new SignValue(9998);
+            yield return (new Processor(sv, "c"), "Y1");
+            sv[0, 0] = new SignValue(7780);
+            yield return (new Processor(sv, "c"), "y1");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries231()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "a"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries232()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "b"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries233()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(7777);
+            yield return (new Processor(sv, "c"), "c");
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueries234()
+        {
+            SignValue[,] svq = new SignValue[1, 2];
+            svq[0, 0] = new SignValue(5555);
+            svq[0, 1] = new SignValue(7777);
+            yield return (new Processor(svq, "K"), "i");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries235Exception()
+        {
+            yield return (new Processor(new SignValue[1, 1], "q"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries236Exception()
+        {
+            yield return (new Processor(new SignValue[2, 1], "w"), "b");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries237Exception()
+        {
+            yield return (new Processor(new SignValue[1, 2], "e"), "c");
         }
 
         #endregion //Incorrect
@@ -3880,8 +4104,8 @@ namespace ReflectorTest
         {
             NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries0(), GetCorrectQueries0().Select(tuple => tuple.Item1));
             NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries1(), GetCorrectQueries1().Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries2(), CorrectQueries2Answer());
-            GetCorrectQueries3
+            //NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries2(), CorrectQueries2Answer());
+            //GetCorrectQueries3
         }
     }
 }
