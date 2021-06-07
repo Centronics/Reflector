@@ -16,6 +16,11 @@ namespace ReflectorTest
 
         #region GetProcessors
 
+        /// <summary>
+        /// Используется для теста, где используется одна и та же физическая карта <see cref="GetGlobalProcessorForNeuron"/> и <see cref="GetCorrectGlobalProcessorQuery"/>.
+        /// </summary>
+        static Processor _globalProcessor;
+
         static IEnumerable<Processor> GetProcessors0()
         {
             SignValue[,] sv = new SignValue[1, 1];
@@ -114,7 +119,26 @@ namespace ReflectorTest
             sv[0, 0] = new SignValue(7777);
             yield return new Processor(sv, "y1");
         }
-        // TODO написать тест, где используется одна и та же карта (физически)
+
+        static IEnumerable<Processor> GetGlobalProcessorForNeuron()
+        {
+            if (_globalProcessor == null)
+            {
+                SignValue[,] sv = new SignValue[3, 3];
+                sv[0, 0] = new SignValue(1111);
+                sv[1, 0] = new SignValue(2222);
+                sv[2, 0] = new SignValue(3333);
+                sv[0, 1] = new SignValue(4444);
+                sv[1, 1] = new SignValue(5555);
+                sv[2, 1] = new SignValue(6666);
+                sv[0, 2] = new SignValue(7777);
+                sv[1, 2] = new SignValue(8888);
+                sv[2, 2] = new SignValue(9999);
+                _globalProcessor = new Processor(sv, "Global");
+            }
+            yield return _globalProcessor;
+        }
+
         static IEnumerable<Processor> GetProcessors8Exception()
         {
             yield return new Processor(new SignValue[2, 2], "Exception8");
@@ -183,8 +207,6 @@ namespace ReflectorTest
             sv[0, 0] = new SignValue(100008);
             yield return new Processor(sv, "w");
         }
-
-        //написать результаты для второго и третьего тестов
 
         #endregion //Results
 
@@ -2042,6 +2064,13 @@ namespace ReflectorTest
             sv[0, 0] = new SignValue(6666);
             sv[1, 0] = new SignValue(6666);
             yield return (new Processor(sv, "m"), "Y");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectGlobalProcessorQuery()
+        {
+            if (_globalProcessor == null)
+                throw new Exception($"Сначала необходимо вызвать метод {nameof(GetGlobalProcessorForNeuron)}.");
+            yield return (_globalProcessor, "A");
         }
 
         #endregion //Correct
@@ -3966,17 +3995,123 @@ namespace ReflectorTest
             yield return (new Processor(svq, "K"), "i");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries235Exception()
+        static IEnumerable<(Processor, string)> GetInCorrectQueries235()
+        {
+            SignValue[,] sv = new SignValue[1, 5];
+            sv[0, 0] = new SignValue(5555);
+            sv[0, 1] = new SignValue(5555);
+            sv[0, 2] = new SignValue(7777);
+            sv[0, 3] = new SignValue(6666);
+            yield return (new Processor(sv, "l"), "B1");
+            yield return (new Processor(sv, "3"), "n");
+            yield return (new Processor(sv, "3"), "m");
+            yield return (new Processor(sv, "3"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries236()
+        {
+            SignValue[,] sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(8888);
+            sv[0, 1] = new SignValue(2222);
+            yield return (new Processor(sv, "n"), "F");
+            sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(8888);
+            yield return (new Processor(sv, "y"), "F");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries237()
+        {
+            SignValue[,] sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(8888);
+            sv[0, 1] = new SignValue(3333);
+            yield return (new Processor(sv, "n"), "G");
+            sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(9999);
+            yield return (new Processor(sv, "y"), "H");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries238()
+        {
+            SignValue[,] sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(5555);
+            sv[0, 1] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "J");
+            sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "J");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries239()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "h"), "K");
+            sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(5555);
+            sv[0, 1] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "K");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries240()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "h"), "K1");
+            sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(6666);
+            sv[0, 1] = new SignValue(6666);
+            yield return (new Processor(sv, "m"), "K1");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries241()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(7777);
+            yield return (new Processor(sv, "h"), "Q");
+            sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(5555);
+            sv[0, 1] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "q");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries242()
+        {
+            SignValue[,] sv = new SignValue[1, 1];
+            sv[0, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "h"), "w");
+            sv = new SignValue[1, 2];
+            sv[0, 0] = new SignValue(7777);
+            sv[0, 1] = new SignValue(7777);
+            yield return (new Processor(sv, "m"), "W");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries243()
+        {
+            SignValue[,] sv = new SignValue[2, 1];
+            sv[0, 0] = new SignValue(5555);
+            sv[1, 0] = new SignValue(5555);
+            yield return (new Processor(sv, "m"), "A");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries244()
+        {
+            SignValue[,] sv = new SignValue[2, 1];
+            sv[0, 0] = new SignValue(6666);
+            sv[1, 0] = new SignValue(6666);
+            yield return (new Processor(sv, "m"), "a");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries245Exception()
         {
             yield return (new Processor(new SignValue[1, 1], "q"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries236Exception()
+        static IEnumerable<(Processor, string)> GetInCorrectQueries246Exception()
         {
             yield return (new Processor(new SignValue[2, 1], "w"), "b");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries237Exception()
+        static IEnumerable<(Processor, string)> GetInCorrectQueries247Exception()
         {
             yield return (new Processor(new SignValue[1, 2], "e"), "c");
         }
@@ -3985,7 +4120,62 @@ namespace ReflectorTest
 
         #endregion //Tests
 
-        static void GetException(string errorString, Type exType, Action act)//ПРОВЕРИТЬ работоспособность
+        [TestMethod]
+        public void NeuronAutoTest1()
+        {
+            GetException("123", typeof(ArgumentNullException), () => throw new ArgumentNullException());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NeuronAutoTest2_0()
+        {
+            GetException(" ", typeof(Exception), () => throw new AggregateException());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NeuronAutoTest2_1()
+        {
+            GetException(null, typeof(Exception), () => throw new AggregateException());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NeuronAutoTest2_2()
+        {
+            GetException(string.Empty, typeof(Exception), () => throw new AggregateException());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NeuronAutoTest3()
+        {
+            GetException("1234", null, () => throw new AggregateException());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException), "Должно быть 123")]
+        public void NeuronAutoTest4()
+        {
+            GetException("123", typeof(Exception), null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Должно быть 123456")]
+        public void NeuronAutoTest5()
+        {
+            GetException("123456", typeof(Exception), () => throw new AggregateException());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception), "Должно быть 12345")]
+        public void NeuronAutoTest6()
+        {
+            GetException("12345", typeof(Exception), () => { });
+        }
+
+        static void GetException(string errorString, Type exType, Action act)
         {
             if (string.IsNullOrWhiteSpace(errorString))
                 throw new ArgumentNullException();
