@@ -4120,69 +4120,89 @@ namespace ReflectorTest
 
         #endregion //Tests
 
+        #region SelfTests
+
         [TestMethod]
-        public void NeuronAutoTest1()
+        public void NeuronAutoGetExceptionTest1()
         {
             GetException("123", typeof(ArgumentNullException), () => throw new ArgumentNullException());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void NeuronAutoTest2_0()
+        public void NeuronAutoGetExceptionTest2_0()
         {
             GetException(" ", typeof(Exception), () => throw new AggregateException());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void NeuronAutoTest2_1()
+        public void NeuronAutoGetExceptionTest2_1()
         {
             GetException(null, typeof(Exception), () => throw new AggregateException());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void NeuronAutoTest2_2()
+        public void NeuronAutoGetExceptionTest2_2()
         {
             GetException(string.Empty, typeof(Exception), () => throw new AggregateException());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void NeuronAutoTest3()
+        public void NeuronAutoGetExceptionTest3()
         {
             GetException("1234", null, () => throw new AggregateException());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException), "Должно быть 123")]
-        public void NeuronAutoTest4()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NeuronAutoGetExceptionTest4()
         {
             GetException("123", typeof(Exception), null);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception), "Должно быть 123456")]
-        public void NeuronAutoTest5()
+        [ExpectedException(typeof(Exception))]
+        public void NeuronAutoGetExceptionTest5()
         {
-            GetException("123456", typeof(Exception), () => throw new AggregateException());
+            try
+            {
+                GetException("123456", typeof(Exception), () => throw new AggregateException());
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("123456", ex.Message);
+                throw;
+            }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception), "Должно быть 12345")]
-        public void NeuronAutoTest6()
+        [ExpectedException(typeof(Exception))]
+        public void NeuronAutoGetExceptionTest6()
         {
-            GetException("12345", typeof(Exception), () => { });
+            try
+            {
+                GetException("12345", typeof(Exception), () => { });
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("12345", ex.Message);
+                throw;
+            }
         }
+
+        #endregion //SelfTests
 
         static void GetException(string errorString, Type exType, Action act)
         {
             if (string.IsNullOrWhiteSpace(errorString))
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(errorString));
             if (exType == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(exType));
             if (act == null)
-                throw new ArgumentNullException(nameof(act), "act == null");
+                throw new ArgumentNullException(nameof(act));
 
             try
             {
