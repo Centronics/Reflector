@@ -1515,7 +1515,7 @@ namespace ReflectorTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void CheckSumTest()
         {
-            HashCreator.GetHash(null, false);
+            HashCreator.GetHash(null);// TODO Добавить карты с одинаковыми значениями, но разными Tag
         }
 
         sealed class ReflectionTestClass : Reflection

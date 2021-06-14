@@ -4229,18 +4229,6 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> PCToEnumerable(ProcessorContainer pc)
-        {
-            Assert.AreNotEqual(null, pc);
-
-            for (int k = 0; k < pc.Count; k++)
-            {
-                Processor p = pc[k];
-                Assert.AreNotEqual(null, p);
-                yield return p;
-            }
-        }
-
         static void CheckNeuronMapValue(IEnumerable<Processor> actual, IEnumerable<Processor> pcExpected)
         {
             Dictionary<string, Processor> dicActual = actual.ToDictionary(p => p.Tag);
@@ -4276,7 +4264,6 @@ namespace ReflectorTest
             {
                 Assert.AreNotEqual(null, parentNeuron);
                 CheckNeuronMapValue(NeuronToEnumerable(parentNeuron), expected);
-                CheckNeuronMapValue(PCToEnumerable(parentNeuron.ToProcessorContainer()), expected);
                 if (!charSetParent.SetEquals(parentNeuron.ToString()))
                     throw new Exception($"{nameof(CheckParentNeuron)}");
 
@@ -4294,7 +4281,6 @@ namespace ReflectorTest
                 Assert.AreNotEqual(null, derivedNeuron);
                 Processor[] requestProcessors = pcRequestProcessors as Processor[] ?? pcRequestProcessors.ToArray();
                 CheckNeuronMapValue(NeuronToEnumerable(derivedNeuron), requestProcessors);
-                CheckNeuronMapValue(PCToEnumerable(derivedNeuron.ToProcessorContainer()), requestProcessors);
                 if (!charSetParent.SetEquals(derivedNeuron.ToString()))
                     throw new Exception($"{nameof(CheckDerivedNeuron)}");
 

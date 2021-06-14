@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using DynamicMosaic;
 using DynamicParser;
 using Processor = DynamicParser.Processor;
@@ -9,31 +9,37 @@ namespace DynamicReflector
 {
     public sealed class Neuron
     {
-        readonly ProcessorContainer _processorContainer;
         readonly Reflex _workReflex;
+        readonly HashSet<char> _procNames;
         readonly string _stringOriginalUniqueQuery;
 
         public Neuron(ProcessorContainer pc)
+        {
+            ProcessorHandler ph = FromProcessorContainer(pc);
+            _workReflex = new Reflex(ph.Processors);
+            _procNames = ph.ToHashSet();
+            _stringOriginalUniqueQuery = ph.ToString();
+        }
+
+        static ProcessorHandler FromProcessorContainer(ProcessorContainer pc)
         {
             if (pc == null)
                 throw new ArgumentNullException();
 
             ProcessorHandler ph = new ProcessorHandler();
-            HashSet<char> setUniqueQuery = new HashSet<char>();
             for (int k = 0; k < pc.Count; k++)
-            {
-                Processor proc = pc[k];
-                char pTag = char.ToUpper(proc.Tag[0]);
-                if (ph.Find(proc).Any(p => p.Tag[0] == pTag))
-                    continue;
+                ph.Add(pc[k]);
 
-                ph.Add(proc);
-                setUniqueQuery.Add(pTag);
-            }
+            return ph;
+        }
 
-            _processorContainer = ph.Processors;
-            _workReflex = new Reflex(_processorContainer);
-            _stringOriginalUniqueQuery = new string(setUniqueQuery.ToArray());
+        static HashSet<char> ToHashSet(IEnumerable<(Processor, string)> q)
+        {
+            HashSet<char> chs = new HashSet<char>();
+            foreach ((Processor, string query) x in q)
+                foreach (char c in x.query)
+                    chs.Add(char.ToUpper(c));
+            return chs;
         }
 
         static IEnumerable<Processor> GetNewProcessors(Reflex start, Reflex finish)
@@ -46,33 +52,60 @@ namespace DynamicReflector
                 yield return finish[k];
         }
 
-        public Neuron FindRelation(Request request)
+        public Neuron FindRelation(IEnumerable<(Processor, string query)> queries)//как обрабатывать коллекцию, перечислять несколько раз?
         {
-            if (request == null)
+            if (queries == null)
                 throw new ArgumentNullException();
 
-            ProcessorHandler ph = new ProcessorHandler();
+            if (!ToHashSet(queries).SetEquals(_procNames))
+                return null;
 
-            foreach ((Processor processor, string query) in request.Queries)
-                ph.AddRange(GetNewProcessors(_workReflex, _workReflex.FindRelation(processor, query)));
+            object lockObject = new object();
 
-            return ph.SetEquals(_stringOriginalUniqueQuery) ? new Neuron(ph.Processors) : null;
-        }
+            string errString = string.Empty, errStopped = string.Empty;
+            bool exThrown = false, exStopped = false;
 
-        public ProcessorContainer ToProcessorContainer()
-        {
-            IEnumerable<Processor> GetProcessors()
+            ProcessorHandler result = new ProcessorHandler();
+
+            Parallel.ForEach(queries, ((Processor processor, string query) q, ParallelLoopState state) =>
             {
-                for (int k = 0; k < _processorContainer.Count; k++)
-                    yield return _processorContainer[k];
-            }
+                try
+                {
+                    if (state.IsStopped)
+                        return;
 
-            return new ProcessorContainer(GetProcessors().ToArray());
+                    Reflex reflex = _workReflex.FindRelation(q.processor, q.query);
+                    if (reflex == null || state.IsStopped)
+                        return;
+
+                    lock (lockObject)
+                        result.AddRange(GetNewProcessors(_workReflex, reflex));
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        errString = ex.Message;
+                        exThrown = true;
+                        state.Stop();
+                    }
+                    catch (Exception ex1)
+                    {
+                        errStopped = ex1.Message;
+                        exStopped = true;
+                    }
+                }
+            });
+
+            if (exThrown)
+                throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
+
+            return result.SetEquals(_stringOriginalUniqueQuery) ? new Neuron(result.Processors) : null;
         }
 
-        public Processor this[int index] => _processorContainer[index];
+        public Processor this[int index] => _workReflex[index];
 
-        public int Count => _processorContainer.Count;
+        public int Count => _workReflex.Count;
 
         public override string ToString() => _stringOriginalUniqueQuery;
     }

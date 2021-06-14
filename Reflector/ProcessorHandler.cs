@@ -76,7 +76,7 @@ namespace DynamicReflector
                 IsEmpty = false;
             }
 
-            int hash = HashCreator.GetHash(p, false);
+            int hash = HashCreator.GetHash(p);
             if (_dicProcsWithTag.TryGetValue(hash, out List<Processor> prcs))
             {
                 if (prcs.Any(prc => ProcessorCompare(prc, p, true)))
@@ -89,22 +89,13 @@ namespace DynamicReflector
             SetProps();
         }
 
-        public IEnumerable<Processor> Find(Processor p)
-        {
-            CheckProcessorSizes(p);
-            if (!_dicProcsWithTag.TryGetValue(HashCreator.GetHash(p, false), out List<Processor> prcs))
-                yield break;
-            foreach (Processor prc in prcs.Where(prc => ProcessorCompare(prc, p, false)))
-                yield return prc;
-        }
-
         static bool ProcessorCompare(Processor p1, Processor p2, bool includeTag)
         {
             if (p1 == null)
                 throw new ArgumentNullException();
             if (p2 == null)
                 throw new ArgumentNullException();
-            if (includeTag && string.Compare(p1.Tag, p2.Tag, StringComparison.OrdinalIgnoreCase) != 0)
+            if (includeTag && char.ToUpper(p1.Tag[0]) != char.ToUpper(p2.Tag[0]))
                 return false;
             for (int i = 0; i < p1.Width; i++)
                 for (int j = 0; j < p1.Height; j++)
@@ -117,6 +108,8 @@ namespace DynamicReflector
         {
             if (processor == null)
                 throw new ArgumentNullException(nameof(processor));
+            if (processor.Tag == newTag)
+                return processor;
             if (string.IsNullOrWhiteSpace(newTag))
                 throw new ArgumentException($"\"{nameof(newTag)}\" не может быть пустым или содержать только пробел.", nameof(newTag));
 
@@ -128,6 +121,8 @@ namespace DynamicReflector
         }
 
         public bool SetEquals(IEnumerable<char> values) => _procNames.SetEquals(values);
+
+        public HashSet<char> ToHashSet() => new HashSet<char>(_procNames);
 
         public override string ToString() => new string(_procNames.ToArray());
     }
