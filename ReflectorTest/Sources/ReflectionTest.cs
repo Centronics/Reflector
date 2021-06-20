@@ -274,8 +274,8 @@ namespace ReflectorTest
         {
             SignValue[,] sv = new SignValue[p.Width, p.Height];
             for (int y = 0; y < p.Height; y++)
-            for (int x = 0; x < p.Width; x++)
-                sv[x, y] = new SignValue(p[x, y] + 1);
+                for (int x = 0; x < p.Width; x++)
+                    sv[x, y] = new SignValue(p[x, y] + 1);
             return new Processor(sv, p.Tag);
         }
 
@@ -797,7 +797,7 @@ namespace ReflectorTest
         }
 
         [TestMethod]
-        public void ProcessorCompareTest()
+        public void ProcessorSameTest()
         {
             SignValue[,] sv1 = new SignValue[1, 2];
             sv1[0, 0] = new SignValue(1000);
@@ -854,25 +854,25 @@ namespace ReflectorTest
                 double dbRep = 0.0, dbNotRep = 0.0;
                 const int maxlen = 100;
                 for (int y = 1; y <= 100; y++)
-                for (int x = 1; x <= maxlen; x++)
-                {
-                    SignValue[,] svv1 = new SignValue[x, y];
-                    for (int p = 0; p < y; p++)
-                    for (int u = 0; u < x; u++)
-                        svv1[u, p] = new SignValue(u);
-                    SignValue[,] svv2 = new SignValue[x, y];
-                    for (int p = 0; p < y; p++)
-                    for (int u = 0; u < x; u++)
-                        svv2[u, p] = new SignValue(maxlen - u);
-                    Processor p1 = new Processor(svv1, "1");
-                    Processor p2 = new Processor(svv2, "1");
-                    int c1 = ps.GetHashCode(p1), c2 = ps.GetHashCode(p2);
-                    totalCheckSumm2 = unchecked(totalCheckSumm2 + c1 + c2);
-                    if (c1 == c2)
-                        dbRep++;
-                    else
-                        dbNotRep++;
-                }
+                    for (int x = 1; x <= maxlen; x++)
+                    {
+                        SignValue[,] svv1 = new SignValue[x, y];
+                        for (int p = 0; p < y; p++)
+                            for (int u = 0; u < x; u++)
+                                svv1[u, p] = new SignValue(u);
+                        SignValue[,] svv2 = new SignValue[x, y];
+                        for (int p = 0; p < y; p++)
+                            for (int u = 0; u < x; u++)
+                                svv2[u, p] = new SignValue(maxlen - u);
+                        Processor p1 = new Processor(svv1, "1");
+                        Processor p2 = new Processor(svv2, "1");
+                        int c1 = ps.GetHashCode(p1), c2 = ps.GetHashCode(p2);
+                        totalCheckSumm2 = unchecked(totalCheckSumm2 + c1 + c2);
+                        if (c1 == c2)
+                            dbRep++;
+                        else
+                            dbNotRep++;
+                    }
                 dbRep = dbRep / dbNotRep * 100.0;
                 Assert.AreEqual(true, dbRep < 0.6);
                 Assert.AreNotEqual(totalCheckSumm1, totalCheckSumm2);
@@ -1513,9 +1513,25 @@ namespace ReflectorTest
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void CheckSumTest()
+        public void CheckSumTest0()
         {
-            HashCreator.GetHash(null);// TODO Добавить карты с одинаковыми значениями, но разными Tag
+            HashCreator.GetHash(null);
+        }
+
+        [TestMethod]
+        public void CheckSumTest1()
+        {
+            const int hashSum = 1234;
+
+            Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "a")));
+            Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "A")));
+            Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "b")));
+            Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "B")));
+
+            Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "a1")));
+            Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "A2")));
+            Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "b3")));
+            Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "B4")));
         }
 
         sealed class ReflectionTestClass : Reflection

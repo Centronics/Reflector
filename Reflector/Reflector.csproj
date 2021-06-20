@@ -56,18 +56,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DynamicMaster.cs" />
-    <Compile Include="FunctionHelper.cs" />
-    <Compile Include="HashCreator.cs" />
-    <Compile Include="Neuron.cs" />
-    <Compile Include="ProcessorHandler.cs" />
-    <Compile Include="Reflection.cs" />
-    <Compile Include="Reflector.cs" />
+    <Compile Include="Sources\HashCreator.cs" />
+    <Compile Include="Sources\Neuron.cs" />
+    <Compile Include="Sources\ProcessorHandler.cs" />
+    <Compile Include="Sources\Reflection.cs" />
+    <Compile Include="Sources\Reflector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

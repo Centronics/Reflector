@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DynamicMosaic;
 using DynamicParser;
@@ -52,12 +53,13 @@ namespace DynamicReflector
                 yield return finish[k];
         }
 
-        public Neuron FindRelation(IEnumerable<(Processor, string query)> queries)//как обрабатывать коллекцию, перечислять несколько раз?
+        public Neuron FindRelation(IEnumerable<(Processor, string query)> queries)
         {
             if (queries == null)
                 throw new ArgumentNullException();
 
-            if (!ToHashSet(queries).SetEquals(_procNames))
+            IEnumerable<(Processor, string)> tq = queries as (Processor, string)[] ?? queries.ToArray();
+            if (!ToHashSet(tq).SetEquals(_procNames))
                 return null;
 
             object lockObject = new object();
@@ -67,7 +69,7 @@ namespace DynamicReflector
 
             ProcessorHandler result = new ProcessorHandler();
 
-            Parallel.ForEach(queries, ((Processor processor, string query) q, ParallelLoopState state) =>
+            Parallel.ForEach(tq, ((Processor processor, string query) q, ParallelLoopState state) =>
             {
                 try
                 {

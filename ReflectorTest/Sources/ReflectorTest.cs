@@ -3485,7 +3485,7 @@ namespace ReflectorTest
 
             public void ReflexNull(int x, int y)
             {
-                ProcessorContainers[x, y] = null;
+                _processorContainers[x, y] = null;
             }
 
             public new Processor GetMapByName(char tag) => base.GetMapByName(tag);

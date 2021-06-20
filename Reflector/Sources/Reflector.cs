@@ -5,8 +5,6 @@ using DynamicParser;
 using DynamicProcessor;
 using Processor = DynamicParser.Processor;
 
-using ErrorStatus = DynamicReflector.FunctionHelper.ErrorStatus;
-
 namespace DynamicReflector
 {
     /// <summary>
@@ -18,12 +16,12 @@ namespace DynamicReflector
         /// <summary>
         ///     Карты для выборки результатов распознавания.
         /// </summary>
-        protected readonly Dictionary<char, Processor> Processors = new Dictionary<char, Processor>();
+        protected readonly Dictionary<char, Processor> _processors = new Dictionary<char, Processor>();
 
         /// <summary>
         ///     Процессы, которые будут происходить вне зависимости друг от друга.
         /// </summary>
-        protected readonly ProcessorContainer[,] ProcessorContainers;
+        protected readonly ProcessorContainer[,] _processorContainers;
 
         /// <summary>
         ///     Инициализирует текущий экземпляр класса, добавляя указанные карты в коллекцию класса, создавая её копию. Массив
@@ -42,12 +40,12 @@ namespace DynamicReflector
                     $"{nameof(Reflector)}: Искомые карты не прошли проверку на размер и/или количество карт в массиве, а также на значение null или значение свойства {nameof(Processor.Tag)}.",
                     nameof(processors));
             int lx = processors.GetLength(0), ly = processors.GetLength(1);
-            ProcessorContainers = new ProcessorContainer[lx, ly];
+            _processorContainers = new ProcessorContainer[lx, ly];
             for (int y = 0; y < ly; y++)
                 for (int x = 0; x < lx; x++)
                 {
                     ProcessorContainer pc = processors[x, y];
-                    ProcessorContainers[x, y] = CopyContainer(pc);
+                    _processorContainers[x, y] = CopyContainer(pc);
                     CopyProcessorContainer(pc);
                 }
             MapHeight = processors[0, 0].Height;
@@ -67,12 +65,12 @@ namespace DynamicReflector
         /// <summary>
         ///     Размер, которому должна соответствовать входная распознаваемая карта по ширине.
         /// </summary>
-        public virtual int ProcessorWidth => ProcessorContainers.GetLength(0) * MapWidth;
+        public virtual int ProcessorWidth => _processorContainers.GetLength(0) * MapWidth;
 
         /// <summary>
         ///     Размер, которому должна соответствовать входная распознаваемая карта по высоте.
         /// </summary>
-        public virtual int ProcessorHeight => ProcessorContainers.GetLength(1) * MapHeight;
+        public virtual int ProcessorHeight => _processorContainers.GetLength(1) * MapHeight;
 
         static ProcessorContainer CopyContainer(ProcessorContainer pc)
         {
@@ -98,11 +96,11 @@ namespace DynamicReflector
             {
                 Processor p = pc[k];
                 char tag = char.ToUpper(p.Tag[0]);
-                if (Processors.ContainsKey(tag))
+                if (_processors.ContainsKey(tag))
                     throw new ArgumentException(
                         $"{nameof(CopyProcessorContainer)}: Обнаружены повторяющиеся карты: карта с таким названием ({tag}) уже была добавлена.",
                         nameof(pc));
-                Processors[tag] = p;
+                _processors[tag] = p;
             }
         }
 
@@ -176,7 +174,7 @@ namespace DynamicReflector
             if (char.IsWhiteSpace(tag))
                 throw new ArgumentNullException(nameof(tag),
                     $"{nameof(GetMapByName)}: Название карты должно состоять из любых значимых символов ({tag}).");
-            return Processors[char.ToUpper(tag)];
+            return _processors[char.ToUpper(tag)];
         }
 
         /// <summary>
@@ -202,7 +200,7 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Получает указанную часть указанной карты.
+        ///     Получает заданную часть указанной карты.
         ///     Часть эта по размерам соответствует полям <see cref="MapWidth" /> и <see cref="MapHeight" />.
         /// </summary>
         /// <param name="processor">Карта, часть которой необходимо получить.</param>
@@ -285,8 +283,8 @@ namespace DynamicReflector
                     nameof(matrix));
             if (!ResearchByPieces(proc, matrix))
                 return null;
-            int mx = ProcessorContainers.GetLength(0);
-            int my = ProcessorContainers.GetLength(1);
+            int mx = _processorContainers.GetLength(0);
+            int my = _processorContainers.GetLength(1);
             Processor[,] processors = new Processor[mx, my];
             for (int y = 0; y < my; y++)
                 for (int x = 0; x < mx; x++)
@@ -296,38 +294,36 @@ namespace DynamicReflector
 
         bool ResearchByPieces(Processor proc, char[,] matrix)
         {
-            ErrorStatus result = new ErrorStatus();
-            Parallel.For(0, ProcessorContainers.Length, (k, state) =>
+            string lastErrorText = null;
+            ParallelLoopResult result = Parallel.For(0, _processorContainers.Length, (k, state) =>
             {
-                ErrorStatus status = FunctionHelper.Run(() => ResearchPiece(proc, matrix, k, state), $@"iteration {k}");
-                if (status.ErrorCode == 0)
-                    return;
-                state.Stop();
-                result = status;
+                try
+                {
+                    int mx = _processorContainers.GetLength(0);
+                    int x = k % mx, y = k / mx;
+                    SignValue[,] mapPiece = GetMapPiece(proc, x * MapWidth, y * MapHeight);
+                    if (state.IsStopped)
+                        return;
+                    Processor processor = new Processor(mapPiece, proc.Tag);
+                    if (state.IsStopped)
+                        return;
+                    SearchResults searchResults = processor.GetEqual(_processorContainers[x, y]);
+                    if (state.IsStopped)
+                        return;
+                    if (!searchResults.FindRelation(matrix[x, y].ToString()))
+                        state.Stop();
+                }
+                catch (Exception ex)
+                {
+                    state.Stop();
+                    lastErrorText = ex.Message;
+                }
             });
 
-            switch (result.ErrorCode)
-            {
-                case 0:
-                    return true;
-                case -1:
-                    return false;
-                default:
-                    throw new Exception(result.ErrorText);
-            }
-        }
+            if (lastErrorText != null)
+                throw new Exception(lastErrorText);
 
-        int ResearchPiece(Processor proc, char[,] matrix, int iterator, ParallelLoopState state)
-        {
-            int mx = ProcessorContainers.GetLength(0);
-            int x = iterator % mx, y = iterator / mx;
-            string searchWord = matrix[x, y].ToString();
-            SignValue[,] piece = GetMapPiece(proc, x * MapWidth, y * MapHeight);
-            if (state.IsStopped)
-                return 0;
-            Processor p = new Processor(piece, proc.Tag);
-            SearchResults sr = p.GetEqual(ProcessorContainers[x, y]);
-            return state.IsStopped || sr.FindRelation(searchWord) ? 0 : -1;
+            return result.IsCompleted;
         }
     }
 }

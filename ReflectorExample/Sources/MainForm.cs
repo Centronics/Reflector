@@ -209,13 +209,13 @@ namespace ReflectorExample
             Painter p = _reflectorPainters[x, y];
             _saveLoad.Save(x, y, path, p.CurrentBitmap);
             p.CurrentProcessorName = mapName;
-            _pcs[x, y].Add(p.CurrentProcessor);//работу с картами взять отсюда
+            _pcs[x, y].Add(p.CurrentProcessor);
             _imageCounter[x, y] = _pcs[x, y].Count - 1;
             DisplayCountMapsOnControl(x, y, _pcs[x, y].Count - 1);
             return true;
         }
 
-        void DeleteImage(int x, int y)//исправить баг с удалением всех карт, которые называются по указанному имени
+        void DeleteImage(int x, int y)
         {
             string mapName = GetCurrentName(x, y);
             _saveLoad.Delete(x, y, GetImagePath(mapName));
@@ -925,7 +925,7 @@ namespace ReflectorExample
             }
         }
 
-        Request NeuronQuery
+        IEnumerable<(Processor, string)> NeuronQuery
         {
             get
             {
@@ -940,7 +940,7 @@ namespace ReflectorExample
                         }
                 }
 
-                return new Request(GetQuery());
+                return GetQuery();
             }
         }
 

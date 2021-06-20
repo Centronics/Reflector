@@ -2077,6 +2077,16 @@ namespace ReflectorTest
 
         #region Incorrect
 
+        static IEnumerable<(Processor, string)> GetIncorrectQueriesNull()
+        {
+            return null;
+        }
+
+        static IEnumerable<(Processor, string)> GetIncorrectQueriesBreak()
+        {
+            yield break;
+        }
+
         static IEnumerable<(Processor, string)> GetIncorrectQueries0()
         {
             SignValue[,] sv = new SignValue[1, 1];
@@ -4254,7 +4264,6 @@ namespace ReflectorTest
             Processor[] expected = pcExpected as Processor[] ?? pcExpected.ToArray();
             ProcessorContainer pcParent = new ProcessorContainer(pcActual.ToArray());
             Neuron parentNeuron = new Neuron(pcParent);
-            Request request = new Request(pcRequest as (Processor, string)[] ?? pcRequest.ToArray());
 
             HashSet<char> charSetParent = new HashSet<char>();
             for (int k = 0; k < pcParent.Count; k++)
@@ -4277,7 +4286,8 @@ namespace ReflectorTest
             void CheckDerivedNeuron()
             {
                 Assert.AreNotEqual(null, parentNeuron);
-                Neuron derivedNeuron = parentNeuron.FindRelation(request);
+                IEnumerable<(Processor, string)> query = pcRequest as (Processor, string)[] ?? pcRequest.ToArray();
+                Neuron derivedNeuron = parentNeuron.FindRelation(query);
                 Assert.AreNotEqual(null, derivedNeuron);
                 Processor[] requestProcessors = pcRequestProcessors as Processor[] ?? pcRequestProcessors.ToArray();
                 CheckNeuronMapValue(NeuronToEnumerable(derivedNeuron), requestProcessors);
@@ -4286,7 +4296,7 @@ namespace ReflectorTest
 
                 Assert.AreEqual(parentNeuron.Count, derivedNeuron.Count);
                 Assert.AreEqual(parentNeuron.ToString().Length, derivedNeuron.ToString().Length);
-                Assert.AreNotEqual(null, derivedNeuron.FindRelation(request));
+                Assert.AreNotEqual(null, derivedNeuron.FindRelation(query));
                 GetException("Neuron3", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[-1]; });
                 GetException("Neuron4", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[derivedNeuron.Count]; });
             }

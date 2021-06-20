@@ -21,13 +21,13 @@ namespace DynamicReflector
         ///     Содержит варианты разбора приходящих карт. Включает в себя все возможные комбинации запросов для разбора, которые
         ///     используются в методе <see cref="Reflector.Push" />.
         /// </summary>
-        protected readonly char[][,] Logical;
+        protected char[][,] Logical { get; }
 
         /// <summary>
         ///     Предназначен для распознавания указанной карты. Каждый элемент массива принимает свой запрос и отрабатывает его в
         ///     параллельном режиме, независимо от других.
         /// </summary>
-        protected readonly Reflector[] Reflections;
+        protected Reflector[] Reflections { get; }
 
         /// <summary>
         ///     Инициализирует текущий экземпляр класса, инициализируя внутренние объекты <see cref="Reflector" /> для

@@ -68,10 +68,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="NeuronTest.cs" />
-    <Compile Include="ReflectorTest.cs" />
+    <Compile Include="Sources\NeuronTest.cs" />
+    <Compile Include="Sources\ProcessorHandlerTest.cs" />
+    <Compile Include="Sources\ReflectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectionTest.cs" />
+    <Compile Include="Sources\ReflectionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Reflector\Reflector.csproj">
@@ -82,6 +83,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
