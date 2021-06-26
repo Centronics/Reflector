@@ -11,7 +11,7 @@ namespace DynamicReflector
     {
         readonly Dictionary<int, List<Processor>> _dicProcsWithTag = new Dictionary<int, List<Processor>>();
         readonly HashSet<string> _hashProcs = new HashSet<string>();
-        readonly HashSet<char> _procNames = new HashSet<char>();
+        readonly List<char> _procNames = new List<char>();
 
         public ProcessorContainer Processors
         {
@@ -119,10 +119,6 @@ namespace DynamicReflector
                     sv[i, j] = processor[i, j];
             return new Processor(sv, newTag);
         }
-
-        public bool SetEquals(IEnumerable<char> values) => _procNames.SetEquals(values);
-
-        public HashSet<char> ToHashSet() => new HashSet<char>(_procNames);
 
         public override string ToString() => new string(_procNames.ToArray());
     }

@@ -11,15 +11,13 @@ namespace DynamicReflector
     public sealed class Neuron
     {
         readonly Reflex _workReflex;
-        readonly HashSet<char> _procNames;
-        readonly string _stringOriginalUniqueQuery;
+        readonly HashSet<char> _hashSetOriginalUniqueQuery;
 
         public Neuron(ProcessorContainer pc)
         {
             ProcessorHandler ph = FromProcessorContainer(pc);
             _workReflex = new Reflex(ph.Processors);
-            _procNames = ph.ToHashSet();
-            _stringOriginalUniqueQuery = ph.ToString();
+            _hashSetOriginalUniqueQuery = new HashSet<char>(ph.ToString());
         }
 
         static ProcessorHandler FromProcessorContainer(ProcessorContainer pc)
@@ -59,7 +57,7 @@ namespace DynamicReflector
                 throw new ArgumentNullException();
 
             IEnumerable<(Processor, string)> tq = queries as (Processor, string)[] ?? queries.ToArray();
-            if (!ToHashSet(tq).SetEquals(_procNames))
+            if (!ToHashSet(tq).SetEquals(_hashSetOriginalUniqueQuery))
                 return null;
 
             object lockObject = new object();
@@ -102,13 +100,11 @@ namespace DynamicReflector
             if (exThrown)
                 throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
 
-            return result.SetEquals(_stringOriginalUniqueQuery) ? new Neuron(result.Processors) : null;
+            return _hashSetOriginalUniqueQuery.SetEquals(result.ToString()) ? new Neuron(result.Processors) : null;
         }
 
         public Processor this[int index] => _workReflex[index];
 
         public int Count => _workReflex.Count;
-
-        public override string ToString() => _stringOriginalUniqueQuery;
     }
 }
