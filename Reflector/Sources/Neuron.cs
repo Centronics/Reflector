@@ -79,7 +79,8 @@ namespace DynamicReflector
                         return;
 
                     lock (lockObject)
-                        result.AddRange(GetNewProcessors(_workReflex, reflex));
+                        foreach (Processor p in GetNewProcessors(_workReflex, reflex))
+                            result.Add(p);
                 }
                 catch (Exception ex)
                 {

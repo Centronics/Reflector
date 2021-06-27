@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using DynamicParser;
 using DynamicProcessor;
 using Processor = DynamicParser.Processor;
@@ -11,7 +12,7 @@ namespace DynamicReflector
     {
         readonly Dictionary<int, List<Processor>> _dicProcsWithTag = new Dictionary<int, List<Processor>>();
         readonly HashSet<string> _hashProcs = new HashSet<string>();
-        readonly List<char> _procNames = new List<char>();
+        readonly StringBuilder _procNames = new StringBuilder();
 
         public ProcessorContainer Processors
         {
@@ -43,10 +44,10 @@ namespace DynamicReflector
             if (t == null)
                 return;
             if (t.Size != p.Size)
-                throw new ArgumentException();
+                throw new ArgumentException($"{nameof(ProcessorHandler)}: Добавляемая карта отличается по размерам от первой карты, добавленной в коллекцию. Требуется: {t.Width}, {t.Height}. Фактически: {p.Width}, {p.Height}.");
         }
 
-        Processor GetUniqueProcessor(Processor p)
+        Processor GetProcessorWithUniqueTag(Processor p)
         {
             if (!_hashProcs.Contains(p.Tag))
                 return p;
@@ -56,13 +57,7 @@ namespace DynamicReflector
                 tTag += '0';
             } while (_hashProcs.Contains(tTag));
             _hashProcs.Add(tTag);
-            return RenameProcessor(p, tTag);
-        }
-
-        public void AddRange(IEnumerable<Processor> processors)
-        {
-            foreach (Processor processor in processors)
-                Add(processor);
+            return ChangeProcessorTag(p, tTag);
         }
 
         public void Add(Processor p)
@@ -71,7 +66,7 @@ namespace DynamicReflector
 
             void SetProps()
             {
-                _procNames.Add(char.ToUpper(p.Tag[0]));
+                _procNames.Append(char.ToUpper(p.Tag[0]));
                 Count++;
                 IsEmpty = false;
             }
@@ -81,11 +76,11 @@ namespace DynamicReflector
             {
                 if (prcs.Any(prc => ProcessorCompare(prc, p, true)))
                     return;
-                prcs.Add(GetUniqueProcessor(p));
+                prcs.Add(GetProcessorWithUniqueTag(p));
                 SetProps();
                 return;
             }
-            _dicProcsWithTag.Add(hash, new List<Processor> { GetUniqueProcessor(p) });
+            _dicProcsWithTag.Add(hash, new List<Processor> { GetProcessorWithUniqueTag(p) });
             SetProps();
         }
 
@@ -104,7 +99,7 @@ namespace DynamicReflector
             return true;
         }
 
-        public static Processor RenameProcessor(Processor processor, string newTag)
+        public static Processor ChangeProcessorTag(Processor processor, string newTag)
         {
             if (processor == null)
                 throw new ArgumentNullException(nameof(processor));
@@ -120,6 +115,6 @@ namespace DynamicReflector
             return new Processor(sv, newTag);
         }
 
-        public override string ToString() => new string(_procNames.ToArray());
+        public override string ToString() => _procNames.ToString();
     }
 }
