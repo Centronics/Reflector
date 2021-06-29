@@ -32,11 +32,11 @@ namespace DynamicReflector
             return ph;
         }
 
-        static HashSet<char> ToHashSet(IEnumerable<(Processor, string)> q)
+        static HashSet<char> ToHashSet(IEnumerable<string> query)
         {
             HashSet<char> chs = new HashSet<char>();
-            foreach ((Processor, string query) x in q)
-                foreach (char c in x.query)
+            foreach (string q in query)
+                foreach (char c in q)
                     chs.Add(char.ToUpper(c));
             return chs;
         }
@@ -51,13 +51,13 @@ namespace DynamicReflector
                 yield return finish[k];
         }
 
-        public Neuron FindRelation(IEnumerable<(Processor, string query)> queries)
+        public Neuron FindRelation(IEnumerable<(Processor, string query)> queryPairs)
         {
-            if (queries == null)
+            if (queryPairs == null)
                 throw new ArgumentNullException();
 
-            IEnumerable<(Processor, string)> tq = queries as (Processor, string)[] ?? queries.ToArray();
-            if (!ToHashSet(tq).SetEquals(_hashSetOriginalUniqueQuery))
+            IEnumerable<(Processor, string queryString)> queries = queryPairs as (Processor, string)[] ?? queryPairs.ToArray();
+            if (!ToHashSet(queries.Select(q => q.queryString)).SetEquals(_hashSetOriginalUniqueQuery))
                 return null;
 
             object lockObject = new object();
@@ -67,7 +67,7 @@ namespace DynamicReflector
 
             ProcessorHandler result = new ProcessorHandler();
 
-            Parallel.ForEach(tq, ((Processor processor, string query) q, ParallelLoopState state) =>
+            Parallel.ForEach(queries, ((Processor processor, string query) q, ParallelLoopState state) =>
             {
                 try
                 {
@@ -104,8 +104,13 @@ namespace DynamicReflector
             return _hashSetOriginalUniqueQuery.SetEquals(result.ToString()) ? new Neuron(result.Processors) : null;
         }
 
-        public Processor this[int index] => _workReflex[index];
-
-        public int Count => _workReflex.Count;
+        public IEnumerable<Processor> Processors
+        {
+            get
+            {
+                for (int k = 0; k < _workReflex.Count; k++)
+                    yield return _workReflex[k];
+            }
+        }
     }
 }

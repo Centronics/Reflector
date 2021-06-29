@@ -670,11 +670,18 @@ namespace ReflectorTest
             yield return (new Processor(svq, "ab"), "AB");
         }
 
+        static IEnumerable<Processor> GetCorrectQueries14Result()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2441);
+            yield return new Processor(svq, "B");
+            svq[0, 0] = new SignValue(1320);
+            yield return new Processor(svq, "A");
+        }
+
         static IEnumerable<(Processor, string)> GetCorrectQueries15()
         {
             SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1228);
-            yield return (new Processor(svq, "fg"), "jkl");
             svq[0, 0] = new SignValue(1228);
             yield return (new Processor(svq, "s"), "A");
             svq[0, 0] = new SignValue(2446);
@@ -688,15 +695,11 @@ namespace ReflectorTest
             yield return (new Processor(svq, "b"), "B");
             svq[0, 0] = new SignValue(1228);
             yield return (new Processor(svq, "b"), "a");
-            svq[0, 0] = new SignValue(2445);
-            yield return (new Processor(svq, "ab"), "jkl");
         }
 
         static IEnumerable<(Processor, string)> GetCorrectQueries17()
         {
             SignValue[,] svq = new SignValue[1, 1];
-            svq[0, 0] = new SignValue(1228);
-            yield return (new Processor(svq, "fg"), "JKL");
             svq[0, 0] = new SignValue(1228);
             yield return (new Processor(svq, "s"), "A");
             svq[0, 0] = new SignValue(2446);
@@ -710,8 +713,6 @@ namespace ReflectorTest
             yield return (new Processor(svq, "b"), "B");
             svq[0, 0] = new SignValue(1228);
             yield return (new Processor(svq, "b"), "a");
-            svq[0, 0] = new SignValue(2445);
-            yield return (new Processor(svq, "ab"), "JKL");
         }
 
         static IEnumerable<(Processor, string)> GetCorrectQueries19()
@@ -723,7 +724,6 @@ namespace ReflectorTest
             svq[0, 0] = new SignValue(1335);
             svq[1, 0] = new SignValue(3999);
             yield return (new Processor(svq, "b"), "ba");
-            yield return (new Processor(svq, "ab"), "JKL");
         }
 
         static IEnumerable<(Processor, string)> GetCorrectQueries20()
@@ -735,17 +735,11 @@ namespace ReflectorTest
             svq[0, 0] = new SignValue(1228);
             svq[1, 0] = new SignValue(5329);
             yield return (new Processor(svq, "b"), "BA");
-            svq[0, 0] = new SignValue(2341);
-            svq[1, 0] = new SignValue(1000);
-            yield return (new Processor(svq, "ab"), "JKL");
         }
 
         static IEnumerable<(Processor, string)> GetCorrectQueries21()
         {
             SignValue[,] svq = new SignValue[1, 2];
-            svq[0, 0] = new SignValue(2341);
-            svq[0, 1] = new SignValue(1237);
-            yield return (new Processor(svq, "ab"), "JKL");
             svq[0, 0] = new SignValue(1500);
             svq[0, 1] = new SignValue(2671);
             yield return (new Processor(svq, "b"), "AB");
@@ -757,9 +751,6 @@ namespace ReflectorTest
         static IEnumerable<(Processor, string)> GetCorrectQueries22()
         {
             SignValue[,] svq = new SignValue[2, 1];
-            svq[0, 0] = new SignValue(1009);
-            svq[1, 0] = new SignValue(3008);
-            yield return (new Processor(svq, "ab"), "JKL");
             svq[0, 0] = new SignValue(1001);
             svq[1, 0] = new SignValue(2002);
             yield return (new Processor(svq, "b"), "ba");
@@ -774,9 +765,6 @@ namespace ReflectorTest
             svq[0, 0] = new SignValue(1256);
             svq[1, 0] = new SignValue(2356);
             yield return (new Processor(svq, "b"), "AB");
-            svq[0, 0] = new SignValue(1116);
-            svq[1, 0] = new SignValue(2226);
-            yield return (new Processor(svq, "ab"), "JKL");
             svq[0, 0] = new SignValue(1156);
             svq[1, 0] = new SignValue(2156);
             yield return (new Processor(svq, "b"), "ba");
@@ -788,9 +776,6 @@ namespace ReflectorTest
             svq[0, 0] = new SignValue(801);
             svq[0, 1] = new SignValue(2411);
             yield return (new Processor(svq, "a"), "ba");
-            svq[0, 0] = new SignValue(701);
-            svq[0, 1] = new SignValue(2968);
-            yield return (new Processor(svq, "ab"), "JKL");
             svq[0, 0] = new SignValue(1205);
             svq[0, 1] = new SignValue(4164);
             yield return (new Processor(svq, "a"), "AB");
@@ -4111,17 +4096,143 @@ namespace ReflectorTest
             yield return (new Processor(sv, "m"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries245Exception()
+        static IEnumerable<(Processor, string)> GetCorrectQueries245()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "fg"), "jkl");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "s"), "A");
+            svq[0, 0] = new SignValue(2446);
+            yield return (new Processor(svq, "b"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries246()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2445);
+            yield return (new Processor(svq, "b"), "B");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "b"), "a");
+            svq[0, 0] = new SignValue(2445);
+            yield return (new Processor(svq, "ab"), "jkl");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries247()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "fg"), "JKL");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "s"), "A");
+            svq[0, 0] = new SignValue(2446);
+            yield return (new Processor(svq, "b"), "B");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries248()
+        {
+            SignValue[,] svq = new SignValue[1, 1];
+            svq[0, 0] = new SignValue(2445);
+            yield return (new Processor(svq, "b"), "B");
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "b"), "a");
+            svq[0, 0] = new SignValue(2445);
+            yield return (new Processor(svq, "ab"), "JKL");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries249()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[1, 0] = new SignValue(2222);
+            svq[0, 0] = new SignValue(1228);
+            yield return (new Processor(svq, "b"), "AB");
+            svq[0, 0] = new SignValue(1335);
+            svq[1, 0] = new SignValue(3999);
+            yield return (new Processor(svq, "b"), "ba");
+            yield return (new Processor(svq, "ab"), "JKL");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries250()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[0, 0] = new SignValue(1138);
+            svq[1, 0] = new SignValue(5229);
+            yield return (new Processor(svq, "abc"), "ab");
+            svq[0, 0] = new SignValue(1228);
+            svq[1, 0] = new SignValue(5329);
+            yield return (new Processor(svq, "b"), "BA");
+            svq[0, 0] = new SignValue(2341);
+            svq[1, 0] = new SignValue(1000);
+            yield return (new Processor(svq, "ab"), "JKL");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries251()
+        {
+            SignValue[,] svq = new SignValue[1, 2];
+            svq[0, 0] = new SignValue(2341);
+            svq[0, 1] = new SignValue(1237);
+            yield return (new Processor(svq, "ab"), "JKL");
+            svq[0, 0] = new SignValue(1500);
+            svq[0, 1] = new SignValue(2671);
+            yield return (new Processor(svq, "b"), "AB");
+            svq[0, 0] = new SignValue(1129);
+            svq[0, 1] = new SignValue(5641);
+            yield return (new Processor(svq, "b"), "ba");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries252()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[0, 0] = new SignValue(1009);
+            svq[1, 0] = new SignValue(3008);
+            yield return (new Processor(svq, "ab"), "JKL");
+            svq[0, 0] = new SignValue(1001);
+            svq[1, 0] = new SignValue(2002);
+            yield return (new Processor(svq, "b"), "ba");
+            svq[0, 0] = new SignValue(9341);
+            svq[1, 0] = new SignValue(91);
+            yield return (new Processor(svq, "b"), "AB");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries253()
+        {
+            SignValue[,] svq = new SignValue[2, 1];
+            svq[0, 0] = new SignValue(1256);
+            svq[1, 0] = new SignValue(2356);
+            yield return (new Processor(svq, "b"), "AB");
+            svq[0, 0] = new SignValue(1116);
+            svq[1, 0] = new SignValue(2226);
+            yield return (new Processor(svq, "ab"), "JKL");
+            svq[0, 0] = new SignValue(1156);
+            svq[1, 0] = new SignValue(2156);
+            yield return (new Processor(svq, "b"), "ba");
+        }
+
+        static IEnumerable<(Processor, string)> GetCorrectQueries254()
+        {
+            SignValue[,] svq = new SignValue[1, 2];
+            svq[0, 0] = new SignValue(801);
+            svq[0, 1] = new SignValue(2411);
+            yield return (new Processor(svq, "a"), "ba");
+            svq[0, 0] = new SignValue(701);
+            svq[0, 1] = new SignValue(2968);
+            yield return (new Processor(svq, "ab"), "JKL");
+            svq[0, 0] = new SignValue(1205);
+            svq[0, 1] = new SignValue(4164);
+            yield return (new Processor(svq, "a"), "AB");
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries255Exception()
         {
             yield return (new Processor(new SignValue[1, 1], "q"), "a");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries246Exception()
+        static IEnumerable<(Processor, string)> GetInCorrectQueries256Exception()
         {
             yield return (new Processor(new SignValue[2, 1], "w"), "b");
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries247Exception()
+        static IEnumerable<(Processor, string)> GetInCorrectQueries257Exception()
         {
             yield return (new Processor(new SignValue[1, 2], "e"), "c");
         }
@@ -4227,21 +4338,13 @@ namespace ReflectorTest
             throw new Exception(errorString);
         }
 
-        static IEnumerable<Processor> NeuronToEnumerable(Neuron neuron)
+        static void CheckNeuronMapValue(Neuron actual, IEnumerable<Processor> pcExpected)
         {
-            Assert.AreNotEqual(null, neuron);
+            Assert.AreNotEqual(null, actual);
+            Assert.AreNotEqual(null, actual.Processors);
+            Assert.AreNotEqual(null, pcExpected);
 
-            for (int k = 0; k < neuron.Count; k++)
-            {
-                Processor p = neuron[k];
-                Assert.AreNotEqual(null, p);
-                yield return p;
-            }
-        }
-
-        static void CheckNeuronMapValue(IEnumerable<Processor> actual, IEnumerable<Processor> pcExpected)
-        {
-            Dictionary<string, Processor> dicActual = actual.ToDictionary(p => p.Tag);
+            Dictionary<string, Processor> dicActual = actual.Processors.ToDictionary(p => p.Tag);
 
             foreach (Processor pExpected in pcExpected)
             {
@@ -4261,57 +4364,77 @@ namespace ReflectorTest
 
         static void NeuronTestSub(IEnumerable<Processor> pcActual, IEnumerable<Processor> pcExpected, IEnumerable<(Processor, string)> pcRequest, IEnumerable<Processor> pcRequestProcessors)
         {
-            Processor[] expected = pcExpected as Processor[] ?? pcExpected.ToArray();
-            ProcessorContainer pcParent = new ProcessorContainer(pcActual.ToArray());
-            Neuron parentNeuron = new Neuron(pcParent);
-
-            HashSet<char> charSetParent = new HashSet<char>();
-            for (int k = 0; k < pcParent.Count; k++)
-                charSetParent.Add(char.ToUpper(pcParent[k].Tag[0]));
-
-            void CheckParentNeuron()
-            {
-                Assert.AreNotEqual(null, parentNeuron);
-                CheckNeuronMapValue(NeuronToEnumerable(parentNeuron), expected);
-                if (!charSetParent.SetEquals(parentNeuron.ToString()))
-                    throw new Exception($"{nameof(CheckParentNeuron)}");
-
-                Assert.AreEqual(expected.Length, parentNeuron.Count);
-                GetException("Neuron1", typeof(ArgumentOutOfRangeException), () => { Processor unused = parentNeuron[-1]; });
-                GetException("Neuron2", typeof(ArgumentOutOfRangeException), () => { Processor unused = parentNeuron[parentNeuron.Count]; });
-            }
-
-            CheckParentNeuron();
-
-            void CheckDerivedNeuron()
-            {
-                Assert.AreNotEqual(null, parentNeuron);
-                IEnumerable<(Processor, string)> query = pcRequest as (Processor, string)[] ?? pcRequest.ToArray();
-                Neuron derivedNeuron = parentNeuron.FindRelation(query);
-                Assert.AreNotEqual(null, derivedNeuron);
-                Processor[] requestProcessors = pcRequestProcessors as Processor[] ?? pcRequestProcessors.ToArray();
-                CheckNeuronMapValue(NeuronToEnumerable(derivedNeuron), requestProcessors);
-                if (!charSetParent.SetEquals(derivedNeuron.ToString()))
-                    throw new Exception($"{nameof(CheckDerivedNeuron)}");
-
-                Assert.AreEqual(parentNeuron.Count, derivedNeuron.Count);
-                Assert.AreEqual(parentNeuron.ToString().Length, derivedNeuron.ToString().Length);
-                Assert.AreNotEqual(null, derivedNeuron.FindRelation(query));
-                GetException("Neuron3", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[-1]; });
-                GetException("Neuron4", typeof(ArgumentOutOfRangeException), () => { Processor unused = derivedNeuron[derivedNeuron.Count]; });
-            }
-
-            CheckDerivedNeuron();
-            CheckParentNeuron();
+            Neuron parentNeuron = new Neuron(new ProcessorContainer(pcActual.ToArray()));
+            CheckNeuronMapValue(parentNeuron, pcExpected);
+            CheckNeuronMapValue(parentNeuron.FindRelation(pcRequest), pcRequestProcessors);
+            CheckNeuronMapValue(parentNeuron, pcExpected);
         }
 
         [TestMethod]
         public void NeuronTest0()
         {
             NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries0(), GetCorrectQueries0().Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries1(), GetCorrectQueries1().Select(tuple => tuple.Item1));
-            //NeuronTestSub(GetProcessors0(), GetProcessors0(), GetCorrectQueries2(), CorrectQueries2Answer());
-            //GetCorrectQueries3
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries1(), GetCorrectQueries1().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries2(), GetCorrectQueries2().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries3(), GetCorrectQueries3().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries4(), GetCorrectQueries4().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries5(), GetCorrectQueries5().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries5_1(), GetCorrectQueries5_1().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries6(), GetCorrectQueries6().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries6_1(), GetCorrectQueries6_1().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries7(), GetCorrectQueries7().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries7_1(), GetCorrectQueries7_1().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries8(), GetCorrectQueries8().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries8_1(), GetCorrectQueries8_1().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries8_2(), GetCorrectQueries8_2().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries90(), GetCorrectQueries90().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries9_0(), GetCorrectQueries9_0().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries9_1(), GetCorrectQueries9_1().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries9_1_1(), GetCorrectQueries9_1_1().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries9_2(), GetCorrectQueries9_2().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries9_3(), GetCorrectQueries9_3().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries10_0(), GetCorrectQueries10_0().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries10_1(), GetCorrectQueries10_1().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries10_2(), GetCorrectQueries10_2().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries10_3(), GetCorrectQueries10_3().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries11(), GetCorrectQueries11().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries12(), GetCorrectQueries12().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries13(), GetCorrectQueries13().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries14(), GetCorrectQueries14Result());
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries15(), GetCorrectQueries15().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries16(), GetCorrectQueries16().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries17(), GetCorrectQueries17().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries18(), GetCorrectQueries18().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries19(), GetCorrectQueries19().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries20(), GetCorrectQueries20().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries21(), GetCorrectQueries21().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries22(), GetCorrectQueries22().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries23(), GetCorrectQueries23().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors1(), GetProcessors1(), GetCorrectQueries24(), GetCorrectQueries24().Select(tuple => tuple.Item1));
+
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries25().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries26().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries27().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries28().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries29().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries30().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries31().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries32().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries33().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries34().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries35().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries36().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries37().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries38().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries39().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries40().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries41().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries42().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries43().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries44().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries45().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries46().Select(tuple => tuple.Item1));
+            NeuronTestSub(GetProcessors2(), GetProcessors2(), GetCorrectQueries2(), GetCorrectQueries47().Select(tuple => tuple.Item1));
         }
     }
 }
