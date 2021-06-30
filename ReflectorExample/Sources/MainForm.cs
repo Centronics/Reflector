@@ -968,7 +968,7 @@ namespace ReflectorExample
                     InvokeFunction(() =>
                     {
                         _neurons.Insert(0, n);
-                        lstNeurons.Items.Insert(1, $@"({n.Count}) {DateTime.Now:HH:mm:ss}");
+                        lstNeurons.Items.Insert(1, $@"({n.Processors.Count()}) {DateTime.Now:HH:mm:ss}");
                         lstNeurons.SetItemCheckState(1, CheckState.Indeterminate);
                         lstNeurons.SelectedIndex = 1;
                         txtNeuronString.Text = n.ToString();
@@ -986,10 +986,10 @@ namespace ReflectorExample
                     return;
                 }
 
-                if (neuron.Count != workNeuron.Count)
+                if (neuron.Processors.Count() != workNeuron.Processors.Count())
                 {
                     InvokeFunction(() => MessageBox.Show(this, $@"{nameof(Neuron)}: Количество карт различается в порождённом {nameof(Neuron)
-                            } ({neuron.Count}) и базовом (родительском) {nameof(Neuron)} ({workNeuron.Count}).",
+                            } ({neuron.Processors.Count()}) и базовом (родительском) {nameof(Neuron)} ({workNeuron.Processors.Count()}).",
                         @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Information));
                     return;
                 }
@@ -1006,7 +1006,7 @@ namespace ReflectorExample
                 for (int y = 0, j = 0; y < 3; y++)
                     for (int x = 0; x < 3; x++, j++)
                     {
-                        Processor p = neuron[j];
+                        Processor p = neuron.Processors.ElementAt(j);
                         _reflectorPainters[x, y].CurrentProcessor = p;
                         GetTextBox(x, y).Text = p.Tag;
                     }
@@ -1046,7 +1046,7 @@ namespace ReflectorExample
                     InvokeFunction(() =>
                     {
                         _neurons.Insert(0, n);
-                        lstNeurons.Items.Insert(1, $@"({n.Count}) {DateTime.Now:HH:mm:ss}");
+                        lstNeurons.Items.Insert(1, $@"({n.Processors.Count()}) {DateTime.Now:HH:mm:ss}");
                         lstNeurons.SetItemCheckState(1, CheckState.Indeterminate);
                         lstNeurons.SelectedIndex = 1;
                         txtNeuronString.Text = n.ToString();
