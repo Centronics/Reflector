@@ -49,9 +49,10 @@ namespace DynamicReflector
 
         Processor GetProcessorWithUniqueTag(Processor p)
         {
-            if (!_hashProcs.Contains(p.Tag))
-                return p;
-            string tTag = p.Tag;
+            string tTag = p.Tag.ToUpper();
+            if (!_hashProcs.Contains(tTag))
+                return _hashProcs.Add(tTag) ? ChangeProcessorTag(p, tTag) : p;
+
             do
             {
                 tTag += '0';
@@ -74,7 +75,7 @@ namespace DynamicReflector
             int hash = HashCreator.GetHash(p);
             if (_dicProcsWithTag.TryGetValue(hash, out List<Processor> prcs))
             {
-                if (prcs.Any(prc => ProcessorCompare(prc, p, true)))
+                if (prcs.Any(prc => ProcessorCompare(prc, p)))
                     return;
                 prcs.Add(GetProcessorWithUniqueTag(p));
                 SetProps();
@@ -84,13 +85,13 @@ namespace DynamicReflector
             SetProps();
         }
 
-        static bool ProcessorCompare(Processor p1, Processor p2, bool includeTag)
+        static bool ProcessorCompare(Processor p1, Processor p2)
         {
             if (p1 == null)
                 throw new ArgumentNullException();
             if (p2 == null)
                 throw new ArgumentNullException();
-            if (includeTag && char.ToUpper(p1.Tag[0]) != char.ToUpper(p2.Tag[0]))
+            if (char.ToUpper(p1.Tag[0]) != char.ToUpper(p2.Tag[0]))
                 return false;
             for (int i = 0; i < p1.Width; i++)
                 for (int j = 0; j < p1.Height; j++)

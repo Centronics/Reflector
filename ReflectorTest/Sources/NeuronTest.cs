@@ -1989,7 +1989,6 @@ namespace ReflectorTest
                 yield return (new Processor(sv, "p"), "k");
                 yield return (new Processor(sv, "k"), "K");
                 yield return (new Processor(sv, "l"), "k");
-                yield return (new Processor(sv, "l"), "a");
             }
         }
 
@@ -2119,7 +2118,6 @@ namespace ReflectorTest
                 yield return (new Processor(sv, "p"), "k");
                 yield return (new Processor(sv, "k"), "K");
                 yield return (new Processor(sv, "l"), "k");
-                yield return (new Processor(sv, "l"), "a");
             }
         }
 
@@ -2238,7 +2236,6 @@ namespace ReflectorTest
                 yield return (new Processor(sv, "1"), "K");
                 yield return (new Processor(sv, "2"), "K");
                 yield return (new Processor(sv, "3"), "k");
-                yield return (new Processor(sv, "l"), "a");
                 sv = new SignValue[1, 1];
                 sv[0, 0] = new SignValue(7879);
                 yield return (new Processor(sv, "4"), "k");
@@ -2255,7 +2252,6 @@ namespace ReflectorTest
                 yield return (new Processor(sv, "1"), "K");
                 yield return (new Processor(sv, "2"), "K");
                 yield return (new Processor(sv, "3"), "k");
-                yield return (new Processor(sv, "l"), "a");
                 sv = new SignValue[1, 1];
                 sv[0, 0] = new SignValue(7880);
                 yield return (new Processor(sv, "4"), "k");
@@ -6108,6 +6104,68 @@ namespace ReflectorTest
             }
         }
 
+        static IEnumerable<(Processor, string)> GetInCorrectQueries264
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return (new Processor(sv, "p"), "k");
+                yield return (new Processor(sv, "k"), "K");
+                yield return (new Processor(sv, "l"), "k");
+                yield return (new Processor(sv, "l"), "a");
+            }
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries265
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[3, 1];
+                sv[0, 0] = new SignValue(5555);
+                sv[1, 0] = new SignValue(5555);
+                sv[2, 0] = new SignValue(5555);
+                yield return (new Processor(sv, "p"), "k");
+                yield return (new Processor(sv, "k"), "K");
+                yield return (new Processor(sv, "l"), "k");
+                yield return (new Processor(sv, "l"), "a");
+            }
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries266
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 2];
+                sv[0, 0] = new SignValue(6666);
+                sv[0, 1] = new SignValue(6666);
+                yield return (new Processor(sv, "1"), "K");
+                yield return (new Processor(sv, "2"), "K");
+                yield return (new Processor(sv, "3"), "k");
+                yield return (new Processor(sv, "l"), "a");
+                sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(7879);
+                yield return (new Processor(sv, "4"), "k");
+            }
+        }
+
+        static IEnumerable<(Processor, string)> GetInCorrectQueries267
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 2];
+                sv[0, 0] = new SignValue(6666);
+                sv[0, 1] = new SignValue(7777);
+                yield return (new Processor(sv, "1"), "K");
+                yield return (new Processor(sv, "2"), "K");
+                yield return (new Processor(sv, "3"), "k");
+                yield return (new Processor(sv, "l"), "a");
+                sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(7880);
+                yield return (new Processor(sv, "4"), "k");
+            }
+        }
+
         #endregion //Incorrect
 
         #endregion //Tests
@@ -6231,6 +6289,22 @@ namespace ReflectorTest
             }
 
             Assert.AreEqual(0, dicActual.Count);
+        }
+
+        static IEnumerable<Processor> GetKProcessors(IEnumerable<(Processor, string)> query)
+        {
+            Assert.AreNotEqual(null, query);
+
+            ProcessorHandler ph = new ProcessorHandler();
+
+            foreach ((Processor p, string tag) in query)
+                for (int x = 0; x < p.Width; x++)
+                for (int y = 0; y < p.Height; y++)
+                    ph.Add(new Processor(new[] { p[x, y] }, tag));
+
+            ProcessorContainer pc = ph.Processors;
+            for (int k = 0; k < pc.Count; k++)
+                yield return ProcessorHandler.ChangeProcessorTag(pc[k], pc[k].Tag[0].ToString());
         }
 
         static void NeuronTestSub(IEnumerable<Processor> pcActual, IEnumerable<Processor> pcExpected, IEnumerable<(Processor, string)> pcRequest, IEnumerable<Processor> pcRequestProcessors)
