@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using DynamicParser;
@@ -17,11 +18,11 @@ namespace ReflectorTest
         #region GetProcessors
 
         /// <summary>
-        /// Используется для теста, где используется одна и та же физическая карта <see cref="GetGlobalProcessorForNeuron"/> и <see cref="GetCorrectGlobalProcessorQuery"/>.
+        /// Используется для теста, где используется одна и та же физическая карта <see cref="GlobalProcessorForNeuron"/> и <see cref="CorrectGlobalProcessorQuery"/>.
         /// </summary>
         static Processor _globalProcessor;
 
-        static IEnumerable<Processor> GetProcessors0
+        static IEnumerable<Processor> Processors0
         {
             get
             {
@@ -89,7 +90,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetProcessors1
+        static IEnumerable<Processor> Processors1
         {
             get
             {
@@ -101,7 +102,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetProcessors2
+        static IEnumerable<Processor> Processors2
         {
             get
             {
@@ -112,7 +113,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetProcessors3
+        static IEnumerable<Processor> Processors3
         {
             get
             {
@@ -123,7 +124,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetProcessors4
+        static IEnumerable<Processor> Processors4
         {
             get
             {
@@ -135,7 +136,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetGlobalProcessorForNeuron
+        static IEnumerable<Processor> GlobalProcessorForNeuron
         {
             get
             {
@@ -157,7 +158,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetProcessors8Exception
+        static IEnumerable<Processor> Processors8Exception
         {
             get
             {
@@ -165,7 +166,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetProcessors9Exception
+        static IEnumerable<Processor> Processors9Exception
         {
             get
             {
@@ -173,7 +174,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetProcessors10Exception
+        static IEnumerable<Processor> Processors10Exception
         {
             get
             {
@@ -181,70 +182,11 @@ namespace ReflectorTest
             }
         }
 
-        #region Results
-
-        static IEnumerable<Processor> GetProcessors0Result
-        {
-            get
-            {
-                SignValue[,] sv = new SignValue[1, 1];
-                sv[0, 0] = new SignValue(1111);
-                yield return new Processor(sv, "1");
-                sv[0, 0] = new SignValue(4555);
-                yield return new Processor(sv, "10");
-                sv[0, 0] = new SignValue(3333);
-                yield return new Processor(sv, "3");
-                sv[0, 0] = new SignValue(2222);
-                yield return new Processor(sv, "2");
-                sv[0, 0] = new SignValue(5555);
-                yield return new Processor(sv, "Y");
-                yield return new Processor(sv, "I");
-                sv[0, 0] = new SignValue(7777);
-                yield return new Processor(sv, "F");
-                sv[0, 0] = new SignValue(18888);
-                yield return new Processor(sv, "v");
-                sv[0, 0] = new SignValue(17777);
-                yield return new Processor(sv, "V");
-                sv[0, 0] = new SignValue(33535);
-                yield return new Processor(sv, "s");
-                sv[0, 0] = new SignValue(36666);
-                yield return new Processor(sv, "S0");
-                sv[0, 0] = new SignValue(90666);
-                yield return new Processor(sv, "z");
-                sv[0, 0] = new SignValue(67666);
-                yield return new Processor(sv, "Z1");
-                sv[0, 0] = new SignValue(100000);
-                yield return new Processor(sv, "g");
-                sv[0, 0] = new SignValue(100001);
-                yield return new Processor(sv, "J");
-                sv[0, 0] = new SignValue(100002);
-                yield return new Processor(sv, "L");
-                sv[0, 0] = new SignValue(1000021);
-                yield return new Processor(sv, "l0");
-                sv[0, 0] = new SignValue(103003);
-                yield return new Processor(sv, "M");
-                sv[0, 0] = new SignValue(103103);
-                yield return new Processor(sv, "m");
-                sv[0, 0] = new SignValue(100004);
-                yield return new Processor(sv, "p");
-                sv[0, 0] = new SignValue(100005);
-                yield return new Processor(sv, "t");
-                sv[0, 0] = new SignValue(100006);
-                yield return new Processor(sv, "U");
-                sv[0, 0] = new SignValue(100007);
-                yield return new Processor(sv, "h");
-                sv[0, 0] = new SignValue(100008);
-                yield return new Processor(sv, "w");
-            }
-        }
-
-        #endregion //Results
-
         #endregion //GetProcessors
 
         #region Correct
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries0
+        static IEnumerable<(Processor, string)> CorrectQuery0
         {
             get
             {
@@ -366,7 +308,62 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries1
+        static IEnumerable<Processor> CorrectQuery0Result
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(1111);
+                yield return new Processor(sv, "1");
+                sv[0, 0] = new SignValue(4555);
+                yield return new Processor(sv, "10");
+                sv[0, 0] = new SignValue(3333);
+                yield return new Processor(sv, "3");
+                sv[0, 0] = new SignValue(2222);
+                yield return new Processor(sv, "2");
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "Y");
+                yield return new Processor(sv, "I");
+                sv[0, 0] = new SignValue(7777);
+                yield return new Processor(sv, "F");
+                sv[0, 0] = new SignValue(18888);
+                yield return new Processor(sv, "v");
+                sv[0, 0] = new SignValue(17777);
+                yield return new Processor(sv, "V");
+                sv[0, 0] = new SignValue(33535);
+                yield return new Processor(sv, "s");
+                sv[0, 0] = new SignValue(36666);
+                yield return new Processor(sv, "S0");
+                sv[0, 0] = new SignValue(90666);
+                yield return new Processor(sv, "z");
+                sv[0, 0] = new SignValue(67666);
+                yield return new Processor(sv, "Z1");
+                sv[0, 0] = new SignValue(100000);
+                yield return new Processor(sv, "g");
+                sv[0, 0] = new SignValue(100001);
+                yield return new Processor(sv, "J");
+                sv[0, 0] = new SignValue(100002);
+                yield return new Processor(sv, "L");
+                sv[0, 0] = new SignValue(1000021);
+                yield return new Processor(sv, "l0");
+                sv[0, 0] = new SignValue(103003);
+                yield return new Processor(sv, "M");
+                sv[0, 0] = new SignValue(103103);
+                yield return new Processor(sv, "m");
+                sv[0, 0] = new SignValue(100004);
+                yield return new Processor(sv, "p");
+                sv[0, 0] = new SignValue(100005);
+                yield return new Processor(sv, "t");
+                sv[0, 0] = new SignValue(100006);
+                yield return new Processor(sv, "U");
+                sv[0, 0] = new SignValue(100007);
+                yield return new Processor(sv, "h");
+                sv[0, 0] = new SignValue(100008);
+                yield return new Processor(sv, "w");
+            }
+        }
+
+        static IEnumerable<(Processor, string)> CorrectQuery1
         {
             get
             {
@@ -382,7 +379,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries2
+        static IEnumerable<(Processor, string)> CorrectQuery2
         {
             get
             {
@@ -398,7 +395,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries3
+        static IEnumerable<(Processor, string)> CorrectQuery3
         {
             get
             {
@@ -414,7 +411,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries4
+        static IEnumerable<(Processor, string)> CorrectQuery4
         {
             get
             {
@@ -430,7 +427,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries5
+        static IEnumerable<(Processor, string)> CorrectQuery5
         {
             get
             {
@@ -450,7 +447,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries5_1
+        static IEnumerable<(Processor, string)> CorrectQuery5_1
         {
             get
             {
@@ -470,7 +467,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries6
+        static IEnumerable<(Processor, string)> CorrectQuery6
         {
             get
             {
@@ -490,7 +487,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries6_1
+        static IEnumerable<(Processor, string)> CorrectQuery6_1
         {
             get
             {
@@ -510,7 +507,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries7
+        static IEnumerable<(Processor, string)> CorrectQuery7
         {
             get
             {
@@ -530,7 +527,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries7_1
+        static IEnumerable<(Processor, string)> CorrectQuery7_1
         {
             get
             {
@@ -550,7 +547,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries8
+        static IEnumerable<(Processor, string)> CorrectQuery8
         {
             get
             {
@@ -570,7 +567,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries8_1
+        static IEnumerable<(Processor, string)> CorrectQuery8_1
         {
             get
             {
@@ -590,7 +587,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries8_2
+        static IEnumerable<(Processor, string)> CorrectQuery8_2
         {
             get
             {
@@ -610,7 +607,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries9_0
+        static IEnumerable<(Processor, string)> CorrectQuery9_0
         {
             get
             {
@@ -622,7 +619,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries9_1
+        static IEnumerable<(Processor, string)> CorrectQuery9_1
         {
             get
             {
@@ -634,7 +631,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries9_1_1
+        static IEnumerable<(Processor, string)> CorrectQuery9_1_1
         {
             get
             {
@@ -646,7 +643,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries9_2
+        static IEnumerable<(Processor, string)> CorrectQuery9_2
         {
             get
             {
@@ -658,7 +655,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries9_3
+        static IEnumerable<(Processor, string)> CorrectQuery9_3
         {
             get
             {
@@ -670,7 +667,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries10_0
+        static IEnumerable<(Processor, string)> CorrectQuery10_0
         {
             get
             {
@@ -682,7 +679,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries10_1
+        static IEnumerable<(Processor, string)> CorrectQuery10_1
         {
             get
             {
@@ -694,7 +691,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries10_1_1
+        static IEnumerable<(Processor, string)> CorrectQuery10_1_1
         {
             get
             {
@@ -706,7 +703,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries10_2
+        static IEnumerable<(Processor, string)> CorrectQuery10_2
         {
             get
             {
@@ -718,7 +715,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries10_3
+        static IEnumerable<(Processor, string)> CorrectQuery10_3
         {
             get
             {
@@ -730,7 +727,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries11
+        static IEnumerable<(Processor, string)> CorrectQuery11
         {
             get
             {
@@ -744,7 +741,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries12
+        static IEnumerable<(Processor, string)> CorrectQuery12
         {
             get
             {
@@ -758,7 +755,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries13
+        static IEnumerable<(Processor, string)> CorrectQuery13
         {
             get
             {
@@ -771,7 +768,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries14
+        static IEnumerable<(Processor, string)> CorrectQuery14
         {
             get
             {
@@ -784,7 +781,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries14Result
+        static IEnumerable<Processor> CorrectQuery14Result
         {
             get
             {
@@ -796,7 +793,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries15
+        static IEnumerable<(Processor, string)> CorrectQuery15
         {
             get
             {
@@ -808,7 +805,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries16
+        static IEnumerable<(Processor, string)> CorrectQuery16
         {
             get
             {
@@ -820,7 +817,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries17
+        static IEnumerable<(Processor, string)> CorrectQuery17
         {
             get
             {
@@ -832,7 +829,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries18
+        static IEnumerable<(Processor, string)> CorrectQuery18
         {
             get
             {
@@ -844,7 +841,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries19
+        static IEnumerable<(Processor, string)> CorrectQuery19
         {
             get
             {
@@ -858,7 +855,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries19Result
+        static IEnumerable<Processor> CorrectQuery19Result
         {
             get
             {
@@ -874,7 +871,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries20
+        static IEnumerable<(Processor, string)> CorrectQuery20
         {
             get
             {
@@ -888,7 +885,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries20Result
+        static IEnumerable<Processor> CorrectQuery20Result
         {
             get
             {
@@ -904,7 +901,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries21
+        static IEnumerable<(Processor, string)> CorrectQuery21
         {
             get
             {
@@ -918,7 +915,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries21Result
+        static IEnumerable<Processor> CorrectQuery21Result
         {
             get
             {
@@ -934,7 +931,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries22
+        static IEnumerable<(Processor, string)> CorrectQuery22
         {
             get
             {
@@ -948,7 +945,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries22Result
+        static IEnumerable<Processor> CorrectQuery22Result
         {
             get
             {
@@ -964,7 +961,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries23
+        static IEnumerable<(Processor, string)> CorrectQuery23
         {
             get
             {
@@ -978,7 +975,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries23Result
+        static IEnumerable<Processor> CorrectQuery23Result
         {
             get
             {
@@ -994,7 +991,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries24
+        static IEnumerable<(Processor, string)> CorrectQuery24
         {
             get
             {
@@ -1008,7 +1005,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries24Result
+        static IEnumerable<Processor> CorrectQuery24Result
         {
             get
             {
@@ -1024,7 +1021,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries25
+        static IEnumerable<(Processor, string)> CorrectQuery25
         {
             get
             {
@@ -1035,7 +1032,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries26
+        static IEnumerable<(Processor, string)> CorrectQuery26
         {
             get
             {
@@ -1046,7 +1043,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries27
+        static IEnumerable<(Processor, string)> CorrectQuery27
         {
             get
             {
@@ -1057,7 +1054,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries28
+        static IEnumerable<(Processor, string)> CorrectQuery28
         {
             get
             {
@@ -1068,7 +1065,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries29
+        static IEnumerable<(Processor, string)> CorrectQuery29
         {
             get
             {
@@ -1079,7 +1076,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries30
+        static IEnumerable<(Processor, string)> CorrectQuery30
         {
             get
             {
@@ -1090,7 +1087,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries31
+        static IEnumerable<(Processor, string)> CorrectQuery31
         {
             get
             {
@@ -1101,7 +1098,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries32
+        static IEnumerable<(Processor, string)> CorrectQuery32
         {
             get
             {
@@ -1111,7 +1108,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries33
+        static IEnumerable<(Processor, string)> CorrectQuery33
         {
             get
             {
@@ -1121,7 +1118,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries34
+        static IEnumerable<(Processor, string)> CorrectQuery34
         {
             get
             {
@@ -1131,7 +1128,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries35
+        static IEnumerable<(Processor, string)> CorrectQuery35
         {
             get
             {
@@ -1145,7 +1142,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries36
+        static IEnumerable<(Processor, string)> CorrectQuery36
         {
             get
             {
@@ -1159,7 +1156,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries37
+        static IEnumerable<(Processor, string)> CorrectQuery37
         {
             get
             {
@@ -1173,7 +1170,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries38
+        static IEnumerable<(Processor, string)> CorrectQuery38
         {
             get
             {
@@ -1187,7 +1184,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries39
+        static IEnumerable<(Processor, string)> CorrectQuery39
         {
             get
             {
@@ -1201,7 +1198,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries40
+        static IEnumerable<(Processor, string)> CorrectQuery40
         {
             get
             {
@@ -1215,7 +1212,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries41
+        static IEnumerable<(Processor, string)> CorrectQuery41
         {
             get
             {
@@ -1227,7 +1224,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries42
+        static IEnumerable<(Processor, string)> CorrectQuery42
         {
             get
             {
@@ -1237,7 +1234,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries43
+        static IEnumerable<(Processor, string)> CorrectQuery43
         {
             get
             {
@@ -1247,7 +1244,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries44
+        static IEnumerable<(Processor, string)> CorrectQuery44
         {
             get
             {
@@ -1257,7 +1254,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries45
+        static IEnumerable<(Processor, string)> CorrectQuery45
         {
             get
             {
@@ -1267,7 +1264,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries46
+        static IEnumerable<(Processor, string)> CorrectQuery46
         {
             get
             {
@@ -1278,7 +1275,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries46Result
+        static IEnumerable<Processor> CorrectQuery46Result
         {
             get
             {
@@ -1294,7 +1291,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries47
+        static IEnumerable<(Processor, string)> CorrectQuery47
         {
             get
             {
@@ -1310,7 +1307,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries47Result
+        static IEnumerable<Processor> CorrectQuery47Result
         {
             get
             {
@@ -1326,7 +1323,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries48
+        static IEnumerable<(Processor, string)> CorrectQuery48
         {
             get
             {
@@ -1341,7 +1338,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries48Result
+        static IEnumerable<Processor> CorrectQuery48Result
         {
             get
             {
@@ -1357,7 +1354,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries49
+        static IEnumerable<(Processor, string)> CorrectQuery49
         {
             get
             {
@@ -1373,7 +1370,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries49Result
+        static IEnumerable<Processor> CorrectQuery49Result
         {
             get
             {
@@ -1397,7 +1394,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries50
+        static IEnumerable<(Processor, string)> CorrectQuery50
         {
             get
             {
@@ -1410,7 +1407,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries50Result
+        static IEnumerable<Processor> CorrectQuery50Result
         {
             get
             {
@@ -1426,7 +1423,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries51
+        static IEnumerable<(Processor, string)> CorrectQuery51
         {
             get
             {
@@ -1439,7 +1436,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries51Result
+        static IEnumerable<Processor> CorrectQuery51Result
         {
             get
             {
@@ -1455,7 +1452,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries52
+        static IEnumerable<(Processor, string)> CorrectQuery52
         {
             get
             {
@@ -1468,7 +1465,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries52Result
+        static IEnumerable<Processor> CorrectQuery52Result
         {
             get
             {
@@ -1492,7 +1489,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries53
+        static IEnumerable<(Processor, string)> CorrectQuery53
         {
             get
             {
@@ -1506,7 +1503,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries53Result
+        static IEnumerable<Processor> CorrectQuery53Result
         {
             get
             {
@@ -1522,7 +1519,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries54
+        static IEnumerable<(Processor, string)> CorrectQuery54
         {
             get
             {
@@ -1536,7 +1533,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries54Result
+        static IEnumerable<Processor> CorrectQuery54Result
         {
             get
             {
@@ -1552,7 +1549,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries55
+        static IEnumerable<(Processor, string)> CorrectQuery55
         {
             get
             {
@@ -1566,7 +1563,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries55Result
+        static IEnumerable<Processor> CorrectQuery55Result
         {
             get
             {
@@ -1590,7 +1587,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries56
+        static IEnumerable<(Processor, string)> CorrectQuery56
         {
             get
             {
@@ -1604,7 +1601,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries56Result
+        static IEnumerable<Processor> CorrectQuery56Result
         {
             get
             {
@@ -1620,7 +1617,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries57
+        static IEnumerable<(Processor, string)> CorrectQuery57
         {
             get
             {
@@ -1634,7 +1631,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries57Result
+        static IEnumerable<Processor> CorrectQuery57Result
         {
             get
             {
@@ -1650,7 +1647,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries58
+        static IEnumerable<(Processor, string)> CorrectQuery58
         {
             get
             {
@@ -1664,7 +1661,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries58Result
+        static IEnumerable<Processor> CorrectQuery58Result
         {
             get
             {
@@ -1688,7 +1685,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries59
+        static IEnumerable<(Processor, string)> CorrectQuery59
         {
             get
             {
@@ -1706,7 +1703,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries59Result
+        static IEnumerable<Processor> CorrectQuery59Result
         {
             get
             {
@@ -1722,7 +1719,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries60
+        static IEnumerable<(Processor, string)> CorrectQuery60
         {
             get
             {
@@ -1741,7 +1738,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries60Result
+        static IEnumerable<Processor> CorrectQuery60Result
         {
             get
             {
@@ -1757,7 +1754,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries61
+        static IEnumerable<(Processor, string)> CorrectQuery61
         {
             get
             {
@@ -1775,7 +1772,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries61Result
+        static IEnumerable<Processor> CorrectQuery61Result
         {
             get
             {
@@ -1799,7 +1796,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries62
+        static IEnumerable<(Processor, string)> CorrectQuery62
         {
             get
             {
@@ -1818,7 +1815,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries62Result
+        static IEnumerable<Processor> CorrectQuery62Result
         {
             get
             {
@@ -1834,7 +1831,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries63
+        static IEnumerable<(Processor, string)> CorrectQuery63
         {
             get
             {
@@ -1852,7 +1849,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries63Result
+        static IEnumerable<Processor> CorrectQuery63Result
         {
             get
             {
@@ -1868,7 +1865,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries64
+        static IEnumerable<(Processor, string)> CorrectQuery64
         {
             get
             {
@@ -1886,7 +1883,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries64Result
+        static IEnumerable<Processor> CorrectQuery64Result
         {
             get
             {
@@ -1910,7 +1907,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries65
+        static IEnumerable<(Processor, string)> CorrectQuery65
         {
             get
             {
@@ -1920,7 +1917,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries66
+        static IEnumerable<(Processor, string)> CorrectQuery66
         {
             get
             {
@@ -1930,7 +1927,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries67
+        static IEnumerable<(Processor, string)> CorrectQuery67
         {
             get
             {
@@ -1942,7 +1939,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries68
+        static IEnumerable<(Processor, string)> CorrectQuery68
         {
             get
             {
@@ -1954,7 +1951,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries69
+        static IEnumerable<(Processor, string)> CorrectQuery69
         {
             get
             {
@@ -1966,7 +1963,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries70
+        static IEnumerable<(Processor, string)> CorrectQuery70
         {
             get
             {
@@ -1980,7 +1977,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries71
+        static IEnumerable<(Processor, string)> CorrectQuery71
         {
             get
             {
@@ -1992,7 +1989,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries72
+        static IEnumerable<(Processor, string)> CorrectQuery72
         {
             get
             {
@@ -2005,7 +2002,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries73
+        static IEnumerable<(Processor, string)> CorrectQuery73
         {
             get
             {
@@ -2017,7 +2014,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries73Result
+        static IEnumerable<Processor> CorrectQuery73Result
         {
             get
             {
@@ -2027,7 +2024,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries74
+        static IEnumerable<(Processor, string)> CorrectQuery74
         {
             get
             {
@@ -2039,7 +2036,23 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries74Result
+        static IEnumerable<(Processor, string)> CorrectQuery74_1
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 3];
+                sv[0, 0] = new SignValue(5555);
+                sv[0, 1] = new SignValue(5555);
+                sv[0, 2] = new SignValue(5555);
+                yield return (new Processor(sv, "a"), "k");
+                sv[0, 0] = new SignValue(6676);
+                sv[0, 1] = new SignValue(8976);
+                sv[0, 2] = new SignValue(9034);
+                yield return (new Processor(sv, "b"), "k");
+            }
+        }
+
+        static IEnumerable<Processor> CorrectQuery74Result
         {
             get
             {
@@ -2049,7 +2062,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries75
+        static IEnumerable<(Processor, string)> CorrectQuery75
         {
             get
             {
@@ -2061,7 +2074,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries75Result
+        static IEnumerable<Processor> CorrectQuery75Result
         {
             get
             {
@@ -2073,7 +2086,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries76
+        static IEnumerable<(Processor, string)> CorrectQuery76
         {
             get
             {
@@ -2083,7 +2096,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GetCorrectQueries76Result
+        static IEnumerable<Processor> CorrectQuery76Result
         {
             get
             {
@@ -2095,7 +2108,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries77
+        static IEnumerable<(Processor, string)> CorrectQuery77
         {
             get
             {
@@ -2107,7 +2120,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries78
+        static IEnumerable<(Processor, string)> CorrectQuery78
         {
             get
             {
@@ -2121,7 +2134,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries79
+        static IEnumerable<(Processor, string)> CorrectQuery79
         {
             get
             {
@@ -2136,7 +2149,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries80
+        static IEnumerable<(Processor, string)> CorrectQuery80
         {
             get
             {
@@ -2149,7 +2162,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries81
+        static IEnumerable<(Processor, string)> CorrectQuery81
         {
             get
             {
@@ -2161,7 +2174,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries82
+        static IEnumerable<(Processor, string)> CorrectQuery82
         {
             get
             {
@@ -2179,7 +2192,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries83
+        static IEnumerable<(Processor, string)> CorrectQuery83
         {
             get
             {
@@ -2193,7 +2206,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries84
+        static IEnumerable<(Processor, string)> CorrectQuery84
         {
             get
             {
@@ -2209,7 +2222,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries85
+        static IEnumerable<(Processor, string)> CorrectQuery85
         {
             get
             {
@@ -2226,7 +2239,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries86
+        static IEnumerable<(Processor, string)> CorrectQuery86
         {
             get
             {
@@ -2242,7 +2255,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries87
+        static IEnumerable<(Processor, string)> CorrectQuery87
         {
             get
             {
@@ -2258,7 +2271,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries88
+        static IEnumerable<(Processor, string)> CorrectQuery88
         {
             get
             {
@@ -2274,7 +2287,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries89
+        static IEnumerable<(Processor, string)> CorrectQuery89
         {
             get
             {
@@ -2291,7 +2304,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries90
+        static IEnumerable<(Processor, string)> CorrectQuery90
         {
             get
             {
@@ -2308,7 +2321,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries91
+        static IEnumerable<(Processor, string)> CorrectQuery91
         {
             get
             {
@@ -2325,7 +2338,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries92
+        static IEnumerable<(Processor, string)> CorrectQuery92
         {
             get
             {
@@ -2339,7 +2352,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries93
+        static IEnumerable<(Processor, string)> CorrectQuery93
         {
             get
             {
@@ -2353,7 +2366,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries94
+        static IEnumerable<(Processor, string)> CorrectQuery94
         {
             get
             {
@@ -2368,7 +2381,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries95
+        static IEnumerable<(Processor, string)> CorrectQuery95
         {
             get
             {
@@ -2383,7 +2396,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries96
+        static IEnumerable<(Processor, string)> CorrectQuery96
         {
             get
             {
@@ -2394,7 +2407,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries97
+        static IEnumerable<(Processor, string)> CorrectQuery97
         {
             get
             {
@@ -2408,7 +2421,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries98
+        static IEnumerable<(Processor, string)> CorrectQuery98
         {
             get
             {
@@ -2422,7 +2435,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries99
+        static IEnumerable<(Processor, string)> CorrectQuery99
         {
             get
             {
@@ -2436,7 +2449,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries100
+        static IEnumerable<(Processor, string)> CorrectQuery100
         {
             get
             {
@@ -2450,7 +2463,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries101
+        static IEnumerable<(Processor, string)> CorrectQuery101
         {
             get
             {
@@ -2461,7 +2474,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries102
+        static IEnumerable<(Processor, string)> CorrectQuery102
         {
             get
             {
@@ -2472,7 +2485,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries103
+        static IEnumerable<(Processor, string)> CorrectQuery103
         {
             get
             {
@@ -2482,7 +2495,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries104
+        static IEnumerable<(Processor, string)> CorrectQuery104
         {
             get
             {
@@ -2492,7 +2505,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries96_1
+        static IEnumerable<(Processor, string)> CorrectQuery96_1
         {
             get
             {
@@ -2503,7 +2516,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries97_1
+        static IEnumerable<(Processor, string)> CorrectQuery97_1
         {
             get
             {
@@ -2517,7 +2530,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries98_1
+        static IEnumerable<(Processor, string)> CorrectQuery98_1
         {
             get
             {
@@ -2531,7 +2544,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries99_1
+        static IEnumerable<(Processor, string)> CorrectQuery99_1
         {
             get
             {
@@ -2545,7 +2558,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries100_1
+        static IEnumerable<(Processor, string)> CorrectQuery100_1
         {
             get
             {
@@ -2559,7 +2572,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries101_1
+        static IEnumerable<(Processor, string)> CorrectQuery101_1
         {
             get
             {
@@ -2570,7 +2583,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries102_1
+        static IEnumerable<(Processor, string)> CorrectQuery102_1
         {
             get
             {
@@ -2581,7 +2594,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries103_1
+        static IEnumerable<(Processor, string)> CorrectQuery103_1
         {
             get
             {
@@ -2591,7 +2604,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries104_1
+        static IEnumerable<(Processor, string)> CorrectQuery104_1
         {
             get
             {
@@ -2601,7 +2614,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries105
+        static IEnumerable<(Processor, string)> CorrectQuery105
         {
             get
             {
@@ -2613,7 +2626,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries106
+        static IEnumerable<(Processor, string)> CorrectQuery106
         {
             get
             {
@@ -2625,7 +2638,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries107
+        static IEnumerable<(Processor, string)> CorrectQuery107
         {
             get
             {
@@ -2639,7 +2652,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries108
+        static IEnumerable<(Processor, string)> CorrectQuery108
         {
             get
             {
@@ -2651,7 +2664,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries109
+        static IEnumerable<(Processor, string)> CorrectQuery109
         {
             get
             {
@@ -2663,7 +2676,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries110
+        static IEnumerable<(Processor, string)> CorrectQuery110
         {
             get
             {
@@ -2673,7 +2686,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries111
+        static IEnumerable<(Processor, string)> CorrectQuery111
         {
             get
             {
@@ -2683,7 +2696,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries112
+        static IEnumerable<(Processor, string)> CorrectQuery112
         {
             get
             {
@@ -2693,7 +2706,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries113
+        static IEnumerable<(Processor, string)> CorrectQuery113
         {
             get
             {
@@ -2703,7 +2716,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries114
+        static IEnumerable<(Processor, string)> CorrectQuery114
         {
             get
             {
@@ -2715,7 +2728,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries115
+        static IEnumerable<(Processor, string)> CorrectQuery115
         {
             get
             {
@@ -2727,7 +2740,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries116
+        static IEnumerable<(Processor, string)> CorrectQuery116
         {
             get
             {
@@ -2739,7 +2752,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries117
+        static IEnumerable<(Processor, string)> CorrectQuery117
         {
             get
             {
@@ -2753,7 +2766,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries118
+        static IEnumerable<(Processor, string)> CorrectQuery118
         {
             get
             {
@@ -2766,7 +2779,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries119
+        static IEnumerable<(Processor, string)> CorrectQuery119
         {
             get
             {
@@ -2779,7 +2792,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries120
+        static IEnumerable<(Processor, string)> CorrectQuery120
         {
             get
             {
@@ -2797,7 +2810,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries121
+        static IEnumerable<(Processor, string)> CorrectQuery121
         {
             get
             {
@@ -2810,7 +2823,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries122
+        static IEnumerable<(Processor, string)> CorrectQuery122
         {
             get
             {
@@ -2824,7 +2837,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries123
+        static IEnumerable<(Processor, string)> CorrectQuery123
         {
             get
             {
@@ -2838,7 +2851,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries124
+        static IEnumerable<(Processor, string)> CorrectQuery124
         {
             get
             {
@@ -2852,7 +2865,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries125
+        static IEnumerable<(Processor, string)> CorrectQuery125
         {
             get
             {
@@ -2865,7 +2878,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries126
+        static IEnumerable<(Processor, string)> CorrectQuery126
         {
             get
             {
@@ -2879,7 +2892,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries127
+        static IEnumerable<(Processor, string)> CorrectQuery127
         {
             get
             {
@@ -2893,7 +2906,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries128
+        static IEnumerable<(Processor, string)> CorrectQuery128
         {
             get
             {
@@ -2907,7 +2920,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries129
+        static IEnumerable<(Processor, string)> CorrectQuery129
         {
             get
             {
@@ -2919,11 +2932,10 @@ namespace ReflectorTest
                 yield return (new Processor(sv, "l"), "Y1");
                 yield return (new Processor(sv, "3"), "y");
                 yield return (new Processor(sv, "3"), "y");
-                yield return (new Processor(sv, "3"), "a");
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries130
+        static IEnumerable<(Processor, string)> CorrectQuery130
         {
             get
             {
@@ -2937,7 +2949,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries131
+        static IEnumerable<(Processor, string)> CorrectQuery131
         {
             get
             {
@@ -2951,7 +2963,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries132
+        static IEnumerable<(Processor, string)> CorrectQuery132
         {
             get
             {
@@ -2965,7 +2977,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries133
+        static IEnumerable<(Processor, string)> CorrectQuery133
         {
             get
             {
@@ -2979,7 +2991,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries134
+        static IEnumerable<(Processor, string)> CorrectQuery134
         {
             get
             {
@@ -2993,7 +3005,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries135
+        static IEnumerable<(Processor, string)> CorrectQuery135
         {
             get
             {
@@ -3007,7 +3019,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries136
+        static IEnumerable<(Processor, string)> CorrectQuery136
         {
             get
             {
@@ -3021,7 +3033,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries137
+        static IEnumerable<(Processor, string)> CorrectQuery137
         {
             get
             {
@@ -3032,7 +3044,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectQueries138
+        static IEnumerable<(Processor, string)> CorrectQuery138
         {
             get
             {
@@ -3043,12 +3055,12 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetCorrectGlobalProcessorQuery
+        static IEnumerable<(Processor, string)> CorrectGlobalProcessorQuery
         {
             get
             {
                 if (_globalProcessor == null)
-                    throw new Exception($"Сначала необходимо вызвать метод {nameof(GetGlobalProcessorForNeuron)}.");
+                    throw new Exception($"Сначала необходимо вызвать метод {nameof(GlobalProcessorForNeuron)}.");
                 yield return (_globalProcessor, "A");
             }
         }
@@ -3057,9 +3069,9 @@ namespace ReflectorTest
 
         #region Incorrect
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueriesNull => null;
+        static IEnumerable<(Processor, string)> InCorrectQueryNull => null;
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueriesBreak
+        static IEnumerable<(Processor, string)> InCorrectQueryBreak
         {
             get
             {
@@ -3067,7 +3079,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries0
+        static IEnumerable<(Processor, string)> InCorrectQuery0
         {
             get
             {
@@ -3079,7 +3091,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries1
+        static IEnumerable<(Processor, string)> InCorrectQuery1
         {
             get
             {
@@ -3091,7 +3103,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries2
+        static IEnumerable<(Processor, string)> InCorrectQuery2
         {
             get
             {
@@ -3103,7 +3115,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries3
+        static IEnumerable<(Processor, string)> InCorrectQuery3
         {
             get
             {
@@ -3115,7 +3127,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries4
+        static IEnumerable<(Processor, string)> InCorrectQuery4
         {
             get
             {
@@ -3127,7 +3139,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries5
+        static IEnumerable<(Processor, string)> InCorrectQuery5
         {
             get
             {
@@ -3139,7 +3151,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries6
+        static IEnumerable<(Processor, string)> InCorrectQuery6
         {
             get
             {
@@ -3151,7 +3163,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries7
+        static IEnumerable<(Processor, string)> InCorrectQuery7
         {
             get
             {
@@ -3163,7 +3175,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries8
+        static IEnumerable<(Processor, string)> InCorrectQuery8
         {
             get
             {
@@ -3175,7 +3187,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries9
+        static IEnumerable<(Processor, string)> InCorrectQuery9
         {
             get
             {
@@ -3187,7 +3199,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries10
+        static IEnumerable<(Processor, string)> InCorrectQuery10
         {
             get
             {
@@ -3199,7 +3211,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries11
+        static IEnumerable<(Processor, string)> InCorrectQuery11
         {
             get
             {
@@ -3211,7 +3223,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries12
+        static IEnumerable<(Processor, string)> InCorrectQuery12
         {
             get
             {
@@ -3223,7 +3235,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries13
+        static IEnumerable<(Processor, string)> InCorrectQuery13
         {
             get
             {
@@ -3235,7 +3247,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries14
+        static IEnumerable<(Processor, string)> InCorrectQuery14
         {
             get
             {
@@ -3247,7 +3259,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries15
+        static IEnumerable<(Processor, string)> InCorrectQuery15
         {
             get
             {
@@ -3259,7 +3271,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries16
+        static IEnumerable<(Processor, string)> InCorrectQuery16
         {
             get
             {
@@ -3271,7 +3283,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries17
+        static IEnumerable<(Processor, string)> InCorrectQuery17
         {
             get
             {
@@ -3283,7 +3295,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries18
+        static IEnumerable<(Processor, string)> InCorrectQuery18
         {
             get
             {
@@ -3295,7 +3307,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries19
+        static IEnumerable<(Processor, string)> InCorrectQuery19
         {
             get
             {
@@ -3307,7 +3319,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries20
+        static IEnumerable<(Processor, string)> InCorrectQuery20
         {
             get
             {
@@ -3319,7 +3331,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries21
+        static IEnumerable<(Processor, string)> InCorrectQuery21
         {
             get
             {
@@ -3331,7 +3343,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries22
+        static IEnumerable<(Processor, string)> InCorrectQuery22
         {
             get
             {
@@ -3343,7 +3355,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries23
+        static IEnumerable<(Processor, string)> InCorrectQuery23
         {
             get
             {
@@ -3355,7 +3367,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries24
+        static IEnumerable<(Processor, string)> InCorrectQuery24
         {
             get
             {
@@ -3367,7 +3379,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries25
+        static IEnumerable<(Processor, string)> InCorrectQuery25
         {
             get
             {
@@ -3379,7 +3391,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries26
+        static IEnumerable<(Processor, string)> InCorrectQuery26
         {
             get
             {
@@ -3391,7 +3403,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries27
+        static IEnumerable<(Processor, string)> InCorrectQuery27
         {
             get
             {
@@ -3407,7 +3419,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries28
+        static IEnumerable<(Processor, string)> InCorrectQuery28
         {
             get
             {
@@ -3419,7 +3431,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries29
+        static IEnumerable<(Processor, string)> InCorrectQuery29
         {
             get
             {
@@ -3429,7 +3441,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries30
+        static IEnumerable<(Processor, string)> InCorrectQuery30
         {
             get
             {
@@ -3441,7 +3453,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries31
+        static IEnumerable<(Processor, string)> InCorrectQuery31
         {
             get
             {
@@ -3453,7 +3465,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries32
+        static IEnumerable<(Processor, string)> InCorrectQuery32
         {
             get
             {
@@ -3465,7 +3477,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries33
+        static IEnumerable<(Processor, string)> InCorrectQuery33
         {
             get
             {
@@ -3477,7 +3489,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries34
+        static IEnumerable<(Processor, string)> InCorrectQuery34
         {
             get
             {
@@ -3489,7 +3501,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries35
+        static IEnumerable<(Processor, string)> InCorrectQuery35
         {
             get
             {
@@ -3499,7 +3511,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries36
+        static IEnumerable<(Processor, string)> InCorrectQuery36
         {
             get
             {
@@ -3509,7 +3521,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries37
+        static IEnumerable<(Processor, string)> InCorrectQuery37
         {
             get
             {
@@ -3519,7 +3531,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries38
+        static IEnumerable<(Processor, string)> InCorrectQuery38
         {
             get
             {
@@ -3529,7 +3541,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries39
+        static IEnumerable<(Processor, string)> InCorrectQuery39
         {
             get
             {
@@ -3539,7 +3551,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries41
+        static IEnumerable<(Processor, string)> InCorrectQuery41
         {
             get
             {
@@ -3551,7 +3563,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries42
+        static IEnumerable<(Processor, string)> InCorrectQuery42
         {
             get
             {
@@ -3563,7 +3575,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries43
+        static IEnumerable<(Processor, string)> InCorrectQuery43
         {
             get
             {
@@ -3575,7 +3587,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries44
+        static IEnumerable<(Processor, string)> InCorrectQuery44
         {
             get
             {
@@ -3587,7 +3599,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries45
+        static IEnumerable<(Processor, string)> InCorrectQuery45
         {
             get
             {
@@ -3599,7 +3611,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries46
+        static IEnumerable<(Processor, string)> InCorrectQuery46
         {
             get
             {
@@ -3611,7 +3623,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries47
+        static IEnumerable<(Processor, string)> InCorrectQuery47
         {
             get
             {
@@ -3623,7 +3635,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries48
+        static IEnumerable<(Processor, string)> InCorrectQuery48
         {
             get
             {
@@ -3635,7 +3647,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries49
+        static IEnumerable<(Processor, string)> InCorrectQuery49
         {
             get
             {
@@ -3647,7 +3659,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries50
+        static IEnumerable<(Processor, string)> InCorrectQuery50
         {
             get
             {
@@ -3659,7 +3671,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries51
+        static IEnumerable<(Processor, string)> InCorrectQuery51
         {
             get
             {
@@ -3671,7 +3683,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries52
+        static IEnumerable<(Processor, string)> InCorrectQuery52
         {
             get
             {
@@ -3683,7 +3695,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries53
+        static IEnumerable<(Processor, string)> InCorrectQuery53
         {
             get
             {
@@ -3695,7 +3707,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries54
+        static IEnumerable<(Processor, string)> InCorrectQuery54
         {
             get
             {
@@ -3707,7 +3719,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries55
+        static IEnumerable<(Processor, string)> InCorrectQuery55
         {
             get
             {
@@ -3719,7 +3731,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries56
+        static IEnumerable<(Processor, string)> InCorrectQuery56
         {
             get
             {
@@ -3731,7 +3743,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries57
+        static IEnumerable<(Processor, string)> InCorrectQuery57
         {
             get
             {
@@ -3743,7 +3755,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries58
+        static IEnumerable<(Processor, string)> InCorrectQuery58
         {
             get
             {
@@ -3755,7 +3767,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries59
+        static IEnumerable<(Processor, string)> InCorrectQuery59
         {
             get
             {
@@ -3767,7 +3779,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries60
+        static IEnumerable<(Processor, string)> InCorrectQuery60
         {
             get
             {
@@ -3779,7 +3791,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries61
+        static IEnumerable<(Processor, string)> InCorrectQuery61
         {
             get
             {
@@ -3791,7 +3803,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries62
+        static IEnumerable<(Processor, string)> InCorrectQuery62
         {
             get
             {
@@ -3803,7 +3815,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries63
+        static IEnumerable<(Processor, string)> InCorrectQuery63
         {
             get
             {
@@ -3815,7 +3827,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries64
+        static IEnumerable<(Processor, string)> InCorrectQuery64
         {
             get
             {
@@ -3827,7 +3839,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries65
+        static IEnumerable<(Processor, string)> InCorrectQuery65
         {
             get
             {
@@ -3839,7 +3851,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries66
+        static IEnumerable<(Processor, string)> InCorrectQuery66
         {
             get
             {
@@ -3851,7 +3863,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries67
+        static IEnumerable<(Processor, string)> InCorrectQuery67
         {
             get
             {
@@ -3863,7 +3875,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries68
+        static IEnumerable<(Processor, string)> InCorrectQuery68
         {
             get
             {
@@ -3875,7 +3887,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries69
+        static IEnumerable<(Processor, string)> InCorrectQuery69
         {
             get
             {
@@ -3887,7 +3899,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries70
+        static IEnumerable<(Processor, string)> InCorrectQuery70
         {
             get
             {
@@ -3899,7 +3911,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries71
+        static IEnumerable<(Processor, string)> InCorrectQuery71
         {
             get
             {
@@ -3911,7 +3923,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries72
+        static IEnumerable<(Processor, string)> InCorrectQuery72
         {
             get
             {
@@ -3923,7 +3935,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries73
+        static IEnumerable<(Processor, string)> InCorrectQuery73
         {
             get
             {
@@ -3935,7 +3947,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries74
+        static IEnumerable<(Processor, string)> InCorrectQuery74
         {
             get
             {
@@ -3947,7 +3959,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries75
+        static IEnumerable<(Processor, string)> InCorrectQuery75
         {
             get
             {
@@ -3959,7 +3971,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries76
+        static IEnumerable<(Processor, string)> InCorrectQuery76
         {
             get
             {
@@ -3971,7 +3983,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries77
+        static IEnumerable<(Processor, string)> InCorrectQuery77
         {
             get
             {
@@ -3983,7 +3995,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries78
+        static IEnumerable<(Processor, string)> InCorrectQuery78
         {
             get
             {
@@ -3995,7 +4007,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries79
+        static IEnumerable<(Processor, string)> InCorrectQuery79
         {
             get
             {
@@ -4007,7 +4019,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries80
+        static IEnumerable<(Processor, string)> InCorrectQuery80
         {
             get
             {
@@ -4019,7 +4031,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries81
+        static IEnumerable<(Processor, string)> InCorrectQuery81
         {
             get
             {
@@ -4031,7 +4043,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries82
+        static IEnumerable<(Processor, string)> InCorrectQuery82
         {
             get
             {
@@ -4043,7 +4055,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries83
+        static IEnumerable<(Processor, string)> InCorrectQuery83
         {
             get
             {
@@ -4055,7 +4067,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries84
+        static IEnumerable<(Processor, string)> InCorrectQuery84
         {
             get
             {
@@ -4067,7 +4079,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries85
+        static IEnumerable<(Processor, string)> InCorrectQuery85
         {
             get
             {
@@ -4079,7 +4091,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries86
+        static IEnumerable<(Processor, string)> InCorrectQuery86
         {
             get
             {
@@ -4091,7 +4103,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries87
+        static IEnumerable<(Processor, string)> InCorrectQuery87
         {
             get
             {
@@ -4103,7 +4115,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries88
+        static IEnumerable<(Processor, string)> InCorrectQuery88
         {
             get
             {
@@ -4115,7 +4127,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries89
+        static IEnumerable<(Processor, string)> InCorrectQuery89
         {
             get
             {
@@ -4127,7 +4139,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries90
+        static IEnumerable<(Processor, string)> InCorrectQuery90
         {
             get
             {
@@ -4139,7 +4151,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries91
+        static IEnumerable<(Processor, string)> InCorrectQuery91
         {
             get
             {
@@ -4151,7 +4163,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries92
+        static IEnumerable<(Processor, string)> InCorrectQuery92
         {
             get
             {
@@ -4163,7 +4175,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries93
+        static IEnumerable<(Processor, string)> InCorrectQuery93
         {
             get
             {
@@ -4175,7 +4187,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries94
+        static IEnumerable<(Processor, string)> InCorrectQuery94
         {
             get
             {
@@ -4187,7 +4199,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries95
+        static IEnumerable<(Processor, string)> InCorrectQuery95
         {
             get
             {
@@ -4199,7 +4211,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries96
+        static IEnumerable<(Processor, string)> InCorrectQuery96
         {
             get
             {
@@ -4211,7 +4223,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries98
+        static IEnumerable<(Processor, string)> InCorrectQuery98
         {
             get
             {
@@ -4223,7 +4235,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries99
+        static IEnumerable<(Processor, string)> InCorrectQuery99
         {
             get
             {
@@ -4235,7 +4247,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries100
+        static IEnumerable<(Processor, string)> InCorrectQuery100
         {
             get
             {
@@ -4247,7 +4259,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries101
+        static IEnumerable<(Processor, string)> InCorrectQuery101
         {
             get
             {
@@ -4259,7 +4271,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries102
+        static IEnumerable<(Processor, string)> InCorrectQuery102
         {
             get
             {
@@ -4271,7 +4283,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries103
+        static IEnumerable<(Processor, string)> InCorrectQuery103
         {
             get
             {
@@ -4283,7 +4295,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries104
+        static IEnumerable<(Processor, string)> InCorrectQuery104
         {
             get
             {
@@ -4293,7 +4305,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries105
+        static IEnumerable<(Processor, string)> InCorrectQuery105
         {
             get
             {
@@ -4303,7 +4315,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries106
+        static IEnumerable<(Processor, string)> InCorrectQuery106
         {
             get
             {
@@ -4313,7 +4325,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries107
+        static IEnumerable<(Processor, string)> InCorrectQuery107
         {
             get
             {
@@ -4323,7 +4335,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries108
+        static IEnumerable<(Processor, string)> InCorrectQuery108
         {
             get
             {
@@ -4333,7 +4345,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries109
+        static IEnumerable<(Processor, string)> InCorrectQuery109
         {
             get
             {
@@ -4343,7 +4355,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries110
+        static IEnumerable<(Processor, string)> InCorrectQuery110
         {
             get
             {
@@ -4353,7 +4365,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries111
+        static IEnumerable<(Processor, string)> InCorrectQuery111
         {
             get
             {
@@ -4363,7 +4375,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries112
+        static IEnumerable<(Processor, string)> InCorrectQuery112
         {
             get
             {
@@ -4373,7 +4385,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries113
+        static IEnumerable<(Processor, string)> InCorrectQuery113
         {
             get
             {
@@ -4383,7 +4395,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries114
+        static IEnumerable<(Processor, string)> InCorrectQuery114
         {
             get
             {
@@ -4393,7 +4405,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries115
+        static IEnumerable<(Processor, string)> InCorrectQuery115
         {
             get
             {
@@ -4403,7 +4415,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries116
+        static IEnumerable<(Processor, string)> InCorrectQuery116
         {
             get
             {
@@ -4413,7 +4425,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries117
+        static IEnumerable<(Processor, string)> InCorrectQuery117
         {
             get
             {
@@ -4423,7 +4435,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries118
+        static IEnumerable<(Processor, string)> InCorrectQuery118
         {
             get
             {
@@ -4433,7 +4445,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries119
+        static IEnumerable<(Processor, string)> InCorrectQuery119
         {
             get
             {
@@ -4443,7 +4455,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries120
+        static IEnumerable<(Processor, string)> InCorrectQuery120
         {
             get
             {
@@ -4453,7 +4465,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries121
+        static IEnumerable<(Processor, string)> InCorrectQuery121
         {
             get
             {
@@ -4463,7 +4475,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries122
+        static IEnumerable<(Processor, string)> InCorrectQuery122
         {
             get
             {
@@ -4474,7 +4486,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries123
+        static IEnumerable<(Processor, string)> InCorrectQuery123
         {
             get
             {
@@ -4485,7 +4497,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries124
+        static IEnumerable<(Processor, string)> InCorrectQuery124
         {
             get
             {
@@ -4497,7 +4509,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries125
+        static IEnumerable<(Processor, string)> InCorrectQuery125
         {
             get
             {
@@ -4509,7 +4521,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries126
+        static IEnumerable<(Processor, string)> InCorrectQuery126
         {
             get
             {
@@ -4521,7 +4533,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries127
+        static IEnumerable<(Processor, string)> InCorrectQuery127
         {
             get
             {
@@ -4533,7 +4545,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries128
+        static IEnumerable<(Processor, string)> InCorrectQuery128
         {
             get
             {
@@ -4545,7 +4557,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries129
+        static IEnumerable<(Processor, string)> InCorrectQuery129
         {
             get
             {
@@ -4557,7 +4569,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries130
+        static IEnumerable<(Processor, string)> InCorrectQuery130
         {
             get
             {
@@ -4569,7 +4581,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries131
+        static IEnumerable<(Processor, string)> InCorrectQuery131
         {
             get
             {
@@ -4581,7 +4593,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries132
+        static IEnumerable<(Processor, string)> InCorrectQuery132
         {
             get
             {
@@ -4592,7 +4604,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries133
+        static IEnumerable<(Processor, string)> InCorrectQuery133
         {
             get
             {
@@ -4603,7 +4615,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries134
+        static IEnumerable<(Processor, string)> InCorrectQuery134
         {
             get
             {
@@ -4613,7 +4625,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries135
+        static IEnumerable<(Processor, string)> InCorrectQuery135
         {
             get
             {
@@ -4623,7 +4635,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries136
+        static IEnumerable<(Processor, string)> InCorrectQuery136
         {
             get
             {
@@ -4634,7 +4646,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries137
+        static IEnumerable<(Processor, string)> InCorrectQuery137
         {
             get
             {
@@ -4645,7 +4657,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries138
+        static IEnumerable<(Processor, string)> InCorrectQuery138
         {
             get
             {
@@ -4655,7 +4667,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries139
+        static IEnumerable<(Processor, string)> InCorrectQuery139
         {
             get
             {
@@ -4665,7 +4677,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries140
+        static IEnumerable<(Processor, string)> InCorrectQuery140
         {
             get
             {
@@ -4676,7 +4688,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries141
+        static IEnumerable<(Processor, string)> InCorrectQuery141
         {
             get
             {
@@ -4687,7 +4699,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries142
+        static IEnumerable<(Processor, string)> InCorrectQuery142
         {
             get
             {
@@ -4697,7 +4709,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries143
+        static IEnumerable<(Processor, string)> InCorrectQuery143
         {
             get
             {
@@ -4707,7 +4719,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries144
+        static IEnumerable<(Processor, string)> InCorrectQuery144
         {
             get
             {
@@ -4717,7 +4729,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries145
+        static IEnumerable<(Processor, string)> InCorrectQuery145
         {
             get
             {
@@ -4727,7 +4739,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries146
+        static IEnumerable<(Processor, string)> InCorrectQuery146
         {
             get
             {
@@ -4737,7 +4749,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries147
+        static IEnumerable<(Processor, string)> InCorrectQuery147
         {
             get
             {
@@ -4747,7 +4759,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries148
+        static IEnumerable<(Processor, string)> InCorrectQuery148
         {
             get
             {
@@ -4758,7 +4770,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries149
+        static IEnumerable<(Processor, string)> InCorrectQuery149
         {
             get
             {
@@ -4769,7 +4781,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries150
+        static IEnumerable<(Processor, string)> InCorrectQuery150
         {
             get
             {
@@ -4781,7 +4793,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries151
+        static IEnumerable<(Processor, string)> InCorrectQuery151
         {
             get
             {
@@ -4793,7 +4805,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries152
+        static IEnumerable<(Processor, string)> InCorrectQuery152
         {
             get
             {
@@ -4805,7 +4817,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries153
+        static IEnumerable<(Processor, string)> InCorrectQuery153
         {
             get
             {
@@ -4817,7 +4829,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries154
+        static IEnumerable<(Processor, string)> InCorrectQuery154
         {
             get
             {
@@ -4829,7 +4841,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries155
+        static IEnumerable<(Processor, string)> InCorrectQuery155
         {
             get
             {
@@ -4841,7 +4853,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries156
+        static IEnumerable<(Processor, string)> InCorrectQuery156
         {
             get
             {
@@ -4853,7 +4865,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries157
+        static IEnumerable<(Processor, string)> InCorrectQuery157
         {
             get
             {
@@ -4865,7 +4877,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries158
+        static IEnumerable<(Processor, string)> InCorrectQuery158
         {
             get
             {
@@ -4876,7 +4888,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries159
+        static IEnumerable<(Processor, string)> InCorrectQuery159
         {
             get
             {
@@ -4887,7 +4899,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries160
+        static IEnumerable<(Processor, string)> InCorrectQuery160
         {
             get
             {
@@ -4897,7 +4909,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries161
+        static IEnumerable<(Processor, string)> InCorrectQuery161
         {
             get
             {
@@ -4907,7 +4919,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries162
+        static IEnumerable<(Processor, string)> InCorrectQuery162
         {
             get
             {
@@ -4918,7 +4930,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries163
+        static IEnumerable<(Processor, string)> InCorrectQuery163
         {
             get
             {
@@ -4929,7 +4941,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries164
+        static IEnumerable<(Processor, string)> InCorrectQuery164
         {
             get
             {
@@ -4939,7 +4951,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries165
+        static IEnumerable<(Processor, string)> InCorrectQuery165
         {
             get
             {
@@ -4949,7 +4961,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries166
+        static IEnumerable<(Processor, string)> InCorrectQuery166
         {
             get
             {
@@ -4959,7 +4971,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries167
+        static IEnumerable<(Processor, string)> InCorrectQuery167
         {
             get
             {
@@ -4969,7 +4981,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries168
+        static IEnumerable<(Processor, string)> InCorrectQuery168
         {
             get
             {
@@ -4979,7 +4991,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries169
+        static IEnumerable<(Processor, string)> InCorrectQuery169
         {
             get
             {
@@ -4989,7 +5001,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries170
+        static IEnumerable<(Processor, string)> InCorrectQuery170
         {
             get
             {
@@ -4999,7 +5011,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries171
+        static IEnumerable<(Processor, string)> InCorrectQuery171
         {
             get
             {
@@ -5009,7 +5021,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries172
+        static IEnumerable<(Processor, string)> InCorrectQuery172
         {
             get
             {
@@ -5019,7 +5031,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries173
+        static IEnumerable<(Processor, string)> InCorrectQuery173
         {
             get
             {
@@ -5029,7 +5041,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries174
+        static IEnumerable<(Processor, string)> InCorrectQuery174
         {
             get
             {
@@ -5039,7 +5051,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries175
+        static IEnumerable<(Processor, string)> InCorrectQuery175
         {
             get
             {
@@ -5049,7 +5061,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries176
+        static IEnumerable<(Processor, string)> InCorrectQuery176
         {
             get
             {
@@ -5060,7 +5072,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries177
+        static IEnumerable<(Processor, string)> InCorrectQuery177
         {
             get
             {
@@ -5071,7 +5083,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries178
+        static IEnumerable<(Processor, string)> InCorrectQuery178
         {
             get
             {
@@ -5083,7 +5095,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries179
+        static IEnumerable<(Processor, string)> InCorrectQuery179
         {
             get
             {
@@ -5095,7 +5107,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries180
+        static IEnumerable<(Processor, string)> InCorrectQuery180
         {
             get
             {
@@ -5107,7 +5119,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries181
+        static IEnumerable<(Processor, string)> InCorrectQuery181
         {
             get
             {
@@ -5119,7 +5131,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries182
+        static IEnumerable<(Processor, string)> InCorrectQuery182
         {
             get
             {
@@ -5131,7 +5143,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries189
+        static IEnumerable<(Processor, string)> InCorrectQuery189
         {
             get
             {
@@ -5143,7 +5155,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries190
+        static IEnumerable<(Processor, string)> InCorrectQuery190
         {
             get
             {
@@ -5155,7 +5167,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries191
+        static IEnumerable<(Processor, string)> InCorrectQuery191
         {
             get
             {
@@ -5167,7 +5179,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries192
+        static IEnumerable<(Processor, string)> InCorrectQuery192
         {
             get
             {
@@ -5178,7 +5190,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries193
+        static IEnumerable<(Processor, string)> InCorrectQuery193
         {
             get
             {
@@ -5189,7 +5201,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries194
+        static IEnumerable<(Processor, string)> InCorrectQuery194
         {
             get
             {
@@ -5199,7 +5211,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries195
+        static IEnumerable<(Processor, string)> InCorrectQuery195
         {
             get
             {
@@ -5209,7 +5221,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries196
+        static IEnumerable<(Processor, string)> InCorrectQuery196
         {
             get
             {
@@ -5220,7 +5232,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries197
+        static IEnumerable<(Processor, string)> InCorrectQuery197
         {
             get
             {
@@ -5231,7 +5243,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries198
+        static IEnumerable<(Processor, string)> InCorrectQuery198
         {
             get
             {
@@ -5241,7 +5253,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries199
+        static IEnumerable<(Processor, string)> InCorrectQuery199
         {
             get
             {
@@ -5251,7 +5263,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries200
+        static IEnumerable<(Processor, string)> InCorrectQuery200
         {
             get
             {
@@ -5262,7 +5274,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries201
+        static IEnumerable<(Processor, string)> InCorrectQuery201
         {
             get
             {
@@ -5273,7 +5285,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries202
+        static IEnumerable<(Processor, string)> InCorrectQuery202
         {
             get
             {
@@ -5283,7 +5295,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries203
+        static IEnumerable<(Processor, string)> InCorrectQuery203
         {
             get
             {
@@ -5293,7 +5305,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries204
+        static IEnumerable<(Processor, string)> InCorrectQuery204
         {
             get
             {
@@ -5303,7 +5315,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries205
+        static IEnumerable<(Processor, string)> InCorrectQuery205
         {
             get
             {
@@ -5313,7 +5325,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries206
+        static IEnumerable<(Processor, string)> InCorrectQuery206
         {
             get
             {
@@ -5323,7 +5335,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries207
+        static IEnumerable<(Processor, string)> InCorrectQuery207
         {
             get
             {
@@ -5333,7 +5345,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries208
+        static IEnumerable<(Processor, string)> InCorrectQuery208
         {
             get
             {
@@ -5344,7 +5356,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries209
+        static IEnumerable<(Processor, string)> InCorrectQuery209
         {
             get
             {
@@ -5355,7 +5367,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries210
+        static IEnumerable<(Processor, string)> InCorrectQuery210
         {
             get
             {
@@ -5367,7 +5379,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries211
+        static IEnumerable<(Processor, string)> InCorrectQuery211
         {
             get
             {
@@ -5379,7 +5391,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries212
+        static IEnumerable<(Processor, string)> InCorrectQuery212
         {
             get
             {
@@ -5391,7 +5403,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries213
+        static IEnumerable<(Processor, string)> InCorrectQuery213
         {
             get
             {
@@ -5403,7 +5415,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries214
+        static IEnumerable<(Processor, string)> InCorrectQuery214
         {
             get
             {
@@ -5415,7 +5427,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries215
+        static IEnumerable<(Processor, string)> InCorrectQuery215
         {
             get
             {
@@ -5427,7 +5439,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries216
+        static IEnumerable<(Processor, string)> InCorrectQuery216
         {
             get
             {
@@ -5439,7 +5451,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries217
+        static IEnumerable<(Processor, string)> InCorrectQuery217
         {
             get
             {
@@ -5451,7 +5463,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries218
+        static IEnumerable<(Processor, string)> InCorrectQuery218
         {
             get
             {
@@ -5462,7 +5474,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries219
+        static IEnumerable<(Processor, string)> InCorrectQuery219
         {
             get
             {
@@ -5473,7 +5485,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries220
+        static IEnumerable<(Processor, string)> InCorrectQuery220
         {
             get
             {
@@ -5483,7 +5495,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries221
+        static IEnumerable<(Processor, string)> InCorrectQuery221
         {
             get
             {
@@ -5493,7 +5505,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries222
+        static IEnumerable<(Processor, string)> InCorrectQuery222
         {
             get
             {
@@ -5504,7 +5516,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries223
+        static IEnumerable<(Processor, string)> InCorrectQuery223
         {
             get
             {
@@ -5515,7 +5527,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries224
+        static IEnumerable<(Processor, string)> InCorrectQuery224
         {
             get
             {
@@ -5525,7 +5537,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries225
+        static IEnumerable<(Processor, string)> InCorrectQuery225
         {
             get
             {
@@ -5535,7 +5547,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries226
+        static IEnumerable<(Processor, string)> InCorrectQuery226
         {
             get
             {
@@ -5545,7 +5557,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries227
+        static IEnumerable<(Processor, string)> InCorrectQuery227
         {
             get
             {
@@ -5557,7 +5569,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries228
+        static IEnumerable<(Processor, string)> InCorrectQuery228
         {
             get
             {
@@ -5569,7 +5581,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries229
+        static IEnumerable<(Processor, string)> InCorrectQuery229
         {
             get
             {
@@ -5597,7 +5609,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries230
+        static IEnumerable<(Processor, string)> InCorrectQuery230
         {
             get
             {
@@ -5625,7 +5637,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries231
+        static IEnumerable<(Processor, string)> InCorrectQuery231
         {
             get
             {
@@ -5635,7 +5647,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries232
+        static IEnumerable<(Processor, string)> InCorrectQuery232
         {
             get
             {
@@ -5645,7 +5657,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries233
+        static IEnumerable<(Processor, string)> InCorrectQuery233
         {
             get
             {
@@ -5655,7 +5667,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetIncorrectQueries234
+        static IEnumerable<(Processor, string)> InCorrectQuery234
         {
             get
             {
@@ -5666,7 +5678,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries235
+        static IEnumerable<(Processor, string)> InCorrectQuery235
         {
             get
             {
@@ -5682,7 +5694,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries236
+        static IEnumerable<(Processor, string)> InCorrectQuery236
         {
             get
             {
@@ -5696,7 +5708,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries237
+        static IEnumerable<(Processor, string)> InCorrectQuery237
         {
             get
             {
@@ -5710,7 +5722,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries238
+        static IEnumerable<(Processor, string)> InCorrectQuery238
         {
             get
             {
@@ -5724,7 +5736,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries239
+        static IEnumerable<(Processor, string)> InCorrectQuery239
         {
             get
             {
@@ -5738,7 +5750,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries240
+        static IEnumerable<(Processor, string)> InCorrectQuery240
         {
             get
             {
@@ -5752,7 +5764,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries241
+        static IEnumerable<(Processor, string)> InCorrectQuery241
         {
             get
             {
@@ -5766,7 +5778,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries242
+        static IEnumerable<(Processor, string)> InCorrectQuery242
         {
             get
             {
@@ -5780,7 +5792,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries243
+        static IEnumerable<(Processor, string)> InCorrectQuery243
         {
             get
             {
@@ -5791,7 +5803,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries244
+        static IEnumerable<(Processor, string)> InCorrectQuery244
         {
             get
             {
@@ -5802,7 +5814,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries245
+        static IEnumerable<(Processor, string)> InCorrectQuery245
         {
             get
             {
@@ -5816,7 +5828,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries246
+        static IEnumerable<(Processor, string)> InCorrectQuery246
         {
             get
             {
@@ -5830,7 +5842,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries247
+        static IEnumerable<(Processor, string)> InCorrectQuery247
         {
             get
             {
@@ -5844,7 +5856,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries248
+        static IEnumerable<(Processor, string)> InCorrectQuery248
         {
             get
             {
@@ -5858,7 +5870,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries249
+        static IEnumerable<(Processor, string)> InCorrectQuery249
         {
             get
             {
@@ -5873,7 +5885,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries250
+        static IEnumerable<(Processor, string)> InCorrectQuery250
         {
             get
             {
@@ -5890,7 +5902,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries251
+        static IEnumerable<(Processor, string)> InCorrectQuery251
         {
             get
             {
@@ -5907,7 +5919,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries252
+        static IEnumerable<(Processor, string)> InCorrectQuery252
         {
             get
             {
@@ -5924,7 +5936,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries253
+        static IEnumerable<(Processor, string)> InCorrectQuery253
         {
             get
             {
@@ -5941,7 +5953,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries254
+        static IEnumerable<(Processor, string)> InCorrectQuery254
         {
             get
             {
@@ -5958,7 +5970,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries255Exception
+        static IEnumerable<(Processor, string)> InCorrectQuery255Exception
         {
             get
             {
@@ -5966,7 +5978,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries256Exception
+        static IEnumerable<(Processor, string)> InCorrectQuery256Exception
         {
             get
             {
@@ -5974,7 +5986,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries257Exception
+        static IEnumerable<(Processor, string)> InCorrectQuery257Exception
         {
             get
             {
@@ -5982,7 +5994,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries258
+        static IEnumerable<(Processor, string)> InCorrectQuery258
         {
             get
             {
@@ -6002,7 +6014,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries259
+        static IEnumerable<(Processor, string)> InCorrectQuery259
         {
             get
             {
@@ -6022,7 +6034,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries260
+        static IEnumerable<(Processor, string)> InCorrectQuery260
         {
             get
             {
@@ -6042,7 +6054,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries261
+        static IEnumerable<(Processor, string)> InCorrectQuery261
         {
             get
             {
@@ -6064,7 +6076,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries262
+        static IEnumerable<(Processor, string)> InCorrectQuery262
         {
             get
             {
@@ -6084,7 +6096,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries263
+        static IEnumerable<(Processor, string)> InCorrectQuery263
         {
             get
             {
@@ -6104,7 +6116,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries264
+        static IEnumerable<(Processor, string)> InCorrectQuery264
         {
             get
             {
@@ -6117,7 +6129,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries265
+        static IEnumerable<(Processor, string)> InCorrectQuery265
         {
             get
             {
@@ -6132,7 +6144,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries266
+        static IEnumerable<(Processor, string)> InCorrectQuery266
         {
             get
             {
@@ -6149,7 +6161,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<(Processor, string)> GetInCorrectQueries267
+        static IEnumerable<(Processor, string)> InCorrectQuery267
         {
             get
             {
@@ -6163,6 +6175,22 @@ namespace ReflectorTest
                 sv = new SignValue[1, 1];
                 sv[0, 0] = new SignValue(7880);
                 yield return (new Processor(sv, "4"), "k");
+            }
+        }
+
+        static IEnumerable<(Processor, string)> InCorrectQuery268
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 5];
+                sv[0, 0] = new SignValue(5555);
+                sv[0, 1] = new SignValue(5555);
+                sv[0, 2] = new SignValue(7777);
+                sv[0, 3] = new SignValue(6666);
+                yield return (new Processor(sv, "l"), "Y1");
+                yield return (new Processor(sv, "3"), "y");
+                yield return (new Processor(sv, "3"), "y");
+                yield return (new Processor(sv, "3"), "a");
             }
         }
 
@@ -6243,8 +6271,6 @@ namespace ReflectorTest
             }
         }
 
-        #endregion //SelfTests
-
         static void GetException(string errorString, Type exType, Action act)
         {
             if (string.IsNullOrWhiteSpace(errorString))
@@ -6267,6 +6293,8 @@ namespace ReflectorTest
             throw new Exception(errorString);
         }
 
+        #endregion //SelfTests
+        
         static void CheckNeuronMapValue(Neuron actual, IEnumerable<Processor> pcExpected)
         {
             Assert.AreNotEqual(null, actual);
@@ -6291,97 +6319,133 @@ namespace ReflectorTest
             Assert.AreEqual(0, dicActual.Count);
         }
 
-        static IEnumerable<Processor> GetKProcessors(IEnumerable<(Processor, string)> query)
+        static IEnumerable<Processor> GetProcessorsFromQuery(IEnumerable<(Processor, string)> query)
         {
             Assert.AreNotEqual(null, query);
+
+            string GetCleanTag(string tag)
+            {
+                int k = tag.Length;
+
+                for (k--; k > 0; k--)
+                    if (tag[k] != '0')
+                        break;
+
+                return tag.Substring(0, k + 1);
+            }
 
             ProcessorHandler ph = new ProcessorHandler();
 
             foreach ((Processor p, string tag) in query)
                 for (int x = 0; x < p.Width; x++)
-                for (int y = 0; y < p.Height; y++)
-                    ph.Add(new Processor(new[] { p[x, y] }, tag));
+                    for (int y = 0; y < p.Height; y++)
+                        ph.Add(new Processor(new[] { p[x, y] }, tag));
 
             ProcessorContainer pc = ph.Processors;
             for (int k = 0; k < pc.Count; k++)
-                yield return ProcessorHandler.ChangeProcessorTag(pc[k], pc[k].Tag[0].ToString());
+                yield return ProcessorHandler.ChangeProcessorTag(pc[k], GetCleanTag(pc[k].Tag));
         }
 
-        static void NeuronTestSub(IEnumerable<Processor> pcActual, IEnumerable<Processor> pcExpected, IEnumerable<(Processor, string)> pcRequest, IEnumerable<Processor> pcRequestProcessors)
+        static void NeuronTestSub(IEnumerable<Processor> pcActual, IEnumerable<(Processor, string)> pcRequest, IEnumerable<Processor> pcRequestProcessors)
         {
             Neuron parentNeuron = new Neuron(new ProcessorContainer(pcActual.ToArray()));
-            CheckNeuronMapValue(parentNeuron, pcExpected);
+            CheckNeuronMapValue(parentNeuron, pcActual);
             CheckNeuronMapValue(parentNeuron.FindRelation(pcRequest), pcRequestProcessors);
-            CheckNeuronMapValue(parentNeuron, pcExpected);
+            CheckNeuronMapValue(parentNeuron, pcActual);
+        }
+
+        static PropertyInfo GetResult(PropertyInfo prop)
+        {
+            foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
+                if (p.Name.EndsWith("Result"))
+                    if (p.Name.StartsWith(prop.Name))
+                        return p;
+            return prop;
         }
 
         [TestMethod]
         public void NeuronTest0()
         {
-            NeuronTestSub(GetProcessors0, GetProcessors0, GetCorrectQueries0, GetCorrectQueries0.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries1, GetCorrectQueries1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries2, GetCorrectQueries2.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries3, GetCorrectQueries3.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries4, GetCorrectQueries4.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries5, GetCorrectQueries5.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries5_1, GetCorrectQueries5_1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries6, GetCorrectQueries6.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries6_1, GetCorrectQueries6_1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries7, GetCorrectQueries7.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries7_1, GetCorrectQueries7_1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries8, GetCorrectQueries8.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries8_1, GetCorrectQueries8_1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries8_2, GetCorrectQueries8_2.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries90, GetCorrectQueries90.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries9_0, GetCorrectQueries9_0.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries9_1, GetCorrectQueries9_1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries9_1_1, GetCorrectQueries9_1_1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries9_2, GetCorrectQueries9_2.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries9_3, GetCorrectQueries9_3.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries10_0, GetCorrectQueries10_0.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries10_1, GetCorrectQueries10_1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries10_1_1, GetCorrectQueries10_1.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries10_2, GetCorrectQueries10_2.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries10_3, GetCorrectQueries10_3.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries11, GetCorrectQueries11.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries12, GetCorrectQueries12.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries13, GetCorrectQueries13.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries14, GetCorrectQueries14Result);
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries15, GetCorrectQueries15.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries16, GetCorrectQueries16.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries17, GetCorrectQueries17.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries18, GetCorrectQueries18.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries19, GetCorrectQueries19Result);
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries20, GetCorrectQueries20Result);
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries21, GetCorrectQueries21Result);
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries22, GetCorrectQueries22Result);
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries23, GetCorrectQueries23Result);
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries24, GetCorrectQueries24Result);
-            NeuronTestSub(GetProcessors1, GetProcessors1, GetCorrectQueries24, GetCorrectQueries46Result);
+            foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
+            {
+                object pi = p.GetValue(null);
+                if (p.Name.StartsWith("Correct"))
+                {
+                    IEnumerable<(Processor, string)> ppi = (IEnumerable<(Processor, string)>) pi;
+                    PropertyInfo result = GetResult(p);
+                    //связать наборы с запросами, сделать это можно по буквам
+                }
 
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries25.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries26.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries27.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries28.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries29.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries30.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries31.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries32.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries33.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries34.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries35.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries36.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries37.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries38.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries39.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries40.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries41.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries42.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries43.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries44.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries45.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries46.Select(tuple => tuple.Item1));
-            NeuronTestSub(GetProcessors2, GetProcessors2, GetCorrectQueries2, GetCorrectQueries47.Select(tuple => tuple.Item1));
+                if (p.Name.StartsWith("InCorrect"))
+                {
+                    IEnumerable<(Processor, string)> ppi = (IEnumerable<(Processor, string)>) pi;
+                }
+            }
+
+            NeuronTestSub(Processors0, CorrectQuery0, GetProcessorsFromQuery(CorrectQuery0));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery1, GetProcessorsFromQuery(CorrectQuery1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery2));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery3, GetProcessorsFromQuery(CorrectQuery3));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery4, GetProcessorsFromQuery(CorrectQuery4));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery5, GetProcessorsFromQuery(CorrectQuery5));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery5_1, GetProcessorsFromQuery(CorrectQuery5_1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery6, GetProcessorsFromQuery(CorrectQuery6));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery6_1, GetProcessorsFromQuery(CorrectQuery6_1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery7, GetProcessorsFromQuery(CorrectQuery7));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery7_1, GetProcessorsFromQuery(CorrectQuery7_1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery8, GetProcessorsFromQuery(CorrectQuery8));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery8_1, GetProcessorsFromQuery(CorrectQuery8_1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery8_2, GetProcessorsFromQuery(CorrectQuery8_2));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery90, GetProcessorsFromQuery(CorrectQuery90));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery9_0, GetProcessorsFromQuery(CorrectQuery9_0));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery9_1, GetProcessorsFromQuery(CorrectQuery9_1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery9_1_1, GetProcessorsFromQuery(CorrectQuery9_1_1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery9_2, GetProcessorsFromQuery(CorrectQuery9_2));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery9_3, GetProcessorsFromQuery(CorrectQuery9_3));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery10_0, GetProcessorsFromQuery(CorrectQuery10_0));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery10_1, GetProcessorsFromQuery(CorrectQuery10_1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery10_1_1, GetProcessorsFromQuery(CorrectQuery10_1));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery10_2, GetProcessorsFromQuery(CorrectQuery10_2));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery10_3, GetProcessorsFromQuery(CorrectQuery10_3));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery11, GetProcessorsFromQuery(CorrectQuery11));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery12, GetProcessorsFromQuery(CorrectQuery12));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery13, GetProcessorsFromQuery(CorrectQuery13));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery14, CorrectQuery14Result);
+            NeuronTestSub(Processors1, Processors1, CorrectQuery15, GetProcessorsFromQuery(CorrectQuery15));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery16, GetProcessorsFromQuery(CorrectQuery16));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery17, GetProcessorsFromQuery(CorrectQuery17));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery18, GetProcessorsFromQuery(CorrectQuery18));
+            NeuronTestSub(Processors1, Processors1, CorrectQuery19, CorrectQuery19Result);
+            NeuronTestSub(Processors1, Processors1, CorrectQuery20, CorrectQuery20Result);
+            NeuronTestSub(Processors1, Processors1, CorrectQuery21, CorrectQuery21Result);
+            NeuronTestSub(Processors1, Processors1, CorrectQuery22, CorrectQuery22Result);
+            NeuronTestSub(Processors1, Processors1, CorrectQuery23, CorrectQuery23Result);
+            NeuronTestSub(Processors1, Processors1, CorrectQuery24, CorrectQuery24Result);
+            NeuronTestSub(Processors1, Processors1, CorrectQuery24, CorrectQuery46Result);
+
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery25));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery26));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery27));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery28));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery29));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery30));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery31));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery32));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery33));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery34));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery35));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery36));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery37));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery38));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery39));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery40));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery41));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery42));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery43));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery44));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery45));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery46));
+            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery47));
         }
     }
 }
