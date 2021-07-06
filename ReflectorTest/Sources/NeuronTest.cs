@@ -6294,7 +6294,7 @@ namespace ReflectorTest
         }
 
         #endregion //SelfTests
-        
+
         static void CheckNeuronMapValue(Neuron actual, IEnumerable<Processor> pcExpected)
         {
             Assert.AreNotEqual(null, actual);
@@ -6346,106 +6346,83 @@ namespace ReflectorTest
                 yield return ProcessorHandler.ChangeProcessorTag(pc[k], GetCleanTag(pc[k].Tag));
         }
 
-        static void NeuronTestSub(IEnumerable<Processor> pcActual, IEnumerable<(Processor, string)> pcRequest, IEnumerable<Processor> pcRequestProcessors)
+        static HashSet<char> GetHashSet(IEnumerable<(Processor, string)> q)
         {
-            Neuron parentNeuron = new Neuron(new ProcessorContainer(pcActual.ToArray()));
-            CheckNeuronMapValue(parentNeuron, pcActual);
-            CheckNeuronMapValue(parentNeuron.FindRelation(pcRequest), pcRequestProcessors);
-            CheckNeuronMapValue(parentNeuron, pcActual);
+            HashSet<char> chs = new HashSet<char>();
+            foreach ((Processor _, string query) in q)
+                foreach (char c in query)
+                    chs.Add(char.ToUpper(c));
+            return chs;
         }
 
-        static PropertyInfo GetResult(PropertyInfo prop)
+        static HashSet<char> GetHashSet(IEnumerable<Processor> procs)
+        {
+            HashSet<char> chs = new HashSet<char>();
+            foreach (Processor p in procs)
+                chs.Add(char.ToUpper(p.Tag[0]));
+            return chs;
+        }
+
+        static IEnumerable<Neuron> GetNeuron()
         {
             foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
-                if (p.Name.EndsWith("Result"))
-                    if (p.Name.StartsWith(prop.Name))
-                        return p;
-            return prop;
+                if (p.Name.StartsWith("Processors"))
+                {
+                    Processor[] processors = ((IEnumerable<Processor>)p.GetValue(null)).ToArray();
+                    Neuron neuron = new Neuron(new ProcessorContainer(processors));
+                    CheckNeuronMapValue(neuron, processors);
+                    yield return neuron;
+                }
+        }
+
+        static IEnumerable<IEnumerable<(Processor, string)>> GetCorrect(HashSet<char> hash)
+        {
+            foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
+                if (p.Name.StartsWith("Correct"))
+                {
+                    (Processor, string)[] array = ((IEnumerable<(Processor, string)>)p.GetValue(null)).ToArray();
+                    if (hash.SetEquals(GetHashSet(array)))
+                        yield return array;
+                }
+        }
+
+        static IEnumerable<Processor> GetResult(string name)
+        {
+            IEnumerable<Processor> Find(string n)
+            {
+                foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
+                    if (p.Name == n)
+                        return (IEnumerable<Processor>)p.GetValue(null);
+                return null;
+            }
+
+            IEnumerable<Processor> result = Find(name + "Result");
+            if (result == null)
+                return Find(name);
+            return result;
+        }
+
+        static IEnumerable<IEnumerable<(Processor, string)>> GetInCorrect()
+        {
+            foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
+                if (p.Name.StartsWith("InCorrect"))
+                    yield return (IEnumerable<(Processor, string)>)p.GetValue(null);
         }
 
         [TestMethod]
         public void NeuronTest0()
         {
-            foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
-            {
-                object pi = p.GetValue(null);
-                if (p.Name.StartsWith("Correct"))
+            Neuron[] neurons = GetNeuron().ToArray();
+            Processor[][] procs = neurons.Select(n => n.Processors).Select(s => s.ToArray()).ToArray();
+            Assert.AreEqual(neurons.Length, procs.Length);
+            for (int k = 0; k < 2; k++)
+                for (int j = 0; j < neurons.Length; j++)
                 {
-                    IEnumerable<(Processor, string)> ppi = (IEnumerable<(Processor, string)>) pi;
-                    PropertyInfo result = GetResult(p);
-                    //связать наборы с запросами, сделать это можно по буквам
+
+                    foreach (IEnumerable<(Processor, string)> q in GetInCorrect())
+                        Assert.AreEqual(null, neurons[j].FindRelation(q));
+                    CheckNeuronMapValue(neurons[j], procs[j]);
                 }
-
-                if (p.Name.StartsWith("InCorrect"))
-                {
-                    IEnumerable<(Processor, string)> ppi = (IEnumerable<(Processor, string)>) pi;
-                }
-            }
-
-            NeuronTestSub(Processors0, CorrectQuery0, GetProcessorsFromQuery(CorrectQuery0));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery1, GetProcessorsFromQuery(CorrectQuery1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery2));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery3, GetProcessorsFromQuery(CorrectQuery3));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery4, GetProcessorsFromQuery(CorrectQuery4));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery5, GetProcessorsFromQuery(CorrectQuery5));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery5_1, GetProcessorsFromQuery(CorrectQuery5_1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery6, GetProcessorsFromQuery(CorrectQuery6));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery6_1, GetProcessorsFromQuery(CorrectQuery6_1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery7, GetProcessorsFromQuery(CorrectQuery7));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery7_1, GetProcessorsFromQuery(CorrectQuery7_1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery8, GetProcessorsFromQuery(CorrectQuery8));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery8_1, GetProcessorsFromQuery(CorrectQuery8_1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery8_2, GetProcessorsFromQuery(CorrectQuery8_2));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery90, GetProcessorsFromQuery(CorrectQuery90));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery9_0, GetProcessorsFromQuery(CorrectQuery9_0));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery9_1, GetProcessorsFromQuery(CorrectQuery9_1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery9_1_1, GetProcessorsFromQuery(CorrectQuery9_1_1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery9_2, GetProcessorsFromQuery(CorrectQuery9_2));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery9_3, GetProcessorsFromQuery(CorrectQuery9_3));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery10_0, GetProcessorsFromQuery(CorrectQuery10_0));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery10_1, GetProcessorsFromQuery(CorrectQuery10_1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery10_1_1, GetProcessorsFromQuery(CorrectQuery10_1));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery10_2, GetProcessorsFromQuery(CorrectQuery10_2));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery10_3, GetProcessorsFromQuery(CorrectQuery10_3));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery11, GetProcessorsFromQuery(CorrectQuery11));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery12, GetProcessorsFromQuery(CorrectQuery12));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery13, GetProcessorsFromQuery(CorrectQuery13));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery14, CorrectQuery14Result);
-            NeuronTestSub(Processors1, Processors1, CorrectQuery15, GetProcessorsFromQuery(CorrectQuery15));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery16, GetProcessorsFromQuery(CorrectQuery16));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery17, GetProcessorsFromQuery(CorrectQuery17));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery18, GetProcessorsFromQuery(CorrectQuery18));
-            NeuronTestSub(Processors1, Processors1, CorrectQuery19, CorrectQuery19Result);
-            NeuronTestSub(Processors1, Processors1, CorrectQuery20, CorrectQuery20Result);
-            NeuronTestSub(Processors1, Processors1, CorrectQuery21, CorrectQuery21Result);
-            NeuronTestSub(Processors1, Processors1, CorrectQuery22, CorrectQuery22Result);
-            NeuronTestSub(Processors1, Processors1, CorrectQuery23, CorrectQuery23Result);
-            NeuronTestSub(Processors1, Processors1, CorrectQuery24, CorrectQuery24Result);
-            NeuronTestSub(Processors1, Processors1, CorrectQuery24, CorrectQuery46Result);
-
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery25));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery26));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery27));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery28));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery29));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery30));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery31));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery32));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery33));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery34));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery35));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery36));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery37));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery38));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery39));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery40));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery41));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery42));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery43));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery44));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery45));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery46));
-            NeuronTestSub(Processors2, Processors2, CorrectQuery2, GetProcessorsFromQuery(CorrectQuery47));
         }
     }
 }
