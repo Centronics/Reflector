@@ -42,7 +42,7 @@ namespace DynamicReflector
         {
             if (p is null)
                 throw new ArgumentNullException(nameof(p), $@"Функция {nameof(GetHash)}.");
-            return GetProcessorBytes(p).Aggregate(255, (currentValue, currentByte) => Table[(byte)(currentValue ^ currentByte)]);
+            return GetProcessorBytes(p).Aggregate(255, (currentValue, currentByte) => Table[unchecked((byte)(currentValue ^ currentByte))]);
         }
 
         /// <summary>

@@ -40,45 +40,45 @@ namespace ReflectorTest
                 yield return new Processor(sv, "5");
                 sv[0, 0] = new SignValue(7777);
                 yield return new Processor(sv, "F");
-                yield return new Processor(sv, "f");
+                yield return new Processor(sv, "f1");
                 sv[0, 0] = new SignValue(18888);
                 yield return new Processor(sv, "v");
                 sv[0, 0] = new SignValue(17777);
-                yield return new Processor(sv, "V");
+                yield return new Processor(sv, "V1");
                 sv[0, 0] = new SignValue(17777);
-                yield return new Processor(sv, "V");
+                yield return new Processor(sv, "V2");
                 sv[0, 0] = new SignValue(33535);
                 yield return new Processor(sv, "sE");
                 sv[0, 0] = new SignValue(36666);
-                yield return new Processor(sv, "Se");
+                yield return new Processor(sv, "Se1");
                 sv[0, 0] = new SignValue(90666);
                 yield return new Processor(sv, "za");
                 sv[0, 0] = new SignValue(67666);
-                yield return new Processor(sv, "Za");
+                yield return new Processor(sv, "Za1");
                 sv[0, 0] = new SignValue(67666);
-                yield return new Processor(sv, "ZA");
+                yield return new Processor(sv, "ZA2");
                 sv[0, 0] = new SignValue(67666);
                 yield return new Processor(sv, "ZAB");
                 sv[0, 0] = new SignValue(100000);
                 yield return new Processor(sv, "g");
                 sv[0, 0] = new SignValue(100000);
-                yield return new Processor(sv, "g");
+                yield return new Processor(sv, "g1");
                 sv[0, 0] = new SignValue(100001);
                 yield return new Processor(sv, "J");
                 sv[0, 0] = new SignValue(100001);
-                yield return new Processor(sv, "j");
+                yield return new Processor(sv, "j1");
                 sv[0, 0] = new SignValue(100002);
                 yield return new Processor(sv, "La");
                 sv[0, 0] = new SignValue(1000021);
-                yield return new Processor(sv, "lA");
+                yield return new Processor(sv, "lA1");
                 sv[0, 0] = new SignValue(103003);
                 yield return new Processor(sv, "M");
                 sv[0, 0] = new SignValue(103103);
-                yield return new Processor(sv, "m");
+                yield return new Processor(sv, "m1");
                 sv[0, 0] = new SignValue(100004);
                 yield return new Processor(sv, "p");
                 sv[0, 0] = new SignValue(100004);
-                yield return new Processor(sv, "p");
+                yield return new Processor(sv, "p1");
                 sv[0, 0] = new SignValue(100005);
                 yield return new Processor(sv, "t");
                 sv[0, 0] = new SignValue(100006);
@@ -6306,7 +6306,7 @@ namespace ReflectorTest
             foreach (Processor pExpected in pcExpected)
             {
                 Assert.AreNotEqual(null, pExpected);
-                Processor pActual = dicActual[pExpected.Tag];
+                Processor pActual = dicActual[pExpected.Tag];//пытается найти f1... не может, исправить
                 Assert.AreNotEqual(null, pActual);
                 dicActual.Remove(pExpected.Tag);
                 Assert.AreEqual(1, pActual.Height);
@@ -6319,7 +6319,7 @@ namespace ReflectorTest
             Assert.AreEqual(0, dicActual.Count);
         }
 
-        static IEnumerable<Processor> GetProcessorsFromQuery(IEnumerable<(Processor, string)> query)
+        /*static IEnumerable<Processor> GetProcessorsFromQuery(IEnumerable<(Processor, string)> query)
         {
             Assert.AreNotEqual(null, query);
 
@@ -6344,7 +6344,7 @@ namespace ReflectorTest
             ProcessorContainer pc = ph.Processors;
             for (int k = 0; k < pc.Count; k++)
                 yield return ProcessorHandler.ChangeProcessorTag(pc[k], GetCleanTag(pc[k].Tag));
-        }
+        }*/
 
         static HashSet<char> GetHashSet(IEnumerable<(Processor, string)> q)
         {
@@ -6355,10 +6355,10 @@ namespace ReflectorTest
             return chs;
         }
 
-        static HashSet<char> GetHashSet(IEnumerable<Processor> procs)
+        static HashSet<char> GetHashSet(Neuron neuron)
         {
             HashSet<char> chs = new HashSet<char>();
-            foreach (Processor p in procs)
+            foreach (Processor p in neuron.Processors)
                 chs.Add(char.ToUpper(p.Tag[0]));
             return chs;
         }
@@ -6375,31 +6375,21 @@ namespace ReflectorTest
                 }
         }
 
-        static IEnumerable<IEnumerable<(Processor, string)>> GetCorrect(HashSet<char> hash)
+        static IEnumerable<(IEnumerable<(Processor, string)>, string)> GetCorrect(HashSet<char> hash)
         {
             foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
                 if (p.Name.StartsWith("Correct"))
                 {
                     (Processor, string)[] array = ((IEnumerable<(Processor, string)>)p.GetValue(null)).ToArray();
                     if (hash.SetEquals(GetHashSet(array)))
-                        yield return array;
+                        yield return (array, p.Name);
                 }
         }
 
         static IEnumerable<Processor> GetResult(string name)
         {
-            IEnumerable<Processor> Find(string n)
-            {
-                foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
-                    if (p.Name == n)
-                        return (IEnumerable<Processor>)p.GetValue(null);
-                return null;
-            }
-
-            IEnumerable<Processor> result = Find(name + "Result");
-            if (result == null)
-                return Find(name);
-            return result;
+            IEnumerable<Processor> Find(string n) => (from p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties where p.Name == n select (IEnumerable<Processor>)p.GetValue(null)).FirstOrDefault();
+            return Find(name + "Result") ?? Find(name);
         }
 
         static IEnumerable<IEnumerable<(Processor, string)>> GetInCorrect()
@@ -6418,7 +6408,8 @@ namespace ReflectorTest
             for (int k = 0; k < 2; k++)
                 for (int j = 0; j < neurons.Length; j++)
                 {
-
+                    foreach ((IEnumerable<(Processor, string)> query, string name) in GetCorrect(GetHashSet(neurons[j])))
+                        CheckNeuronMapValue(neurons[j].FindRelation(query), GetResult(name));
                     foreach (IEnumerable<(Processor, string)> q in GetInCorrect())
                         Assert.AreEqual(null, neurons[j].FindRelation(q));
                     CheckNeuronMapValue(neurons[j], procs[j]);
