@@ -38,12 +38,7 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="p">Карта, для которой необходимо вычислить значение хеша.</param>
         /// <returns>Возвращает хеш заданной карты.</returns>
-        public static int GetHash(Processor p)
-        {
-            if (p is null)
-                throw new ArgumentNullException(nameof(p), $@"Функция {nameof(GetHash)}.");
-            return GetProcessorBytes(p).Aggregate(255, (currentValue, currentByte) => Table[unchecked((byte)(currentValue ^ currentByte))]);
-        }
+        public static int GetHash(Processor p) => GetProcessorBytes(p).Aggregate(255, (currentValue, currentByte) => Table[unchecked((byte)(currentValue ^ currentByte))]);
 
         /// <summary>
         ///     Представляет содержимое карты в виде последовательности байт. Поле <see cref="Processor.Tag" /> не учитывается.
@@ -57,11 +52,8 @@ namespace DynamicReflector
                 throw new ArgumentNullException(nameof(p), $"{nameof(GetProcessorBytes)}: Карта равна значению null.");
             for (int y = 0; y < p.Height; y++)
                 for (int x = 0; x < p.Width; x++)
-                {
-                    byte[] res = BitConverter.GetBytes(p[x, y].Value);
-                    foreach (byte r in res)
+                    foreach (byte r in BitConverter.GetBytes(p[x, y].Value))
                         yield return r;
-                }
         }
     }
 }

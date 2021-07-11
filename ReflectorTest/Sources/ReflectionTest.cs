@@ -1521,7 +1521,7 @@ namespace ReflectorTest
         [TestMethod]
         public void CheckSumTest1()
         {
-            const int hashSum = 1234;
+            const int hashSum = 45441;
 
             Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "a")));
             Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "A")));
