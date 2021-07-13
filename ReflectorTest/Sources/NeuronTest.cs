@@ -18,9 +18,9 @@ namespace ReflectorTest
         #region GetProcessors
 
         /// <summary>
-        /// Используется для теста, где используется одна и та же физическая карта <see cref="GlobalProcessorForNeuron"/> и <see cref="CorrectGlobalProcessorQuery"/>.
+        /// Используется для теста, где используется одна и та же физическая карта <see cref="ProcessorsForNeuronGlobal"/> и <see cref="CorrectGlobalProcessorQuery"/>.
         /// </summary>
-        static Processor _globalProcessor;
+        static Processor _globalProcessor0, _globalProcessor1;
 
         static IEnumerable<Processor> Processors0
         {
@@ -119,8 +119,9 @@ namespace ReflectorTest
             {
                 SignValue[,] sv = new SignValue[1, 1];
                 sv[0, 0] = new SignValue(5555);
-                yield return new Processor(sv, "k");
                 yield return new Processor(sv, "k1");
+                sv[0, 0] = new SignValue(7777);
+                yield return new Processor(sv, "k");
             }
         }
 
@@ -136,13 +137,14 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> GlobalProcessorForNeuron
+        static IEnumerable<Processor> ProcessorsForNeuronGlobal
         {
             get
             {
-                if (_globalProcessor == null)
+                SignValue[,] sv = new SignValue[3, 3];
+
+                if (_globalProcessor0 == null)
                 {
-                    SignValue[,] sv = new SignValue[3, 3];
                     sv[0, 0] = new SignValue(1111);
                     sv[1, 0] = new SignValue(2222);
                     sv[2, 0] = new SignValue(3333);
@@ -152,9 +154,26 @@ namespace ReflectorTest
                     sv[0, 2] = new SignValue(7777);
                     sv[1, 2] = new SignValue(8888);
                     sv[2, 2] = new SignValue(9999);
-                    _globalProcessor = new Processor(sv, "Global");
+                    _globalProcessor0 = new Processor(sv, "G");
                 }
-                yield return _globalProcessor;
+
+                yield return _globalProcessor0;
+
+                if (_globalProcessor1 == null)
+                {
+                    sv[0, 0] = new SignValue(1212);
+                    sv[1, 0] = new SignValue(2323);
+                    sv[2, 0] = new SignValue(3232);
+                    sv[0, 1] = new SignValue(4646);
+                    sv[1, 1] = new SignValue(5757);
+                    sv[2, 1] = new SignValue(6464);
+                    sv[0, 2] = new SignValue(7979);
+                    sv[1, 2] = new SignValue(8181);
+                    sv[2, 2] = new SignValue(9292);
+                    _globalProcessor1 = new Processor(sv, "H");
+                }
+
+                yield return _globalProcessor1;
             }
         }
 
@@ -201,34 +220,17 @@ namespace ReflectorTest
                     yield return (new Processor(svq, "p2"), "1");
                     svq[0, 0] = new SignValue(3444);
                     yield return (new Processor(svq, "p3"), "3");
+                    svq[0, 0] = new SignValue(5500);
+                    yield return (new Processor(svq, "p4"), "4");
+                    yield return (new Processor(svq, "p5"), "5");
+                    svq[0, 0] = new SignValue(6666);
+                    yield return (new Processor(svq, "p4"), "4");
+                    yield return (new Processor(svq, "p5"), "5");
                     svq[0, 0] = new SignValue(2333);
                     yield return (new Processor(svq, "p4"), "2");
                     yield return (new Processor(svq, "p41"), "2");
-                    svq[0, 0] = new SignValue(5000);
-                    yield return (new Processor(svq, "p5"), "Y");
-                    yield return (new Processor(svq, "p51"), "I");
-                    yield return (new Processor(svq, "p6"), "y");
-                    yield return (new Processor(svq, "p61"), "i");
-                    svq[0, 0] = new SignValue(5555);
-                    yield return (new Processor(svq, "p52"), "Y");
-                    svq[0, 0] = new SignValue(5666);
-                    yield return (new Processor(svq, "p53"), "I");
-                    svq[0, 0] = new SignValue(5444);
-                    yield return (new Processor(svq, "p52"), "Y");
-                    svq[0, 0] = new SignValue(5555);
-                    yield return (new Processor(svq, "p53"), "I");
-                    svq[0, 0] = new SignValue(5555);
-                    yield return (new Processor(svq, "p52"), "y");
-                    svq[0, 0] = new SignValue(5666);
-                    yield return (new Processor(svq, "p53"), "i");
-                    svq[0, 0] = new SignValue(5444);
-                    yield return (new Processor(svq, "p52"), "y");
-                    svq[0, 0] = new SignValue(5555);
-                    yield return (new Processor(svq, "p53"), "i");
                     svq[0, 0] = new SignValue(7000);
                     yield return (new Processor(svq, "p6"), "f");
-                    svq[0, 0] = new SignValue(13332);
-                    yield return (new Processor(svq, "p61"), "f");
                     svq[0, 0] = new SignValue(13333);
                     yield return (new Processor(svq, "p62"), "v");
                     yield return (new Processor(svq, "p62"), "V");
@@ -242,12 +244,6 @@ namespace ReflectorTest
                     yield return (new Processor(svq, "p72"), "V");
                     svq[0, 0] = new SignValue(25656);
                     yield return (new Processor(svq, "p73"), "v");
-                    svq[0, 0] = new SignValue(25657);
-                    yield return (new Processor(svq, "p74"), "s");
-                    svq[0, 0] = new SignValue(25657);
-                    yield return (new Processor(svq, "p75"), "S");
-                    svq[0, 0] = new SignValue(90688);
-                    yield return (new Processor(svq, "p8"), "s");
                     svq[0, 0] = new SignValue(32535);
                     yield return (new Processor(svq, "p80"), "s");
                     yield return (new Processor(svq, "p81"), "S");
@@ -257,9 +253,6 @@ namespace ReflectorTest
                     svq[0, 0] = new SignValue(35101);
                     yield return (new Processor(svq, "p84"), "S");
                     yield return (new Processor(svq, "p85"), "s");
-                    svq[0, 0] = new SignValue(63666);
-                    yield return (new Processor(svq, "p86"), "S");
-                    yield return (new Processor(svq, "p87"), "s");
                     svq[0, 0] = new SignValue(63667);
                     yield return (new Processor(svq, "p88"), "z");
                     yield return (new Processor(svq, "p89"), "Z");
@@ -288,9 +281,9 @@ namespace ReflectorTest
                     yield return (new Processor(svq, "pG5"), "l");
                     svq[0, 0] = new SignValue(1003021);
                     yield return (new Processor(svq, "pG6"), "L");
-                    svq[0, 0] = new SignValue(100003);
+                    svq[0, 0] = new SignValue(103003);
                     yield return (new Processor(svq, "pG"), "m");
-                    svq[0, 0] = new SignValue(100003);
+                    svq[0, 0] = new SignValue(103003);
                     yield return (new Processor(svq, "pG"), "M");
                     svq[0, 0] = new SignValue(100004);
                     yield return (new Processor(svq, "pG"), "p");
@@ -3059,9 +3052,10 @@ namespace ReflectorTest
         {
             get
             {
-                if (_globalProcessor == null)
-                    throw new Exception($"Сначала необходимо вызвать метод {nameof(GlobalProcessorForNeuron)}.");
-                yield return (_globalProcessor, "A");
+                if (_globalProcessor0 == null || _globalProcessor1 == null)
+                    throw new Exception($"Сначала необходимо вызвать метод {nameof(ProcessorsForNeuronGlobal)}.");
+                yield return (_globalProcessor0, "A");
+                yield return (_globalProcessor1, "B");
             }
         }
 
@@ -6306,13 +6300,26 @@ namespace ReflectorTest
             foreach (Processor pExpected in pcExpected)
             {
                 Assert.AreNotEqual(null, pExpected);
-                Processor pActual = dicActual[pExpected.Tag];//пытается найти f1... не может, исправить
+                Processor pActual = dicActual[pExpected.Tag];
                 Assert.AreNotEqual(null, pActual);
                 dicActual.Remove(pExpected.Tag);
-                Assert.AreEqual(1, pActual.Height);
-                Assert.AreEqual(1, pActual.Width);
-                Assert.AreEqual(1, pExpected.Height);
-                Assert.AreEqual(1, pExpected.Width);
+                Assert.AreEqual(pActual.Tag, pExpected.Tag);
+
+                if (pExpected.Tag != "G" && pExpected.Tag != "H")
+                {
+                    Assert.AreEqual(1, pActual.Height);
+                    Assert.AreEqual(1, pActual.Width);
+                    Assert.AreEqual(1, pExpected.Height);
+                    Assert.AreEqual(1, pExpected.Width);
+                }
+                else
+                {
+                    Assert.AreEqual(3, pActual.Height);
+                    Assert.AreEqual(3, pActual.Width);
+                    Assert.AreEqual(3, pExpected.Height);
+                    Assert.AreEqual(3, pExpected.Width);
+                }
+
                 Assert.AreEqual(pExpected[0, 0], pActual[0, 0]);
             }
 
@@ -6346,6 +6353,12 @@ namespace ReflectorTest
                 yield return ProcessorHandler.ChangeProcessorTag(pc[k], GetCleanTag(pc[k].Tag));
         }*/
 
+        static IEnumerable<Processor> ProcessorContainerToEnumerable(ProcessorContainer pc)
+        {
+            for (int k = 0; k < pc.Count; k++)
+                yield return pc[k];
+        }
+
         static HashSet<char> GetHashSet(IEnumerable<(Processor, string)> q)
         {
             HashSet<char> chs = new HashSet<char>();
@@ -6363,14 +6376,34 @@ namespace ReflectorTest
             return chs;
         }
 
-        static IEnumerable<Neuron> GetNeuron()
+        static IEnumerable<Neuron> GetNeurons()
         {
-            foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
-                if (p.Name.StartsWith("Processors"))
+            foreach (PropertyInfo pi in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
+                if (pi.Name.StartsWith("Processors"))
                 {
-                    Processor[] processors = ((IEnumerable<Processor>)p.GetValue(null)).ToArray();
-                    Neuron neuron = new Neuron(new ProcessorContainer(processors));
-                    CheckNeuronMapValue(neuron, processors);
+                    Processor[] processors = ((IEnumerable<Processor>)pi.GetValue(null)).ToArray();
+                    ProcessorContainer pc = new ProcessorContainer(processors);
+                    if (pi.Name.EndsWith("Exception"))
+                    {
+                        bool bex = false;
+                        try
+                        {
+                            Neuron unused = new Neuron(pc);
+                        }
+                        catch (ArgumentException)
+                        {
+                            bex = true;
+                        }
+
+                        Assert.AreEqual(true, bex);
+
+                        continue;
+                    }
+                    Neuron neuron = new Neuron(pc);
+                    ProcessorHandler ph = new ProcessorHandler();
+                    foreach (Processor p in processors)
+                        ph.Add(p);
+                    CheckNeuronMapValue(neuron, ProcessorContainerToEnumerable(ph.Processors));
                     yield return neuron;
                 }
         }
@@ -6378,9 +6411,12 @@ namespace ReflectorTest
         static IEnumerable<(IEnumerable<(Processor, string)>, string)> GetCorrect(HashSet<char> hash)
         {
             foreach (PropertyInfo p in typeof(NeuronTest).GetTypeInfo().DeclaredProperties)
-                if (p.Name.StartsWith("Correct"))
+                if (p.Name.StartsWith("Correct") && !p.Name.EndsWith("Result"))
                 {
                     (Processor, string)[] array = ((IEnumerable<(Processor, string)>)p.GetValue(null)).ToArray();
+
+                    HashSet<char> c = GetHashSet(array);
+
                     if (hash.SetEquals(GetHashSet(array)))
                         yield return (array, p.Name);
                 }
@@ -6402,7 +6438,7 @@ namespace ReflectorTest
         [TestMethod]
         public void NeuronTest0()
         {
-            Neuron[] neurons = GetNeuron().ToArray();
+            Neuron[] neurons = GetNeurons().ToArray();
             Processor[][] procs = neurons.Select(n => n.Processors).Select(s => s.ToArray()).ToArray();
             Assert.AreEqual(neurons.Length, procs.Length);
             for (int k = 0; k < 2; k++)
