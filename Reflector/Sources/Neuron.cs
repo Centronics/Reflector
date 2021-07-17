@@ -12,12 +12,21 @@ namespace DynamicReflector
     {
         readonly Reflex _workReflex;
         readonly HashSet<char> _hashSetOriginalUniqueQuery;
+        readonly Dictionary<char, Processor> _dicProcessors;
 
         public Neuron(ProcessorContainer pc)
         {
             ProcessorHandler ph = FromProcessorContainer(pc);
-            _workReflex = new Reflex(ph.Processors);
-            _hashSetOriginalUniqueQuery = new HashSet<char>(ph.ToString());
+            HashSet<char> chs = new HashSet<char>();
+            string phString = ph.ToString();
+            if (phString.Any(c => !chs.Add(c)))
+                throw new ArgumentException();
+            _dicProcessors = new Dictionary<char, Processor>(phString.Length);
+            ProcessorContainer phPc = ph.Processors;
+            for (int k = 0; k < phPc.Count; k++)
+                _dicProcessors.Add(phString[k], phPc[k]);
+            _workReflex = new Reflex(phPc);
+            _hashSetOriginalUniqueQuery = new HashSet<char>(phString);
         }
 
         static ProcessorHandler FromProcessorContainer(ProcessorContainer pc)
@@ -36,26 +45,43 @@ namespace DynamicReflector
         {
             HashSet<char> chs = new HashSet<char>();
             foreach (string q in query)
-                foreach (char c in q)
-                    chs.Add(char.ToUpper(c));
+            {
+                if (string.IsNullOrWhiteSpace(q))
+                    throw new ArgumentNullException();
+                if (q.Any(c => !chs.Add(char.ToUpper(c))))
+                    throw new ArgumentException();
+            }
+
             return chs;
         }
 
-        static IEnumerable<Processor> GetNewProcessors(Reflex start, Reflex finish)
+        IEnumerable<Processor> GetNewProcessors(Reflex start, Reflex finish, string query)
         {
-            if (start == null)
-                throw new ArgumentNullException();
             if (finish == null)
                 yield break;
+
+            Dictionary<char, Processor> dic = new Dictionary<char, Processor>();
             for (int k = start.Count; k < finish.Count; k++)
-                yield return finish[k];
+            {
+                Processor p = finish[k];
+                dic.Add(char.ToUpper(p.Tag[0]), p);
+            }
+
+            foreach (char c in query.Where(c => !dic.ContainsKey(char.ToUpper(c))))
+                dic.Add(c, _dicProcessors[c]);
+
+            foreach (Processor p in dic.Values)
+                yield return p;
         }
 
         public Neuron FindRelation(IEnumerable<(Processor, string query)> queryPairs)
         {
             if (queryPairs == null)
                 throw new ArgumentNullException();
-
+            //карты (обе стороны) должны совпадать по размерам
+            //запрос должен состоять только из одной буквы
+            //карты должны различаться по названиям и содержимому одновременно
+            //название карты должно быть из одной буквы
             IEnumerable<(Processor, string queryString)> queries = queryPairs as (Processor, string)[] ?? queryPairs.ToArray();
             if (!ToHashSet(queries.Select(q => q.queryString)).SetEquals(_hashSetOriginalUniqueQuery))
                 return null;
@@ -67,19 +93,20 @@ namespace DynamicReflector
 
             ProcessorHandler result = new ProcessorHandler();
 
-            Parallel.ForEach(queries, ((Processor processor, string query) q, ParallelLoopState state) =>
+            //Parallel.ForEach(queries, ((Processor processor, string query) q, ParallelLoopState state) =>
+            foreach ((Processor processor, string query) in queries)
             {
                 try
                 {
-                    if (state.IsStopped)
-                        return;
+                    //if (state.IsStopped)
+                    //  return;
 
-                    Reflex reflex = _workReflex.FindRelation(q.processor, q.query);
-                    if (reflex == null || state.IsStopped)
-                        return;
+                    Reflex reflex = _workReflex.FindRelation(processor, query);
+                    //if (reflex == null)// || state.IsStopped)
+                      //  continue;//return;
 
                     lock (lockObject)
-                        foreach (Processor p in GetNewProcessors(_workReflex, reflex))
+                        foreach (Processor p in GetNewProcessors(_workReflex, reflex, query))
                             result.Add(p);
                 }
                 catch (Exception ex)
@@ -88,7 +115,7 @@ namespace DynamicReflector
                     {
                         errString = ex.Message;
                         exThrown = true;
-                        state.Stop();
+                        //state.Stop();
                     }
                     catch (Exception ex1)
                     {
@@ -96,7 +123,7 @@ namespace DynamicReflector
                         exStopped = true;
                     }
                 }
-            });
+            }//);
 
             if (exThrown)
                 throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
