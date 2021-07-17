@@ -46,9 +46,9 @@ namespace ReflectorTest
                 sv[0, 0] = new SignValue(17777);
                 yield return new Processor(sv, "9");
                 sv[0, 0] = new SignValue(33535);
-                yield return new Processor(sv, "A");
+                yield return new Processor(sv, "A1");
                 sv[0, 0] = new SignValue(36666);
-                yield return new Processor(sv, "B");
+                yield return new Processor(sv, "B2");
                 sv[0, 0] = new SignValue(90666);
                 yield return new Processor(sv, "C");
                 sv[0, 0] = new SignValue(67666);
@@ -128,7 +128,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> Processors3Exception
+        static IEnumerable<Processor> Processors1Exception
         {
             get
             {
@@ -140,7 +140,7 @@ namespace ReflectorTest
             }
         }
 
-        static IEnumerable<Processor> Processors4Exception
+        static IEnumerable<Processor> Processors2Exception
         {
             get
             {
@@ -151,11 +151,72 @@ namespace ReflectorTest
             }
         }
 
+        static IEnumerable<Processor> Processors3Exception
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "k");
+                sv[0, 0] = new SignValue(7777);
+                yield return new Processor(sv, "k");
+            }
+        }
+
+        static IEnumerable<Processor> Processors4Exception
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "K");
+                sv[0, 0] = new SignValue(7777);
+                yield return new Processor(sv, "k");
+            }
+        }
+
+        static IEnumerable<Processor> Processors5Exception
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "K");
+                sv[0, 0] = new SignValue(7777);
+                yield return new Processor(sv, "K");
+            }
+        }
+
+        static IEnumerable<Processor> Processors6Exception
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "y");
+                yield return new Processor(sv, "Y1");
+            }
+        }
+
+        static IEnumerable<Processor> Processors7Exception
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "Y");
+                yield return new Processor(sv, "y1");
+            }
+        }
+
         static IEnumerable<Processor> Processors8Exception
         {
             get
             {
-                yield return new Processor(new SignValue[2, 2], "Exception8");
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "Y");
+                yield return new Processor(sv, "Y1");
             }
         }
 
@@ -163,7 +224,11 @@ namespace ReflectorTest
         {
             get
             {
-                yield return new Processor(new SignValue[1, 2], "Exception9");
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "k");
+                sv[0, 0] = new SignValue(7777);
+                yield return new Processor(sv, "K1");
             }
         }
 
@@ -171,7 +236,47 @@ namespace ReflectorTest
         {
             get
             {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "K");
+                sv[0, 0] = new SignValue(7777);
+                yield return new Processor(sv, "k1");
+            }
+        }
+
+        static IEnumerable<Processor> Processors11Exception
+        {
+            get
+            {
+                yield return new Processor(new SignValue[2, 2], "Exception8");
+            }
+        }
+
+        static IEnumerable<Processor> Processors12Exception
+        {
+            get
+            {
+                yield return new Processor(new SignValue[1, 2], "Exception9");
+            }
+        }
+
+        static IEnumerable<Processor> Processors13Exception
+        {
+            get
+            {
                 yield return new Processor(new SignValue[2, 1], "Exception10");
+            }
+        }
+
+        static IEnumerable<Processor> Processors14Exception
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[1, 1];
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "a");
+                sv[0, 0] = new SignValue(5555);
+                yield return new Processor(sv, "b");
             }
         }
 
