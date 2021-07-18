@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DynamicMosaic;
 using DynamicParser;
@@ -13,13 +15,23 @@ namespace DynamicReflector
         readonly Reflex _workReflex;
         readonly HashSet<char> _hashSetOriginalUniqueQuery = new HashSet<char>();
         readonly Dictionary<char, Processor> _dicProcessors;
+        readonly Size _mainSize;
 
         public Neuron(ProcessorContainer pc)
         {
             if (pc == null)
                 throw new ArgumentNullException();
-            Dictionary<int, Processor> chi = new Dictionary<int, Processor>(pc.Count);
+            if (pc.Count < 2)
+                throw new ArgumentException();
             _dicProcessors = new Dictionary<char, Processor>(pc.Count);
+            FillNeuron(pc);
+            _workReflex = new Reflex(pc);
+            _mainSize = new Size(pc.Width, pc.Height);
+        }
+
+        void FillNeuron(ProcessorContainer pc)
+        {
+            Dictionary<int, Processor> chi = new Dictionary<int, Processor>(pc.Count);
             for (int k = 0; k < pc.Count; k++)
             {
                 Processor p = pc[k];
@@ -27,12 +39,13 @@ namespace DynamicReflector
                 if (!_hashSetOriginalUniqueQuery.Add(cTag))
                     throw new ArgumentException();
                 int hash = HashCreator.GetHash(p);
-                if (chi.TryGetValue(hash, out Processor proc) && ProcessorCompare(proc, p))
+                if (!chi.TryGetValue(hash, out Processor proc))
+                    chi.Add(hash, p);
+                else
+                if (ProcessorCompare(proc, p))
                     throw new ArgumentException("Одинаковое содержимое карт недопустимо");
-                chi.Add(hash, p);
                 _dicProcessors.Add(cTag, p);
             }
-            _workReflex = new Reflex(pc);
         }
 
         /// <summary>
@@ -54,57 +67,56 @@ namespace DynamicReflector
             return true;
         }
 
-        static HashSet<char> ToHashSet(IEnumerable<string> query)
+        Processor GetNewProcessor(Reflex start, Reflex finish, char query)
         {
+            if (finish == null)
+                throw new Exception();
+            if (finish.Count > start.Count + 1)
+                throw new ArgumentException();
+
+            return finish.Count == start.Count + 1 ? finish[start.Count] : _dicProcessors[char.ToUpper(query)];
+        }
+
+        void CheckQuery(IEnumerable<(Processor processor, string queryString)> queries)
+        {
+            Dictionary<int, Processor> chi = new Dictionary<int, Processor>();
             HashSet<char> chs = new HashSet<char>();
-            foreach (string q in query)
+            foreach ((Processor p, string q) in queries)
             {
-                if (string.IsNullOrWhiteSpace(q))
+                if (p == null)
                     throw new ArgumentNullException();
+                if (string.IsNullOrWhiteSpace(q))
+                    throw new ArgumentException();
+                if (p.Size != _mainSize)
+                    throw new ArgumentException();
                 if (q.Length > 1)
                     throw new ArgumentException();
                 if (q.Any(c => !chs.Add(char.ToUpper(c))))
                     throw new ArgumentException();
+                int hash = HashCreator.GetHash(p);
+                if (!chi.TryGetValue(hash, out Processor proc))
+                    chi.Add(hash, p);
+                else
+                if (ProcessorCompare(proc, p))
+                    throw new ArgumentException("Одинаковое содержимое карт в запросе недопустимо");
             }
-
-            return chs;
-        }
-
-        IEnumerable<Processor> GetNewProcessors(Reflex start, Reflex finish, string query)
-        {
-            if (finish == null)
-                yield break;
-
-            Dictionary<char, Processor> dic = new Dictionary<char, Processor>();
-            for (int k = start.Count; k < finish.Count; k++)
-            {
-                Processor p = finish[k];
-                dic.Add(char.ToUpper(p.Tag[0]), p);
-            }
-
-            foreach (char c in query.Where(c => !dic.ContainsKey(char.ToUpper(c))))
-                dic.Add(c, _dicProcessors[c]);
-
-            foreach (Processor p in dic.Values)
-                yield return p;
+            if (!chs.SetEquals(_hashSetOriginalUniqueQuery))
+                throw new ArgumentException();
         }
 
         public Neuron FindRelation(IEnumerable<(Processor, string query)> queryPairs)
         {
             if (queryPairs == null)
                 throw new ArgumentNullException();
-            //карты (обе стороны) должны совпадать по размерам
-            //карты должны различаться по названиям и содержимому одновременно
             IEnumerable<(Processor, string queryString)> queries = queryPairs as (Processor, string)[] ?? queryPairs.ToArray();
-            if (!ToHashSet(queries.Select(q => q.queryString)).SetEquals(_hashSetOriginalUniqueQuery))
-                return null;
+            CheckQuery(queries);
 
             object lockObject = new object();
 
             string errString = string.Empty, errStopped = string.Empty;
             bool exThrown = false, exStopped = false;
 
-            ProcessorHandler result = new ProcessorHandler();
+            ProcessorContainer result = new ProcessorContainer();
 
             //Parallel.ForEach(queries, ((Processor processor, string query) q, ParallelLoopState state) =>
             foreach ((Processor processor, string query) in queries)
@@ -115,12 +127,11 @@ namespace DynamicReflector
                     //  return;
 
                     Reflex reflex = _workReflex.FindRelation(processor, query);
-                    //if (reflex == null)// || state.IsStopped)
+                    //if (state.IsStopped)
                     //  continue;//return;
 
                     lock (lockObject)
-                        foreach (Processor p in GetNewProcessors(_workReflex, reflex, query))
-                            result.Add(p);
+                        result.Add(GetNewProcessor(_workReflex, reflex, query[0]));
                 }
                 catch (Exception ex)
                 {
@@ -141,7 +152,7 @@ namespace DynamicReflector
             if (exThrown)
                 throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
 
-            return _hashSetOriginalUniqueQuery.SetEquals(result.ToString()) ? new Neuron(result.Processors) : null;
+            return new Neuron(result);
         }
 
         public IEnumerable<Processor> Processors
