@@ -26,7 +26,7 @@ namespace ReflectorTest
         {
             get
             {
-                SignValue[,] sv = new SignValue[1, 1];
+                SignValue[,] sv = new SignValue[1, 1];//слеоать тесты 2*2
                 sv[0, 0] = new SignValue(1111);
                 yield return new Processor(sv, "1");
                 sv[0, 0] = new SignValue(4555);
@@ -48,7 +48,7 @@ namespace ReflectorTest
                 sv[0, 0] = new SignValue(33535);
                 yield return new Processor(sv, "A1");
                 sv[0, 0] = new SignValue(36666);
-                yield return new Processor(sv, "B2");
+                yield return new Processor(sv, "b2");
                 sv[0, 0] = new SignValue(90666);
                 yield return new Processor(sv, "C");
                 sv[0, 0] = new SignValue(67666);
