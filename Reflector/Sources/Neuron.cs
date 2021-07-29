@@ -107,7 +107,7 @@ namespace DynamicReflector
             return ChangeProcessorTag(result, query.ToString());
         }
 
-        void CheckQuery(IEnumerable<(Processor processor, string queryString)> queries)
+        void CheckQuery(IEnumerable<(Processor, string queryString)> queries)
         {
             Dictionary<int, Processor> chi = new Dictionary<int, Processor>();
             HashSet<char> chs = new HashSet<char>();
@@ -140,7 +140,8 @@ namespace DynamicReflector
         {
             if (queryPairs == null)
                 throw new ArgumentNullException();
-            IEnumerable<(Processor, string queryString)> queries = queryPairs as (Processor, string)[] ?? queryPairs.ToArray();
+            (Processor, string queryString)[] queries = queryPairs as (Processor, string)[] ?? queryPairs.ToArray();
+
             CheckQuery(queries);
 
             object lockObject = new object();
@@ -150,20 +151,20 @@ namespace DynamicReflector
 
             ProcessorContainer result = new ProcessorContainer();
 
-            //Parallel.ForEach(queries, ((Processor processor, string query) q, ParallelLoopState state) =>
-            foreach ((Processor processor, string query) in queries)
+            //Parallel.ForEach(queries, ((Processor p, string q), ParallelLoopState state) =>
+            foreach ((Processor p, string q) in queries)
             {
                 try
                 {
                     //if (state.IsStopped)
                     //  return;
 
-                    Reflex reflex = _workReflex.FindRelation(processor, query);
+                    Reflex reflex = _workReflex.FindRelation(p, q);
                     //if (state.IsStopped)
                     //  continue;//return;
 
                     lock (lockObject)
-                        result.Add(GetNewProcessor(reflex, query[0]));
+                        result.Add(GetNewProcessor(reflex, q[0]));
                 }
                 catch (Exception ex)
                 {
