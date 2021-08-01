@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using DynamicParser;
 using DynamicProcessor;
 using DynamicReflector;
@@ -1145,7 +1146,7 @@ namespace ReflectorTest
 
         #endregion //Tests
 
-        static void CheckNeuronMapValue(Neuron actual, IEnumerable<Processor> pcExpected)
+        static void CheckNeuronValue(Neuron actual, IEnumerable<Processor> pcExpected)
         {
             Assert.AreNotEqual(null, actual);
             Assert.AreNotEqual(null, actual.Processors);
@@ -1226,125 +1227,155 @@ namespace ReflectorTest
                 yield return (new Processor(sv, "p4"), "4");
             }
 
-            IEnumerable<Processor> GetResult()
+            IEnumerable<(Processor, string)> GetProcessorsReverse()
             {
                 SignValue[,] sv = new SignValue[2, 2];
-                sv[0, 0] = new SignValue(3333);
-                yield return new Processor(sv, "1");
-                sv[0, 0] = new SignValue(2222);
-                yield return new Processor(sv, "2");
-                sv[0, 0] = new SignValue(1111);
-                yield return new Processor(sv, "3");
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "pr1"), "1");
+                sv[0, 0] = new SignValue(2227);
+                yield return (new Processor(sv, "pr2"), "2");
+                sv[0, 0] = new SignValue(1116);
+                yield return (new Processor(sv, "pr3"), "3");
                 sv[0, 0] = new SignValue();
-                sv[0, 1] = new SignValue(1111);
-                yield return new Processor(sv, "4");
+                sv[0, 1] = new SignValue(1116);
+                yield return (new Processor(sv, "pr4"), "3");
             }
 
             Neuron mainNeuron = new Neuron(new ProcessorContainer(GetProcessors().ToArray()));
             Neuron parentNeuron = mainNeuron.FindRelation(GetCorrectQuery());
-            Neuron[] derivedNeurons = new Neuron[2];
 
-            void CheckDerivedNeurons(int maxPosition)
+            List<Thread> thrs = new List<Thread>(200);
+            for (int thrIndex = 0; thrIndex < 200; thrIndex++)
             {
-                for (int k = 0; k <= maxPosition; k++)
-                    CheckNeuronMapValue(derivedNeurons[k], CorrectQuery0Result);
+                Thread thread = new Thread(() =>
+                    {
+                        List<Neuron> derivedNeurons1 = new List<Neuron>(1000000);
+                        List<Neuron> derivedNeurons2 = new List<Neuron>(1000000);
+                        List<Neuron> derivedNeuronsMain = new List<Neuron>(1000000);
+
+                        for (int k = 0; k < 1000000; k++)
+                        {
+                            void CheckCurrentState()
+                            {
+                                CheckNeuronValue(mainNeuron, GetProcessors());
+                                CheckNeuronValue(parentNeuron, Processors0);
+
+                                CheckNeuronValue(mainNeuron.FindRelation(GetCorrectQuery()), Processors0);
+                                CheckNeuronValue(parentNeuron.FindRelation(CorrectQuery0), CorrectQuery0Result);
+                                CheckNeuronValue(parentNeuron.FindRelation(GetProcessorsReverse()), GetProcessors());
+
+                                foreach (Neuron derivedNeuron in derivedNeuronsMain)
+                                    CheckNeuronValue(derivedNeuron, Processors0);
+
+                                foreach (Neuron derivedNeuron in derivedNeurons1)
+                                    CheckNeuronValue(derivedNeuron, CorrectQuery0Result);
+
+                                foreach (Neuron derivedNeuron in derivedNeurons2)
+                                    CheckNeuronValue(derivedNeuron, GetProcessors());
+                            }
+
+                            derivedNeuronsMain.Add(mainNeuron.FindRelation(GetCorrectQuery()));
+                            CheckCurrentState();
+                            derivedNeurons1.Add(parentNeuron.FindRelation(CorrectQuery0));
+                            CheckCurrentState();
+                            derivedNeurons2.Add(parentNeuron.FindRelation(GetProcessorsReverse()));
+                            CheckCurrentState();
+
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery0));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery1));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery2));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery3));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery4));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery5));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery6));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery7));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery8));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery9));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery10));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery11));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery12));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery13));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery14));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery15));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery16));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery17));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery18));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery19));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery20));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery21));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery22));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery23));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery24));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery25));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery26));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery27));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery28));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery29));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery30));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery31));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery32));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery33));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery34));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery35));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery36));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery37));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery38));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery39));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery40));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery41));
+                            CheckCurrentState();
+                            CheckException(() => parentNeuron.FindRelation(IncorrectQuery42));
+                            CheckCurrentState();
+                        }
+                    })
+                { IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = $"Number: {thrIndex}" };
+                thread.Start();
+                thrs.Add(thread);
             }
 
-            for (int k = 0; k < 2; k++)
-            {
-                derivedNeurons[k] = parentNeuron.FindRelation(CorrectQuery0);
-                CheckNeuronMapValue(mainNeuron, GetResult());//TODO: разместить везде
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckDerivedNeurons(k);
-
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery0));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckDerivedNeurons(k);//TODO: разместить везде
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery1));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery2));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery3));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery4));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery5));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery6));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery7));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery8));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery9));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery10));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery11));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery12));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery13));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery14));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery15));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery16));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery17));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery18));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery19));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery20));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery21));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery22));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery23));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery24));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery25));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery26));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery27));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery28));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery29));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery30));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery31));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery32));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery33));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery34));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery35));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery36));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery37));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery38));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery39));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery40));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery41));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-                CheckException(() => parentNeuron.FindRelation(IncorrectQuery42));
-                CheckNeuronMapValue(parentNeuron, Processors0);
-            }
+            foreach (Thread t in thrs)
+                t.Join();
         }
 
         [TestMethod]
@@ -1354,8 +1385,8 @@ namespace ReflectorTest
 
             for (int k = 0; k < 2; k++)
             {
-                CheckNeuronMapValue(neuron.FindRelation(CorrectQuery1), CorrectQuery1Result);
-                CheckNeuronMapValue(neuron, Processors1);
+                CheckNeuronValue(neuron.FindRelation(CorrectQuery1), CorrectQuery1Result);
+                CheckNeuronValue(neuron, Processors1);
             }
         }
 
@@ -1366,8 +1397,8 @@ namespace ReflectorTest
 
             for (int k = 0; k < 2; k++)
             {
-                CheckNeuronMapValue(neuron.FindRelation(CorrectQuery2), CorrectQuery2Result);
-                CheckNeuronMapValue(neuron, Processors1);
+                CheckNeuronValue(neuron.FindRelation(CorrectQuery2), CorrectQuery2Result);
+                CheckNeuronValue(neuron, Processors1);
             }
         }
 
@@ -1378,8 +1409,8 @@ namespace ReflectorTest
 
             for (int k = 0; k < 2; k++)
             {
-                CheckNeuronMapValue(neuron.FindRelation(CorrectGlobalProcessorQuery), CorrectGlobalProcessorQueryResult);
-                CheckNeuronMapValue(neuron, ProcessorsForNeuronGlobal);
+                CheckNeuronValue(neuron.FindRelation(CorrectGlobalProcessorQuery), CorrectGlobalProcessorQueryResult);
+                CheckNeuronValue(neuron, ProcessorsForNeuronGlobal);
             }
         }
 
@@ -1476,149 +1507,3 @@ namespace ReflectorTest
         public void NeuronTestException22() => new Neuron(new ProcessorContainer(new Processor(new[] { SignValue.MaxValue }, "t")));
     }
 }
-
-/*[TestMethod]
-        public void ReflexMultiThreadTest
-        {get{
-            SignValue[,] minmap1 = new SignValue[1, 1];
-            minmap1[0, 0] = new SignValue(1000);
-            Processor p1 = new Processor(minmap1, "minmap1");
-
-            SignValue[,] minmap6 = new SignValue[1, 1];
-            minmap6[0, 0] = new SignValue(600);
-            Processor p6 = new Processor(minmap6, "minmap6");
-
-            SignValue[,] mapA = new SignValue[1, 1];
-            mapA[0, 0] = new SignValue(3000);
-            Processor pA = new Processor(mapA, "A");
-
-            SignValue[,] mapB = new SignValue[1, 1];
-            mapB[0, 0] = new SignValue(1500);
-            Processor pB = new Processor(mapB, "B");
-
-            SignValue[,] mapC = new SignValue[1, 1];
-            mapC[0, 0] = new SignValue(500);
-            Processor pC = new Processor(mapC, "C");
-            Processor pCClone = new Processor(mapC, "D");
-
-            void MapVerify(Reflex pr, int needCount)
-            {get{
-                Assert.AreNotEqual(null, pr);
-                Assert.AreEqual(needCount, pr.Count);
-                Assert.AreEqual((object)pr[0], pA);
-                Assert.AreEqual((object)pr[1], pB);
-                Assert.AreEqual((object)pr[2], pC);
-                Assert.AreEqual((object)pr[3], pCClone);
-            }}
-
-            void TestExReflex(Reflex r, params int[] pars)
-            {get{
-                Assert.AreNotEqual(null, r);
-
-                int exCount = 0;
-
-                foreach (int k in pars)
-                    try
-                    {get{
-                        Processor unused = r[k];
-                    }}
-                    catch (ArgumentException)
-                    {get{
-                        exCount++;
-                    }}
-
-                Assert.AreEqual(exCount, pars.Length);
-            }}
-
-            Reflex re = new Reflex(new ProcessorContainer(pA, pB, pC, pCClone));
-            const int steps = 200;
-            Thread[] thrs = new Thread[steps];
-
-            for (int k = 0; k < steps; k++)
-            {get{
-                Thread t = new Thread(obj =>
-                {get{
-                    for (int k1 = 0; k1 < 300; k1++)
-                    {get{
-                        Reflex reflex = (Reflex)obj;
-                        Reflex rZ6 = reflex.FindRelation(p6, "D");
-                        Assert.AreNotEqual(null, rZ6);
-                        MapVerify(reflex, 4);
-                        MapVerify(rZ6, 5);
-                        Assert.AreNotEqual((object)rZ6[4], p6);
-                        Assert.AreEqual(true, ProcessorCompare(rZ6[4], p6));
-                        Assert.AreEqual("D0", rZ6[4].Tag);
-
-                        TestExReflex(rZ6, 5, 6, -1, -2);
-                        TestExReflex(reflex, 4, 5, -1, -2);
-
-                        Reflex rC = reflex.FindRelation(p1, "C");
-                        Assert.AreNotEqual(null, rC);
-                        MapVerify(reflex, 4);
-                        MapVerify(rC, 5);
-                        Assert.AreNotEqual((object)rC[4], p1);
-                        Assert.AreEqual(true, ProcessorCompare(rC[4], p1));
-                        Assert.AreEqual("C0", rC[4].Tag);
-
-                        TestExReflex(rC, 5, 6, -1, -2);
-                        TestExReflex(rZ6, 5, 6, -1, -2);
-                        TestExReflex(reflex, 4, 5, -1, -2);
-
-                        Reflex rB = reflex.FindRelation(p1, "B");
-                        Assert.AreNotEqual(null, rB);
-                        MapVerify(reflex, 4);
-                        MapVerify(rB, 5);
-                        Assert.AreNotEqual((object)rB[4], p1);
-                        Assert.AreEqual(true, ProcessorCompare(rB[4], p1));
-                        Assert.AreEqual("B0", rB[4].Tag);
-
-                        TestExReflex(rB, 5, 6, -1, -2);
-                        TestExReflex(reflex, 4, 5, -1, -2);
-                        TestExReflex(rC, 5, 6, -1, -2);
-                        TestExReflex(rZ6, 5, 6, -1, -2);
-                    }}
-                }})
-                {get{ IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = $"Number: {get{k}}" }};
-                t.Start(re);
-                thrs[k] = t;
-            }}
-
-            for (int k = 0; k < steps; k++)
-                thrs[k].Join;
-
-public SearchResults[] GetEqual(IList<ProcessorContainer> processors)
-        {get{
-            if (processors == null)
-                throw new ArgumentNullException(nameof(processors),
-                    $@"{get{nameof(GetEqual)}}: Массив искомых карт не указан.");
-            if (processors.Count <= 0)
-                throw new ArgumentException($@"{get{nameof(GetEqual)}}: Массив искомых карт пустой.", nameof(processors));
-            SearchResults[] sr = new SearchResults[processors.Count];
-            string errString = string.Empty, errStopped = string.Empty;
-            bool exThrown = false, exStopped = false;
-            Parallel.For(0, processors.Count, (k, state) =>
-            {get{
-                try
-                {get{
-                    sr[k] = GetEqual(processors[k]);
-                }}
-                catch (Exception ex)
-                {get{
-                    try
-                    {get{
-                        errString = ex.Message;
-                        exThrown = true;
-                        state.Stop;
-                    }}
-                    catch (Exception ex1)
-                    {get{
-                        errStopped = ex1.Message;
-                        exStopped = true;
-                    }}
-                }}
-            }});
-            if (exThrown)
-                throw new Exception(exStopped ? $@"{get{errString}}{get{Environment.NewLine}}{get{errStopped}}" : errString);
-            return sr;
-        }}
-        }}*/
