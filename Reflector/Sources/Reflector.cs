@@ -72,10 +72,15 @@ namespace DynamicReflector
         /// </summary>
         public virtual int ProcessorHeight => _processorContainers.GetLength(1) * MapHeight;
 
+        /// <summary>
+        /// Создаёт полную копию заданного контейнера.
+        /// </summary>
+        /// <param name="pc">Копируемый контейнер.</param>
+        /// <returns>Возвращает полную копию заданного контейнера.</returns>
         static ProcessorContainer CopyContainer(ProcessorContainer pc)
         {
             if (pc == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(pc), "Копируемый контейнер не может быть null.");
             ProcessorContainer copy = new ProcessorContainer(pc[0]);
             for (int k = 1; k < pc.Count; k++)
                 copy.Add(pc[k]);
@@ -184,7 +189,7 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="processors">Карты, которые необходимо объединить.</param>
         /// <returns>Возвращает итоговую карту в виде массива <see cref="SignValue" />.</returns>
-        protected SignValue[,] MapCreator(Processor[,] processors)
+        protected SignValue[,] CreateMap(Processor[,] processors)
         {
             int mx = ProcessorWidth, my = ProcessorHeight;
             SignValue[,] sv = new SignValue[mx, my];
@@ -289,9 +294,16 @@ namespace DynamicReflector
             for (int y = 0; y < my; y++)
                 for (int x = 0; x < mx; x++)
                     processors[x, y] = GetMapByName(matrix[x, y]);
-            return new Processor(MapCreator(processors), proc.Tag);
+            return new Processor(CreateMap(processors), proc.Tag);
         }
 
+        /// <summary>
+        /// Исследует указанную карту по частям, применяя к ней указанный запрос.
+        /// Если в каком-либо запросе происходит ошибка его выполнения, процесс завершается с результатом <see langword="false"/>.
+        /// </summary>
+        /// <param name="proc">Карта, которую требуется исследовать.</param>
+        /// <param name="matrix">Названия карт, которые требуется найти на указанной карте.</param>
+        /// <returns>В случае успешного выполнения запроса возвращается значение <see langword="true"/>, в противном случае - <see langword="false"/>.</returns>
         bool ResearchByPieces(Processor proc, char[,] matrix)
         {
             string lastErrorText = null;
@@ -299,6 +311,8 @@ namespace DynamicReflector
             {
                 try
                 {
+                    if (state.IsStopped)
+                        return;
                     int mx = _processorContainers.GetLength(0);
                     int x = k % mx, y = k / mx;
                     SignValue[,] mapPiece = GetMapPiece(proc, x * MapWidth, y * MapHeight);
