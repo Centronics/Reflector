@@ -306,13 +306,11 @@ namespace DynamicReflector
         /// <returns>В случае успешного выполнения запроса возвращается значение <see langword="true"/>, в противном случае - <see langword="false"/>.</returns>
         bool ResearchByPieces(Processor proc, char[,] matrix)
         {
-            string lastErrorText = null;
+            Exception exThrown = null;
             ParallelLoopResult result = Parallel.For(0, _processorContainers.Length, (k, state) =>
             {
                 try
                 {
-                    if (state.IsStopped)
-                        return;
                     int mx = _processorContainers.GetLength(0);
                     int x = k % mx, y = k / mx;
                     SignValue[,] mapPiece = GetMapPiece(proc, x * MapWidth, y * MapHeight);
@@ -330,12 +328,12 @@ namespace DynamicReflector
                 catch (Exception ex)
                 {
                     state.Stop();
-                    lastErrorText = ex.Message;
+                    exThrown = ex;
                 }
             });
 
-            if (lastErrorText != null)
-                throw new Exception(lastErrorText);
+            if (exThrown != null)
+                throw exThrown;
 
             return result.IsCompleted;
         }

@@ -210,10 +210,7 @@ namespace DynamicReflector
 
             CheckQuery(queries);
 
-            object lockObject = new object(), intLockObject = new object();
-
-            string errString = string.Empty, errStopped = string.Empty;
-            bool exThrown = false, exStopped = false;
+            Exception exThrown = null;
 
             ProcessorContainer result = new ProcessorContainer();
 
@@ -222,51 +219,25 @@ namespace DynamicReflector
             {
                 try
                 {
-                    //if (state.IsStopped)
-                    //  return;
-
                     Reflex finish = _workReflex.FindRelation(p, q);
                     //if (state.IsStopped)
                     //return;
 
                     if (finish == null)
-                    {
-                        lock (intLockObject)
-                        {
-                            errString = "При выполнении запроса проиошла ошибка - результат отсутствует.";
-                            exThrown = true;
-                            //state.Stop();
-                            break; //return;
-                        }
-                    }
+                        throw new Exception("При выполнении запроса проиошла ошибка - результат отсутствует.");
 
-                    lock (lockObject)
+                    lock (result)
                         result.Add(GetNewProcessor(finish, q[0]));
                 }
                 catch (Exception ex)
                 {
-                    try
-                    {
-                        lock (intLockObject)
-                        {
-                            errString = ex.Message;
-                            exThrown = true;
-                            //state.Stop();
-                        }
-                    }
-                    catch (Exception ex1)
-                    {
-                        lock (intLockObject)
-                        {
-                            errStopped = ex1.Message;
-                            exStopped = true;
-                        }
-                    }
+                    exThrown = ex;
+                    //state.Stop();
                 }
             }//);
 
-            if (exThrown)
-                throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
+            if (exThrown != null)
+                throw exThrown;
 
             return new Neuron(result);
         }

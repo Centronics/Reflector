@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ReflectorExample
+namespace ReflectorExample.Sources
 {
     static class Program
     {

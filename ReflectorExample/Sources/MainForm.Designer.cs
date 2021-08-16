@@ -1,4 +1,4 @@
-﻿namespace ReflectorExample
+﻿namespace ReflectorExample.Sources
 {
     partial class FrmMain
     {
@@ -188,8 +188,8 @@
             this.picReflection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.picReflection.TabIndex = 0;
             this.picReflection.TabStop = false;
-            this.picReflection.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picReflection_MouseMoveDown);
-            this.picReflection.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picReflection_MouseMoveDown);
+            this.picReflection.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PicReflection_MouseMoveDown);
+            this.picReflection.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PicReflection_MouseMoveDown);
             // 
             // grpSource
             // 
@@ -309,8 +309,8 @@
             this.txt22.TabIndex = 51;
             this.txt22.Text = "I";
             this.txt22.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt22.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt22.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt22.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt22.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // txt12
             // 
@@ -321,8 +321,8 @@
             this.txt12.TabIndex = 50;
             this.txt12.Text = "H";
             this.txt12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt12.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt12.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt12.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt12.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // txt02
             // 
@@ -333,8 +333,8 @@
             this.txt02.TabIndex = 49;
             this.txt02.Text = "G";
             this.txt02.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt02.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt02.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt02.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt02.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // txt00
             // 
@@ -345,8 +345,8 @@
             this.txt00.TabIndex = 43;
             this.txt00.Text = "A";
             this.txt00.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt00.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt00.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt00.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt00.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // txt21
             // 
@@ -357,8 +357,8 @@
             this.txt21.TabIndex = 48;
             this.txt21.Text = "F";
             this.txt21.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt21.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt21.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt21.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt21.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // lblXY00
             // 
@@ -378,8 +378,8 @@
             this.txt10.TabIndex = 44;
             this.txt10.Text = "B";
             this.txt10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt10.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt10.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt10.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt10.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // txt11
             // 
@@ -390,8 +390,8 @@
             this.txt11.TabIndex = 47;
             this.txt11.Text = "E";
             this.txt11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt11.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt11.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // txt20
             // 
@@ -402,8 +402,8 @@
             this.txt20.TabIndex = 45;
             this.txt20.Text = "C";
             this.txt20.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt20.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt20.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt20.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt20.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // txt01
             // 
@@ -414,8 +414,8 @@
             this.txt01.TabIndex = 46;
             this.txt01.Text = "D";
             this.txt01.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txt01.TextChanged += new System.EventHandler(this.txt_TextChanged);
-            this.txt01.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_KeyPress);
+            this.txt01.TextChanged += new System.EventHandler(this.Txt_TextChanged);
+            this.txt01.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_KeyPress);
             // 
             // picResult
             // 
@@ -449,7 +449,7 @@
             this.btnClear00.TabIndex = 28;
             this.btnClear00.Text = "X";
             this.btnClear00.UseVisualStyleBackColor = true;
-            this.btnClear00.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear00.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext00
             // 
@@ -525,7 +525,7 @@
             this.btnClear11.TabIndex = 76;
             this.btnClear11.Text = "X";
             this.btnClear11.UseVisualStyleBackColor = true;
-            this.btnClear11.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear11.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext11
             // 
@@ -601,7 +601,7 @@
             this.btnClear10.TabIndex = 29;
             this.btnClear10.Text = "X";
             this.btnClear10.UseVisualStyleBackColor = true;
-            this.btnClear10.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear10.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext10
             // 
@@ -677,7 +677,7 @@
             this.btnClear20.TabIndex = 30;
             this.btnClear20.Text = "X";
             this.btnClear20.UseVisualStyleBackColor = true;
-            this.btnClear20.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear20.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext20
             // 
@@ -753,7 +753,7 @@
             this.btnClear21.TabIndex = 77;
             this.btnClear21.Text = "X";
             this.btnClear21.UseVisualStyleBackColor = true;
-            this.btnClear21.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear21.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext21
             // 
@@ -829,7 +829,7 @@
             this.btnClear12.TabIndex = 79;
             this.btnClear12.Text = "X";
             this.btnClear12.UseVisualStyleBackColor = true;
-            this.btnClear12.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear12.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext12
             // 
@@ -905,7 +905,7 @@
             this.btnClear02.TabIndex = 78;
             this.btnClear02.Text = "X";
             this.btnClear02.UseVisualStyleBackColor = true;
-            this.btnClear02.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear02.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext02
             // 
@@ -981,7 +981,7 @@
             this.btnClear01.TabIndex = 75;
             this.btnClear01.Text = "X";
             this.btnClear01.UseVisualStyleBackColor = true;
-            this.btnClear01.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear01.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext01
             // 
@@ -1057,7 +1057,7 @@
             this.btnClear22.TabIndex = 80;
             this.btnClear22.Text = "X";
             this.btnClear22.UseVisualStyleBackColor = true;
-            this.btnClear22.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear22.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // btnNext22
             // 
@@ -1132,7 +1132,7 @@
             this.btnSaveResultImage.TabIndex = 57;
             this.btnSaveResultImage.Text = "Сохранить";
             this.btnSaveResultImage.UseVisualStyleBackColor = true;
-            this.btnSaveResultImage.Click += new System.EventHandler(this.btnSaveResultImage_Click);
+            this.btnSaveResultImage.Click += new System.EventHandler(this.BtnSaveResultImage_Click);
             // 
             // btnNextResult
             // 
@@ -1143,7 +1143,7 @@
             this.btnNextResult.TabIndex = 58;
             this.btnNextResult.Text = "Следующее";
             this.btnNextResult.UseVisualStyleBackColor = true;
-            this.btnNextResult.Click += new System.EventHandler(this.btnNextResult_Click);
+            this.btnNextResult.Click += new System.EventHandler(this.BtnNextResult_Click);
             // 
             // btnPrevResult
             // 
@@ -1154,7 +1154,7 @@
             this.btnPrevResult.TabIndex = 56;
             this.btnPrevResult.Text = "Предыдущее";
             this.btnPrevResult.UseVisualStyleBackColor = true;
-            this.btnPrevResult.Click += new System.EventHandler(this.btnPrevResult_Click);
+            this.btnPrevResult.Click += new System.EventHandler(this.BtnPrevResult_Click);
             // 
             // grpReflectorNeuron
             // 
@@ -1287,7 +1287,7 @@
             this.chkAnyNames.TabIndex = 71;
             this.chkAnyNames.Text = "Названия карт любой длины";
             this.chkAnyNames.UseVisualStyleBackColor = true;
-            this.chkAnyNames.CheckedChanged += new System.EventHandler(this.chkAnyNames_CheckedChanged);
+            this.chkAnyNames.CheckedChanged += new System.EventHandler(this.ChkAnyNames_CheckedChanged);
             // 
             // btnReflector
             // 
@@ -1297,7 +1297,7 @@
             this.btnReflector.TabIndex = 52;
             this.btnReflector.Text = "Распознать";
             this.btnReflector.UseVisualStyleBackColor = true;
-            this.btnReflector.Click += new System.EventHandler(this.btnReflector_Click);
+            this.btnReflector.Click += new System.EventHandler(this.BtnReflector_Click);
             // 
             // txtReflectorProcessorHeight
             // 
@@ -1388,7 +1388,7 @@
             this.btnReflectionAdd.TabIndex = 2;
             this.btnReflectionAdd.Text = "Добавить изображение";
             this.btnReflectionAdd.UseVisualStyleBackColor = true;
-            this.btnReflectionAdd.Click += new System.EventHandler(this.btnReflectionAdd_Click);
+            this.btnReflectionAdd.Click += new System.EventHandler(this.BtnReflectionAdd_Click);
             // 
             // btnImageSave
             // 
@@ -1398,7 +1398,7 @@
             this.btnImageSave.TabIndex = 1;
             this.btnImageSave.Text = "Сохранить";
             this.btnImageSave.UseVisualStyleBackColor = true;
-            this.btnImageSave.Click += new System.EventHandler(this.btnImageSave_Click);
+            this.btnImageSave.Click += new System.EventHandler(this.BtnImageSave_Click);
             // 
             // btnImageLoad
             // 
@@ -1408,7 +1408,7 @@
             this.btnImageLoad.TabIndex = 0;
             this.btnImageLoad.Text = "Загрузить";
             this.btnImageLoad.UseVisualStyleBackColor = true;
-            this.btnImageLoad.Click += new System.EventHandler(this.btnImageLoad_Click);
+            this.btnImageLoad.Click += new System.EventHandler(this.BtnImageLoad_Click);
             // 
             // btnReflection
             // 
@@ -1418,7 +1418,7 @@
             this.btnReflection.TabIndex = 53;
             this.btnReflection.Text = "Распознать";
             this.btnReflection.UseVisualStyleBackColor = true;
-            this.btnReflection.Click += new System.EventHandler(this.btnReflection_Click);
+            this.btnReflection.Click += new System.EventHandler(this.BtnReflection_Click);
             // 
             // OpenFile
             // 
@@ -1470,7 +1470,7 @@
             this.btnClearReflection.TabIndex = 75;
             this.btnClearReflection.Text = "Очистить";
             this.btnClearReflection.UseVisualStyleBackColor = true;
-            this.btnClearReflection.Click += new System.EventHandler(this.btnClearReflection_Click);
+            this.btnClearReflection.Click += new System.EventHandler(this.BtnClearReflection_Click);
             // 
             // FrmMain
             // 

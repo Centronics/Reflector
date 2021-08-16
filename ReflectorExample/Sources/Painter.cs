@@ -8,9 +8,9 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using DynamicParser;
 
-namespace ReflectorExample
+namespace ReflectorExample.Sources
 {
-    sealed class Painter
+    internal sealed class Painter
     {
         readonly Pen _blackPen = new Pen(Color.Black, 1.0f);
         readonly PictureBox _pb;
@@ -20,9 +20,7 @@ namespace ReflectorExample
 
         public Painter(PictureBox pic)
         {
-            if (pic == null)
-                throw new ArgumentNullException(nameof(pic), $@"{nameof(PictureBox)} отсутствует (null).");
-            _pb = pic;
+            _pb = pic ?? throw new ArgumentNullException(nameof(pic), $@"{nameof(PictureBox)} отсутствует (null).");
             CurrentBitmap = new Bitmap(pic.Width, pic.Height);
             Clear();
         }
@@ -44,25 +42,21 @@ namespace ReflectorExample
                     throw new ArgumentNullException(nameof(value), @"Карта равна null.");
                 Bitmap btm = new Bitmap(value.Width, value.Height);
                 for (int y = 0; y < value.Height; y++)
-                for (int x = 0; x < value.Width; x++)
-                    btm.SetPixel(x, y, value[x, y].ValueColor);
+                    for (int x = 0; x < value.Width; x++)
+                        btm.SetPixel(x, y, value[x, y].ValueColor);
                 CurrentBitmap = btm;
             }
         }
 
         public Bitmap CurrentBitmap
         {
-            get { return _currentBitmap; }
+            get => _currentBitmap;
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value), @"Изображение должно быть указано (null).");
                 _currentBitmap?.Dispose();
-                _currentBitmap = value;
+                _currentBitmap = value ?? throw new ArgumentNullException(nameof(value), @"Изображение должно быть указано (null).");
                 _grFront = Graphics.FromImage(_currentBitmap);
-                _currentBitmap.SetPixel(0, 0,
-                    _currentBitmap.GetPixel(0,
-                        0)); //Необходим для устранения "Ошибки общего вида в GDI+" при попытке сохранения загруженного файла.
+                _currentBitmap.SetPixel(0, 0, _currentBitmap.GetPixel(0, 0)); //Необходим для устранения "Ошибки общего вида в GDI+" при попытке сохранения загруженного файла.
                 _pb.Image = _currentBitmap;
                 _pb.Refresh();
             }
@@ -97,12 +91,10 @@ namespace ReflectorExample
         public SaveLoad()
         {
             if (!File.Exists(_saveToFile))
-            {
                 _current = new Bitmaps();
-                return;
-            }
-            using (FileStream fs = new FileStream(_saveToFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                _current = (Bitmaps) _xml.Deserialize(fs) ?? new Bitmaps();
+            else
+                using (FileStream fs = new FileStream(_saveToFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    _current = (Bitmaps)_xml.Deserialize(fs) ?? new Bitmaps();
         }
 
         public List<string> GetNamesList(int x, int y)
