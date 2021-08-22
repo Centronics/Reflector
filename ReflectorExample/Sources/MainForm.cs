@@ -77,7 +77,7 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Отвечает за загрузку, сохранение, а также удаление карт с жёсткого диска.
         /// </summary>
-        SaveLoad _saveLoad;
+        //readonly ReflectorField _reflectorField = new ReflectorField();
 
         /// <summary>
         /// Отвечает за автоматическую обработку введённого в текстовое поле текста.
@@ -142,6 +142,9 @@ namespace ReflectorExample.Sources
             }
         }
 
+        /// <summary>
+        /// Получает значение, отражающее, совпадает ли текущее результирующее изображение с исходным (<see langword="true"/>), или нет (<see langword="false"/>).
+        /// </summary>
         bool CompareWithResult
         {
             get
@@ -158,27 +161,50 @@ namespace ReflectorExample.Sources
             }
         }
 
-        // ReSharper disable once FunctionComplexityOverflow
+        /// <summary>
+        /// Предназначено для отключения элементов управления на время выполнения операции, и включения их после её завершения.
+        /// </summary>
         bool EnableButtons
         {
-            set =>
-                picReflection.Enabled = grpResult.Enabled = grpQuery.Enabled = grp00.Enabled =
-                    grp01.Enabled = grp02.Enabled = grp10.Enabled = grp20.Enabled =
-                        grp11.Enabled = grp21.Enabled = grp12.Enabled = grp22.Enabled = btnImageLoad.Enabled =
-                            btnImageSave.Enabled = btnReflectionAdd.Enabled =
-                                btnReflector.Enabled = chkAnyNames.Enabled = btnClearReflection.Enabled = grpNeuron.Enabled = value;
+            set
+            {
+                picReflection.Enabled = value;
+                grpResult.Enabled = value;
+                grpQuery.Enabled = value;
+                grp00.Enabled = value;
+                grp01.Enabled = value;
+                grp02.Enabled = value;
+                grp10.Enabled = value;
+                grp20.Enabled = value;
+                grp11.Enabled = value;
+                grp21.Enabled = value;
+                grp12.Enabled = value;
+                grp22.Enabled = value;
+                btnImageLoad.Enabled = value;
+                btnImageSave.Enabled = value;
+                btnReflectionAdd.Enabled = value;
+                btnReflector.Enabled = value;
+                chkAnyNames.Enabled = value;
+                btnClearReflection.Enabled = value;
+                grpNeuron.Enabled = value;
+            }
         }
 
+        /// <summary>
+        /// Выполняет операции по подготовке к работе.
+        /// Делает необходимые проверки, загружает сохранённые данные с жёсткого диска.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
         void FrmMain_Shown(object sender, EventArgs e)
         {
             try
             {
                 VerifyPictureBoxSizes();
-                _saveLoad = new SaveLoad();
                 for (int y = 0; y < _reflectorPictures.GetLength(1); y++)
                     for (int x = 0; x < _reflectorPictures.GetLength(0); x++)
                     {
-                        _reflectorPictures[x, y] = new List<Processor>(_saveLoad.GetProcessors(x, y));
+                        _reflectorPictures[x, y] = new List<Processor>(ReflectorField.GetProcessors(x, y));
                         if (!VerifyMapsImageSizes(_reflectorPictures[x, y]))
                         {
                             Application.Exit();
@@ -202,6 +228,12 @@ namespace ReflectorExample.Sources
             }
         }
 
+        /// <summary>
+        /// Обрабатывает реакцию на изменение состояния флажка "Названия карт любой длины".
+        /// Актуализирует его для всех полей запроса.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
         void ChkAnyNames_CheckedChanged(object sender, EventArgs e)
         {
             bool ch = ((CheckBox)sender).Checked;
@@ -210,6 +242,9 @@ namespace ReflectorExample.Sources
                     GetTextBox(x, y).MaxLength = ch ? 32767 : 1;
         }
 
+        /// <summary>
+        /// Выполняет операцию самоконтроля изначальных параметров работы программы, чтобы не было ошибок при подаче входных данных в тестируемые компоненты.
+        /// </summary>
         void VerifyPictureBoxSizes()
         {
             Size main = pic00.Size;
@@ -223,6 +258,12 @@ namespace ReflectorExample.Sources
                 throw new Exception("Высота основного поля должна быть кратна высоте всех полей для рисования.");
         }
 
+        /// <summary>
+        /// Получает <see cref="TextBox"/> запроса по указанным координатам.
+        /// </summary>
+        /// <param name="x">Координата X.</param>
+        /// <param name="y">Координата Y.</param>
+        /// <returns>Возвращает <see cref="TextBox"/> запроса по указанным координатам. В противном случае выдаёт исключение.</returns>
         TextBox GetTextBox(int x, int y)
         {
             foreach (Control c in from Control c in grpQuery.Controls where c.GetType() == typeof(TextBox) select c)
@@ -236,22 +277,37 @@ namespace ReflectorExample.Sources
             throw new Exception($"Требуемый {nameof(TextBox)} почему-то отсутствует на поле ({x}, {y}).");
         }
 
-        string GetCurrentName(int x, int y)
+        /// <summary>
+        /// Получает часть запроса по заданным координатам.
+        /// </summary>
+        /// <param name="x">Координата X.</param>
+        /// <param name="y">Координата Y.</param>
+        /// <returns>Возвращает часть запроса по заданным координатам.</returns>
+        string GetCurrentPartOfQuery(int x, int y)
         {
             string pName = GetTextBox(x, y).Text;
             if (string.IsNullOrWhiteSpace(pName))
-                throw new ArgumentException($@"Название карты в соответствующем поле ({x}, {y}) не указано.");
-            if (pName.Length <= 0)
-                throw new ArgumentException(
-                    $"Название карты должно быть указано в соответствующем поле ({x}, {y}) \"запроса\" и его длина может быть равна только одному символу.");
+                throw new ArgumentException($@"Название искомой карты в поле ({x}, {y}) не задано.");
             return pName;
         }
 
+        /// <summary>
+        /// Получает полный путь к изображению карты с заданным именем.
+        /// </summary>
+        /// <param name="name">Название карты, путь к которой требуется получить.</param>
+        /// <returns>Возвращает полный путь к изображению карты с заданным именем.</returns>
         static string GetImagePath(string name) => Path.Combine(Application.StartupPath, $@"{name}.bmp");
 
+        /// <summary>
+        /// Сохраняет карту в виде изображения на жёсткий диск, запоминает её в конце массива карт.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="test"></param>
+        /// <returns></returns>
         bool SaveImage(int x, int y, bool test = false)
         {
-            string mapName = GetCurrentName(x, y);
+            string mapName = GetCurrentPartOfQuery(x, y);
             string path = GetImagePath(mapName);
             if (File.Exists(path))
             {
@@ -264,7 +320,9 @@ namespace ReflectorExample.Sources
             if (test)
                 return true;
             Painter p = _reflectorPainters[x, y];
-            _saveLoad.Save(x, y, path, p.CurrentBitmap);
+            using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read))
+                p.CurrentBitmap.Save(fs, ImageFormat.Bmp);
+            ReflectorField.Save(x, y, path);
             p.CurrentProcessorName = mapName;
             _reflectorPictures[x, y].Add(p.CurrentProcessor);
             _imageCounter[x, y] = _reflectorPictures[x, y].Count - 1;
@@ -274,8 +332,12 @@ namespace ReflectorExample.Sources
 
         void DeleteImage(int x, int y)
         {
-            string mapName = GetCurrentName(x, y);
-            _saveLoad.Delete(x, y, GetImagePath(mapName));
+            string mapName = _reflectorPainters[x, y].CurrentProcessorName;
+            if (string.IsNullOrWhiteSpace(mapName))
+                throw new ArgumentException("Для удаления карты необходимо сначала сохранить её.");
+            string path = GetImagePath(mapName);
+            File.Delete(path);
+            ReflectorField.Delete(x, y, path);
             List<Processor> proc = _reflectorPictures[x, y];
             for (int k = 0; k < proc.Count; k++)
                 if (proc[k].Tag == mapName)
@@ -369,7 +431,7 @@ namespace ReflectorExample.Sources
                 for (int y = 0, px = 0; y < 3; y++)
                     for (int x = 0; x < 3; x++)
                     {
-                        _reflectorPainters[x, y].CurrentProcessor = new Processor(btms[px++], GetCurrentName(x, y));
+                        _reflectorPainters[x, y].CurrentProcessor = new Processor(btms[px++], GetCurrentPartOfQuery(x, y));
                         SaveImage(x, y);
                         NextButton(x, y, true);
                     }
@@ -591,16 +653,17 @@ namespace ReflectorExample.Sources
             }
         }
 
+        /// <summary>
+        /// Сохраняет текущую результирующую карту, в виде изображения, на жёсткий диск.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
         void BtnSaveResultImage_Click(object sender, EventArgs e)
         {
             try
             {
-                if (_recognizeResults == null || SaveFile.ShowDialog(this) != DialogResult.OK)
-                    return;
-                Bitmap btm = _recognizeResults[_currentResult];
-                if (btm == null)
-                    return;
-                btm.Save(SaveFile.FileName, ImageFormat.Bmp);
+                if (_recognizeResults != null && SaveFile.ShowDialog(this) == DialogResult.OK)
+                    _recognizeResults[_currentResult].Save(SaveFile.FileName, ImageFormat.Bmp);
             }
             catch (Exception ex)
             {
@@ -608,6 +671,12 @@ namespace ReflectorExample.Sources
             }
         }
 
+        /// <summary>
+        /// Отображает следующую результирующую карту.
+        /// Поддерживает перемотку по кругу.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
         void BtnNextResult_Click(object sender, EventArgs e)
         {
             try
@@ -631,6 +700,12 @@ namespace ReflectorExample.Sources
             }
         }
 
+        /// <summary>
+        /// Отображает предыдущую результирующую карту.
+        /// Поддерживает перемотку по кругу.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
         void BtnPrevResult_Click(object sender, EventArgs e)
         {
             try
@@ -664,6 +739,7 @@ namespace ReflectorExample.Sources
 
         /// <summary>
         /// Предназначен для перемотки изображений, созданных на поле Reflector, вперёд.
+        /// Не поддерживает перемотку по кругу.
         /// </summary>
         /// <param name="x">Координата изображения X.</param>
         /// <param name="y">Координата изображения Y.</param>
@@ -691,6 +767,7 @@ namespace ReflectorExample.Sources
 
         /// <summary>
         /// Предназначен для перемотки изображений, созданных на поле Reflector, назад.
+        /// Не поддерживает перемотку по кругу.
         /// </summary>
         /// <param name="x">Координата изображения X.</param>
         /// <param name="y">Координата изображения Y.</param>
@@ -997,7 +1074,7 @@ namespace ReflectorExample.Sources
                         for (int x = 0; x < 3; x++)
                         {
                             Painter p = _reflectorPainters[x, y];
-                            p.CurrentProcessorName = GetCurrentName(x, y);
+                            p.CurrentProcessorName = GetCurrentPartOfQuery(x, y);
                             yield return p.CurrentProcessor;
                         }
                 }
@@ -1016,7 +1093,7 @@ namespace ReflectorExample.Sources
                         for (int x = 0; x < 3; x++)
                         {
                             Painter p = _reflectorPainters[x, y];
-                            p.CurrentProcessorName = GetCurrentName(x, y);
+                            p.CurrentProcessorName = GetCurrentPartOfQuery(x, y);
                             yield return (p.CurrentProcessor, p.CurrentProcessorName[0].ToString());
                         }
                 }

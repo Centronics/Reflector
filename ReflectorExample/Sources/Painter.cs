@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 using DynamicParser;
 
 namespace ReflectorExample.Sources
@@ -78,102 +73,6 @@ namespace ReflectorExample.Sources
         {
             _grFront.DrawRectangle(_whitePen, x, y, 1, 1);
             _pb.Refresh();
-        }
-    }
-
-    public sealed class SaveLoad
-    {
-        readonly Bitmaps _current;
-
-        readonly string _saveToFile = Path.Combine(Application.StartupPath, "load.txt");
-        readonly XmlSerializer _xml = new XmlSerializer(typeof(Bitmaps));
-
-        public SaveLoad()
-        {
-            if (!File.Exists(_saveToFile))
-                _current = new Bitmaps();
-            else
-                using (FileStream fs = new FileStream(_saveToFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    _current = (Bitmaps)_xml.Deserialize(fs) ?? new Bitmaps();
-        }
-
-        public List<string> GetNamesList(int x, int y)
-        {
-            // ReSharper disable once ConvertIfStatementToSwitchStatement
-            if (x == 0 && y == 0)
-                return _current.Bitmaps00;
-            if (x == 1 && y == 0)
-                return _current.Bitmaps10;
-            if (x == 2 && y == 0)
-                return _current.Bitmaps20;
-            if (x == 0 && y == 1)
-                return _current.Bitmaps01;
-            if (x == 1 && y == 1)
-                return _current.Bitmaps11;
-            if (x == 2 && y == 1)
-                return _current.Bitmaps21;
-            if (x == 0 && y == 2)
-                return _current.Bitmaps02;
-            if (x == 1 && y == 2)
-                return _current.Bitmaps12;
-            if (x == 2 && y == 2)
-                return _current.Bitmaps22;
-            throw new ArgumentException($@"Некорректные параметры X, Y: {x}, {y}.");
-        }
-
-        public void Save(int x, int y, string imagePath, Bitmap btm)
-        {
-            if (string.IsNullOrWhiteSpace(imagePath))
-                throw new ArgumentException("Не могу сохранить безымянный файл.");
-            using (FileStream fs = new FileStream(imagePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                btm.Save(fs, ImageFormat.Bmp);
-            GetNamesList(x, y).Add(imagePath.ToUpper());
-            Serialize();
-        }
-
-        public void Delete(int x, int y, string imagePath)
-        {
-            if (string.IsNullOrWhiteSpace(imagePath))
-                throw new ArgumentException("Не могу удалить безымянный файл.");
-            if (GetNamesList(x, y).RemoveAll(s => s == imagePath.ToUpper()) <= 0)
-                return;
-            File.Delete(imagePath);
-            Serialize();
-        }
-
-        public IEnumerable<Processor> GetProcessors(int x, int y)
-        {
-            foreach (string name in GetNamesList(x, y).Where(s => !string.IsNullOrWhiteSpace(s)))
-                using (FileStream fs = new FileStream(name, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    yield return new Processor(new Bitmap(fs), Path.GetFileNameWithoutExtension(name));
-        }
-
-        void Serialize()
-        {
-            using (FileStream fs = new FileStream(_saveToFile, FileMode.Create, FileAccess.Write, FileShare.Read))
-                _xml.Serialize(fs, _current);
-        }
-
-        [Serializable]
-        public sealed class Bitmaps
-        {
-            public List<string> Bitmaps00 { get; set; } = new List<string>();
-
-            public List<string> Bitmaps10 { get; set; } = new List<string>();
-
-            public List<string> Bitmaps20 { get; set; } = new List<string>();
-
-            public List<string> Bitmaps01 { get; set; } = new List<string>();
-
-            public List<string> Bitmaps11 { get; set; } = new List<string>();
-
-            public List<string> Bitmaps21 { get; set; } = new List<string>();
-
-            public List<string> Bitmaps02 { get; set; } = new List<string>();
-
-            public List<string> Bitmaps12 { get; set; } = new List<string>();
-
-            public List<string> Bitmaps22 { get; set; } = new List<string>();
         }
     }
 }
