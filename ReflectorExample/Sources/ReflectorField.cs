@@ -9,24 +9,24 @@ using DynamicParser;
 namespace ReflectorExample.Sources
 {
     /// <summary>
-    /// Представляет интерфейс управления базой данных, содержащей пути к изображениям, с поля Reflector.
+    /// Представляет интерфейс управления базой данных, содержащей пути к изображениям, которые находятся на поле Reflector.
     /// Любые операции сразу отражаются на жёстком диске.
     /// </summary>
     [Serializable]
     public sealed class ReflectorField
     {
         /// <summary>
-        /// Содержит путь к базе данных, где хранятся пути к изображениям, находящимся на поле Reflector.
+        /// Содержит путь к базе данных, где хранятся пути к изображениям, которые находятся на поле Reflector.
         /// </summary>
         static readonly string SaveToFile = Path.Combine(Application.StartupPath, "ReflectorFieldDataBase.txt");
 
         /// <summary>
         /// Объект для сериализации / десериализации базы данных.
         /// </summary>
-        static readonly XmlSerializer Xml = new XmlSerializer(typeof(ReflectorField));
+        static readonly XmlSerializer Serializer = new XmlSerializer(typeof(ReflectorField));
 
         /// <summary>
-        /// База данных текущего экземпляра.
+        /// База данных, которая предназначена для использования только в единственном экземпляре (Singleton).
         /// </summary>
         static ReflectorField _dataBase;
 
@@ -38,54 +38,54 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 0, Y = 0.
         /// </summary>
-        public List<string> Bitmaps00 { get; set; } = new List<string>();
+        public List<string> BitPaths00 { get; set; } = new List<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 1, Y = 0.
         /// </summary>
-        public List<string> Bitmaps10 { get; set; } = new List<string>();
+        public List<string> BitPaths10 { get; set; } = new List<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 2, Y = 0.
         /// </summary>
-        public List<string> Bitmaps20 { get; set; } = new List<string>();
+        public List<string> BitPaths20 { get; set; } = new List<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 0, Y = 1.
         /// </summary>
-        public List<string> Bitmaps01 { get; set; } = new List<string>();
+        public List<string> BitPaths01 { get; set; } = new List<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 1, Y = 1.
         /// </summary>
-        public List<string> Bitmaps11 { get; set; } = new List<string>();
+        public List<string> BitPaths11 { get; set; } = new List<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 2, Y = 1.
         /// </summary>
-        public List<string> Bitmaps21 { get; set; } = new List<string>();
+        public List<string> BitPaths21 { get; set; } = new List<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 0, Y = 2.
         /// </summary>
-        public List<string> Bitmaps02 { get; set; } = new List<string>();
+        public List<string> BitPaths02 { get; set; } = new List<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 1, Y = 2.
         /// </summary>
-        public List<string> Bitmaps12 { get; set; } = new List<string>();
+        public List<string> BitPaths12 { get; set; } = new List<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 2, Y = 2.
         /// </summary>
-        public List<string> Bitmaps22 { get; set; } = new List<string>();
+        public List<string> BitPaths22 { get; set; } = new List<string>();
 
         /// <summary>
         /// Возвращает коллекции путей к изображениям, находящихся по указанным координатам, на поле Reflector.
         /// </summary>
         /// <param name="x">Кордината X на поле Reflector.</param>
         /// <param name="y">Кордината Y на поле Reflector.</param>
-        /// <returns>В случае успеха, возвращает коллекции путей к изображениям, в противном случае - <see cref="ArgumentException"/>.</returns>
+        /// <returns>В случае успеха, возвращает коллекции путей к изображениям, в противном случае возникает исключение <see cref="ArgumentException"/>.</returns>
         static List<string> GetNamesList(int x, int y)
         {
             if (x < 0 || x > 2)
@@ -98,35 +98,35 @@ namespace ReflectorExample.Sources
             switch (y * 3 + x)
             {
                 case 0:
-                    return _dataBase.Bitmaps00;
+                    return _dataBase.BitPaths00;
                 case 1:
-                    return _dataBase.Bitmaps10;
+                    return _dataBase.BitPaths10;
                 case 2:
-                    return _dataBase.Bitmaps20;
+                    return _dataBase.BitPaths20;
                 case 3:
-                    return _dataBase.Bitmaps01;
+                    return _dataBase.BitPaths01;
                 case 4:
-                    return _dataBase.Bitmaps11;
+                    return _dataBase.BitPaths11;
                 case 5:
-                    return _dataBase.Bitmaps21;
+                    return _dataBase.BitPaths21;
                 case 6:
-                    return _dataBase.Bitmaps02;
+                    return _dataBase.BitPaths02;
                 case 7:
-                    return _dataBase.Bitmaps12;
+                    return _dataBase.BitPaths12;
                 case 8:
-                    return _dataBase.Bitmaps22;
+                    return _dataBase.BitPaths22;
                 default:
                     throw new ArgumentException($@"Некорректные параметры X, Y: {x}, {y}.");
             }
         }
 
         /// <summary>
-        /// Выполняет сериализацию базы данных путей к изображениям поля Reflector в файл ReflectorFieldDataBase.txt, в каталоге EXE-файла программы.
+        /// Выполняет сериализацию базы данных путей к изображениям поля Reflector в файл ReflectorFieldDataBase.txt, в каталоге исполняемого файла программы.
         /// </summary>
         static void Serialize()
         {
             using (FileStream fs = new FileStream(SaveToFile, FileMode.Create, FileAccess.Write))
-                Xml.Serialize(fs, _dataBase ?? new ReflectorField());
+                Serializer.Serialize(fs, _dataBase ?? new ReflectorField());
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace ReflectorExample.Sources
             try
             {
                 using (FileStream fs = new FileStream(SaveToFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    _dataBase = (ReflectorField) Xml.Deserialize(fs) ?? new ReflectorField();
+                    _dataBase = (ReflectorField) Serializer.Deserialize(fs) ?? new ReflectorField();
             }
             catch (FileNotFoundException)
             {
@@ -148,8 +148,8 @@ namespace ReflectorExample.Sources
         }
 
         /// <summary>
-        /// Получает изображения по указанным координатам, из поля Reflector.
-        /// В случае, если база данных не прочитана с жёсткого диска, это будет сделано автоматически.
+        /// Получает изображения по указанным координатам, с поля Reflector.
+        /// База данных автоматически подгружается с жёсткого диска.
         /// </summary>
         /// <param name="x">Координата X.</param>
         /// <param name="y">Координата Y.</param>
