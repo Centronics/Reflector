@@ -372,10 +372,10 @@ namespace ReflectorExample.Sources
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    _reflectorPainters[x, y].DrawPointBlack(e.X, e.Y);
+                    _reflectorPainters[x, y].DrawBlackPoint(e.X, e.Y);
                     break;
                 case MouseButtons.Right:
-                    _reflectorPainters[x, y].DrawPointWhite(e.X, e.Y);
+                    _reflectorPainters[x, y].DrawWhitePoint(e.X, e.Y);
                     break;
             }
         }
@@ -887,10 +887,10 @@ namespace ReflectorExample.Sources
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    _reflectionPainter.DrawPointBlack(e.X, e.Y);
+                    _reflectionPainter.DrawBlackPoint(e.X, e.Y);
                     break;
                 case MouseButtons.Right:
-                    _reflectionPainter.DrawPointWhite(e.X, e.Y);
+                    _reflectionPainter.DrawWhitePoint(e.X, e.Y);
                     break;
             }
         }

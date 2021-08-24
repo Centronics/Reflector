@@ -11,9 +11,19 @@ namespace ReflectorExample.Sources
     internal sealed class Painter
     {
         /// <summary>
+        /// Определяет значение белого цвета для этого класса.
+        /// </summary>
+        readonly Color _whiteColor = Color.White;
+
+        /// <summary>
+        /// Определяет значение чёрного цвета для этого класса.
+        /// </summary>
+        readonly Color _blackColor = Color.Black;
+
+        /// <summary>
         /// Предназначена для рисования чёрным цветом.
         /// </summary>
-        readonly Pen _blackPen = new Pen(Color.Black, 1.0f);
+        readonly Pen _blackPen;
 
         /// <summary>
         /// <see cref="PictureBox"/>, на который производится вывод изображения.
@@ -21,9 +31,9 @@ namespace ReflectorExample.Sources
         readonly PictureBox _pb;
 
         /// <summary>
-        /// Предназначена для рисования белым цветом (стирания).
+        /// Предназначена для рисования белым цветом (может использоваться для стирания).
         /// </summary>
-        readonly Pen _whitePen = new Pen(Color.White, 1.0f);
+        readonly Pen _whitePen;
 
         /// <summary>
         /// Полотно для рисования.
@@ -42,6 +52,8 @@ namespace ReflectorExample.Sources
         public Painter(PictureBox pic)
         {
             _pb = pic ?? throw new ArgumentNullException(nameof(pic), $@"{nameof(PictureBox)} отсутствует (null).");
+            _blackPen = new Pen(_blackColor, 1.0f);
+            _whitePen = new Pen(_whiteColor, 1.0f);
             CurrentBitmap = new Bitmap(pic.Width, pic.Height);
             Clear();
         }
@@ -74,6 +86,9 @@ namespace ReflectorExample.Sources
             }
         }
 
+        /// <summary>
+        /// Получает или задаёт текущее изображение, т.е. с которым ведётся работа в настоящее время.
+        /// </summary>
         public Bitmap CurrentBitmap
         {
             get => _currentBitmap;
@@ -88,19 +103,32 @@ namespace ReflectorExample.Sources
             }
         }
 
+        /// <summary>
+        /// Очищает белым цветом текущее изображение.
+        /// </summary>
         public void Clear()
         {
-            _grFront.Clear(Color.White);
+            _grFront.Clear(_whiteColor);
             _pb.Refresh();
         }
 
-        public void DrawPointBlack(int x, int y)
+        /// <summary>
+        /// Рисует чёрную точку на текущем изображении, по указанным координатам.
+        /// </summary>
+        /// <param name="x">Координата X от левого верхнего угла.</param>
+        /// <param name="y">Координата Y от левого верхнего угла.</param>
+        public void DrawBlackPoint(int x, int y)
         {
             _grFront.DrawRectangle(_blackPen, x, y, 1, 1);
             _pb.Refresh();
         }
 
-        public void DrawPointWhite(int x, int y)
+        /// <summary>
+        /// Рисует белую точку на текущем изображении, по указанным координатам.
+        /// </summary>
+        /// <param name="x">Координата X от левого верхнего угла.</param>
+        /// <param name="y">Координата Y от левого верхнего угла.</param>
+        public void DrawWhitePoint(int x, int y)
         {
             _grFront.DrawRectangle(_whitePen, x, y, 1, 1);
             _pb.Refresh();
