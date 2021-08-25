@@ -13,7 +13,7 @@ namespace ReflectorExample.Sources
     /// Любые операции сразу отражаются на жёстком диске.
     /// </summary>
     [Serializable]
-    public sealed class ReflectorField
+    public sealed class ReflectorFieldDataBase
     {
         /// <summary>
         /// Содержит путь к базе данных, где хранятся пути к изображениям, которые находятся на поле Reflector.
@@ -23,17 +23,17 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Объект для сериализации / десериализации базы данных.
         /// </summary>
-        static readonly XmlSerializer Serializer = new XmlSerializer(typeof(ReflectorField));
+        static readonly XmlSerializer Serializer = new XmlSerializer(typeof(ReflectorFieldDataBase));
 
         /// <summary>
         /// База данных, которая предназначена для использования только в единственном экземпляре (Singleton).
         /// </summary>
-        static ReflectorField _dataBase;
+        static ReflectorFieldDataBase _dataBase;
 
         /// <summary>
         /// Запрещает создание экземпляров этого класса. Этот класс может использоваться только в единственном экземпляре (Singleton).
         /// </summary>
-        ReflectorField() { }
+        ReflectorFieldDataBase() { }
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 0, Y = 0.
@@ -83,15 +83,15 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Возвращает коллекции путей к изображениям, находящихся по указанным координатам, на поле Reflector.
         /// </summary>
-        /// <param name="x">Кордината X на поле Reflector.</param>
-        /// <param name="y">Кордината Y на поле Reflector.</param>
+        /// <param name="x">Координата X на поле Reflector.</param>
+        /// <param name="y">Координата Y на поле Reflector.</param>
         /// <returns>В случае успеха, возвращает коллекции путей к изображениям, в противном случае возникает исключение <see cref="ArgumentException"/>.</returns>
         static List<string> GetNamesList(int x, int y)
         {
             if (x < 0 || x > 2)
-                throw new ArgumentException($@"Координата X выходит {x}.", nameof(x));
+                throw new ArgumentException($@"Координата X выходит за пределы поля Reflector {x}.", nameof(x));
             if (y < 0 || y > 2)
-                throw new ArgumentException($@"Координата Y выходит {y}.", nameof(y));
+                throw new ArgumentException($@"Координата Y выходит за пределы поля Reflector {y}.", nameof(y));
 
             Deserialize();
 
@@ -121,16 +121,16 @@ namespace ReflectorExample.Sources
         }
 
         /// <summary>
-        /// Выполняет сериализацию базы данных путей к изображениям поля Reflector в файл ReflectorFieldDataBase.txt, в каталоге исполняемого файла программы.
+        /// Выполняет сериализацию базы данных путей к изображениям на поле Reflector в файл ReflectorFieldDataBase.txt, в каталоге исполняемого файла программы.
         /// </summary>
         static void Serialize()
         {
             using (FileStream fs = new FileStream(SaveToFile, FileMode.Create, FileAccess.Write))
-                Serializer.Serialize(fs, _dataBase ?? new ReflectorField());
+                Serializer.Serialize(fs, _dataBase ?? new ReflectorFieldDataBase());
         }
 
         /// <summary>
-        /// Выполняет десериализацию базы данных путей к изображениям поля Reflector из файла ReflectorFieldDataBase.txt, в каталоге EXE-файла программы.
+        /// Выполняет десериализацию базы данных путей к изображениям на поле Reflector из файла ReflectorFieldDataBase.txt, в каталоге EXE-файла программы.
         /// </summary>
         static void Deserialize()
         {
@@ -139,11 +139,11 @@ namespace ReflectorExample.Sources
             try
             {
                 using (FileStream fs = new FileStream(SaveToFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    _dataBase = (ReflectorField) Serializer.Deserialize(fs) ?? new ReflectorField();
+                    _dataBase = (ReflectorFieldDataBase) Serializer.Deserialize(fs) ?? new ReflectorFieldDataBase();
             }
             catch (FileNotFoundException)
             {
-                _dataBase = new ReflectorField();
+                _dataBase = new ReflectorFieldDataBase();
             }
         }
 
@@ -151,8 +151,8 @@ namespace ReflectorExample.Sources
         /// Получает изображения по указанным координатам, с поля Reflector.
         /// База данных автоматически подгружается с жёсткого диска.
         /// </summary>
-        /// <param name="x">Координата X.</param>
-        /// <param name="y">Координата Y.</param>
+        /// <param name="x">Координата X на поле Reflector.</param>
+        /// <param name="y">Координата Y на поле Reflector.</param>
         /// <returns>Возвращает последовательность изображений.</returns>
         public static IEnumerable<Processor> GetProcessors(int x, int y)
         {
@@ -164,8 +164,8 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Записывает указанный путь в базу данных, сохраняя изменение на жёсткий диск.
         /// </summary>
-        /// <param name="x">Кордината X на поле Reflector.</param>
-        /// <param name="y">Кордината Y на поле Reflector.</param>
+        /// <param name="x">Координата X на поле Reflector.</param>
+        /// <param name="y">Координата Y на поле Reflector.</param>
         /// <param name="imagePath">Путь, который необходимо сохранить в базе данных.</param>
         public static void Save(int x, int y, string imagePath)
         {
@@ -176,8 +176,8 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Удаляет указанный путь из базы данных, сохраняя изменение на жёсткий диск.
         /// </summary>
-        /// <param name="x">Кордината X на поле Reflector.</param>
-        /// <param name="y">Кордината Y на поле Reflector.</param>
+        /// <param name="x">Координата X на поле Reflector.</param>
+        /// <param name="y">Координата Y на поле Reflector.</param>
         /// <param name="imagePath">Путь, который необходимо удалить из базы данных.</param>
         public static void Delete(int x, int y, string imagePath)
         {

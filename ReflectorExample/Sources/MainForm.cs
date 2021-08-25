@@ -20,7 +20,7 @@ namespace ReflectorExample.Sources
         readonly int[,] _imageCounter = new int[3, 3];
 
         /// <summary>
-        /// Хранит карты, содержащиеся на поле Reflector, в виде изображений.
+        /// Хранит изображения, содержащиеся на поле Reflector, в виде карт.
         /// </summary>
         readonly List<Processor>[,] _reflectorPictures = new List<Processor>[3, 3];
 
@@ -73,11 +73,6 @@ namespace ReflectorExample.Sources
         /// Содержит результаты работы компонента <see cref="Reflection"/> (карты) в виде изображений.
         /// </summary>
         Bitmap[] _recognizeResults;
-
-        /// <summary>
-        /// Отвечает за загрузку, сохранение, а также удаление карт с жёсткого диска.
-        /// </summary>
-        //readonly ReflectorField _reflectorField = new ReflectorField();
 
         /// <summary>
         /// Отвечает за автоматическую обработку введённого в текстовое поле текста.
@@ -204,7 +199,7 @@ namespace ReflectorExample.Sources
                 for (int y = 0; y < _reflectorPictures.GetLength(1); y++)
                     for (int x = 0; x < _reflectorPictures.GetLength(0); x++)
                     {
-                        _reflectorPictures[x, y] = new List<Processor>(ReflectorField.GetProcessors(x, y));
+                        _reflectorPictures[x, y] = new List<Processor>(ReflectorFieldDataBase.GetProcessors(x, y));
                         if (!VerifyMapsImageSizes(_reflectorPictures[x, y]))
                         {
                             Application.Exit();
@@ -261,8 +256,8 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Получает <see cref="TextBox"/> запроса по указанным координатам.
         /// </summary>
-        /// <param name="x">Координата X.</param>
-        /// <param name="y">Координата Y.</param>
+        /// <param name="x">Координата X на поле Reflector.</param>
+        /// <param name="y">Координата Y на поле Reflector.</param>
         /// <returns>Возвращает <see cref="TextBox"/> запроса по указанным координатам. В противном случае выдаёт исключение.</returns>
         TextBox GetTextBox(int x, int y)
         {
@@ -278,10 +273,10 @@ namespace ReflectorExample.Sources
         }
 
         /// <summary>
-        /// Получает часть запроса по заданным координатам.
+        /// Получает часть исходного изображения по заданным координатам.
         /// </summary>
-        /// <param name="x">Координата X.</param>
-        /// <param name="y">Координата Y.</param>
+        /// <param name="x">Координата X на поле Reflector.</param>
+        /// <param name="y">Координата Y на поле Reflector.</param>
         /// <returns>Возвращает часть запроса по заданным координатам.</returns>
         string GetCurrentPartOfQuery(int x, int y)
         {
@@ -299,12 +294,12 @@ namespace ReflectorExample.Sources
         static string GetImagePath(string name) => Path.Combine(Application.StartupPath, $@"{name}.bmp");
 
         /// <summary>
-        /// Сохраняет карту в виде изображения на жёсткий диск, запоминает её в конце массива карт.
+        /// Сохраняет карту в виде изображения на жёсткий диск, запоминает её в конце массива карт на поле Reflector.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="test"></param>
-        /// <returns></returns>
+        /// <param name="x">Координата X на поле Reflector.</param>
+        /// <param name="y">Координата Y на поле Reflector.</param>
+        /// <param name="test">Флаг проверки возможности выполнения операции. Значение <see langword="true"/> указывает на то, что необходимо проверить, все ли условия позволяют успешно выполнить операцию, при этом, сама операция выполнена не будет.</param>
+        /// <returns>Возвращает значение <see langword="true"/> в случае успеха или успешного прохождения проверки возможности выполнения операции. В противном случае - <see langword="false"/>.</returns>
         bool SaveImage(int x, int y, bool test = false)
         {
             string mapName = GetCurrentPartOfQuery(x, y);
@@ -322,7 +317,7 @@ namespace ReflectorExample.Sources
             Painter p = _reflectorPainters[x, y];
             using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read))
                 p.CurrentBitmap.Save(fs, ImageFormat.Bmp);
-            ReflectorField.Save(x, y, path);
+            ReflectorFieldDataBase.Save(x, y, path);
             p.CurrentProcessorName = mapName;
             _reflectorPictures[x, y].Add(p.CurrentProcessor);
             _imageCounter[x, y] = _reflectorPictures[x, y].Count - 1;
@@ -330,6 +325,12 @@ namespace ReflectorExample.Sources
             return true;
         }
 
+        /// <summary>
+        /// Удаляет указанную карту с на поле Reflector, из базы данных, а так же сам файл с изображением, на жёстком диске.
+        /// Требует, чтобы имя карты было указано в <see cref="Painter.CurrentProcessorName"/>.
+        /// </summary>
+        /// <param name="x">Координата X на поле Reflector.</param>
+        /// <param name="y">Координата Y на поле Reflector.</param>
         void DeleteImage(int x, int y)
         {
             string mapName = _reflectorPainters[x, y].CurrentProcessorName;
@@ -337,7 +338,7 @@ namespace ReflectorExample.Sources
                 throw new ArgumentException("Для удаления карты необходимо сначала сохранить её.");
             string path = GetImagePath(mapName);
             File.Delete(path);
-            ReflectorField.Delete(x, y, path);
+            ReflectorFieldDataBase.Delete(x, y, path);
             List<Processor> proc = _reflectorPictures[x, y];
             for (int k = 0; k < proc.Count; k++)
                 if (proc[k].Tag == mapName)
@@ -345,25 +346,32 @@ namespace ReflectorExample.Sources
             PrevButton(x, y);
         }
 
+        /// <summary>
+        /// Получает данные об указанном элементе управления с на поле Reflector.
+        /// </summary>
+        /// <param name="x">Возвращаемая координата X на поле Reflector.</param>
+        /// <param name="y">Возвращаемая координата Y на поле Reflector.</param>
+        /// <param name="name">Название элемента управления, которое необходимо преобразовать.</param>
+        /// <param name="startsWith">Часть названия элемента управления, с которой должно начинаться название.</param>
+        /// <returns>Возвращает значение <see langword="true"/> в случае успешного получения данных. В противном случае - <see langword="false"/>.</returns>
         static bool GetControlCoords(out int x, out int y, string name, string startsWith)
         {
+            y = x = -1;
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name), @"Имя элемента управления неизвестно.");
             if (string.IsNullOrWhiteSpace(startsWith))
                 throw new ArgumentNullException(nameof(startsWith), @"Начало имени отсутствует.");
-            if (!name.StartsWith(startsWith))
-            {
-                x = -1;
-                y = -1;
-                return false;
-            }
-            if (!int.TryParse(name.Substring(startsWith.Length, 1), out x))
-                throw new Exception("Не могу получить координату X.");
-            if (!int.TryParse(name.Substring(startsWith.Length + 1, 1), out y))
-                throw new Exception("Не могу получить координату Y.");
-            return true;
+            return name.StartsWith(startsWith) && int.TryParse(name.Substring(startsWith.Length, 1), out x) && int.TryParse(name.Substring(startsWith.Length + 1, 1), out y);
         }
 
+        /// <summary>
+        /// Обрабатывает событие перемещения курсора и одновременного нажатия какой-либо кнопки мыши над поверхностью для рисования, на поле Reflector.
+        /// Рисует точку, по указанным координатам, в соответствующей части на поле Reflector.
+        /// В случае нажатия ПКМ цвет точки белый.
+        /// В случае нажатия ЛКМ цвет точки чёрный.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект.</param>
+        /// <param name="e">Аргументы.</param>
         void PicMouseMoveDown(object sender, MouseEventArgs e)
         {
             if (!GetControlCoords(out int x, out int y, ((PictureBox)sender).Name, "pic"))
@@ -407,6 +415,11 @@ namespace ReflectorExample.Sources
             _reflectionPainter.Clear();
         }
 
+        /// <summary>
+        /// Разбивает исходное изображение на изображения равных размеров, затем распределяет их по полю Reflector, и сохраняет на жёсткий диск, отображая на экране.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
         void BtnReflectionAdd_Click(object sender, EventArgs e)
         {
             try

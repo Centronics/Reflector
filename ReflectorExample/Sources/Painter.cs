@@ -115,8 +115,8 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Рисует чёрную точку на текущем изображении, по указанным координатам.
         /// </summary>
-        /// <param name="x">Координата X от левого верхнего угла.</param>
-        /// <param name="y">Координата Y от левого верхнего угла.</param>
+        /// <param name="x">Координата X на поле Reflector от левого верхнего угла.</param>
+        /// <param name="y">Координата Y на поле Reflector от левого верхнего угла.</param>
         public void DrawBlackPoint(int x, int y)
         {
             _grFront.DrawRectangle(_blackPen, x, y, 1, 1);
@@ -126,8 +126,8 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Рисует белую точку на текущем изображении, по указанным координатам.
         /// </summary>
-        /// <param name="x">Координата X от левого верхнего угла.</param>
-        /// <param name="y">Координата Y от левого верхнего угла.</param>
+        /// <param name="x">Координата X на поле Reflector от левого верхнего угла.</param>
+        /// <param name="y">Координата Y на поле Reflector от левого верхнего угла.</param>
         public void DrawWhitePoint(int x, int y)
         {
             _grFront.DrawRectangle(_whitePen, x, y, 1, 1);
