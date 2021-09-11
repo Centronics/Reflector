@@ -21,13 +21,13 @@ namespace DynamicReflector
         ///     Содержит варианты разбора приходящих карт. Включает в себя все возможные комбинации запросов для разбора, которые
         ///     используются в методе <see cref="Reflector.Push" />.
         /// </summary>
-        protected char[][,] Logical { get; }
+        char[][,] Queries { get; }
 
         /// <summary>
         ///     Предназначен для распознавания указанной карты. Каждый элемент массива принимает свой запрос и отрабатывает его в
         ///     параллельном режиме, независимо от других.
         /// </summary>
-        protected Reflector[] Reflections { get; }
+        Reflector[] Reflections { get; }
 
         /// <summary>
         ///     Инициализирует текущий экземпляр класса, инициализируя внутренние объекты <see cref="Reflector" /> для
@@ -47,8 +47,8 @@ namespace DynamicReflector
             if (processors.GetLength(1) <= 0)
                 throw new ArgumentException($"{nameof(Reflection)}: Массив искомых карт пустой (ось Y).",
                     nameof(processors));
-            Logical = Matrixes(processors).ToArray();
-            Reflections = new Reflector[Logical.Length];
+            Queries = Matrixes(processors).ToArray();
+            Reflections = new Reflector[Queries.Length];
             for (int k = 0; k < Reflections.Length; k++)
                 Reflections[k] = new Reflector(processors);
             MapWidth = processors[0, 0].Width * processors.GetLength(0);
@@ -58,25 +58,24 @@ namespace DynamicReflector
         /// <summary>
         ///     Ширина распознаваемой карты, которая должна подаваться на вход метода <see cref="Push" />.
         /// </summary>
-        public virtual int MapWidth { get; }
+        public int MapWidth { get; }
 
         /// <summary>
         ///     Высота распознаваемой карты, которая должна подаваться на вход метода <see cref="Push" />.
         /// </summary>
-        public virtual int MapHeight { get; }
+        public int MapHeight { get; }
 
         /// <summary>
-        ///     Возвращает варианты распознавания (восприятия) одной и той же карты путём подачи на неё различных запросов, или
-        ///     ничего, в случае их отсутствия.
-        ///     Каждый запрос выполняется параллельно и никак не влияет на другие. Последующие вызовы этой функции используют
-        ///     результаты предыдущих.
+        ///     Возвращает варианты распознавания (восприятия) одной и той же карты, путём подачи на неё различных запросов, или
+        ///     пустой массив, в случае их отсутствия.
+        ///     Каждый запрос выполняется параллельно, и никак не влияет на другие.
         /// </summary>
         /// <param name="proc">Карта, которую требуется распознать.</param>
         /// <returns>
-        ///     Возвращает варианты распознавания (восприятия) одной и той же карты путём подачи на неё различных запросов,
-        ///     или ничего, в случае их отсутствия.
+        ///     Возвращает варианты распознавания (восприятия) одной и той же карты, путём подачи на неё различных запросов,
+        ///     или пустой массив, в случае их отсутствия.
         /// </returns>
-        public virtual IEnumerable<Processor> Push(Processor proc)
+        public IEnumerable<Processor> Push(Processor proc)
         {
             if (proc == null)
                 throw new ArgumentNullException(nameof(proc), $"{nameof(Push)}: Распознаваемая карта равна null.");
@@ -91,11 +90,11 @@ namespace DynamicReflector
             string errString = string.Empty, errStopped = string.Empty;
             bool exThrown = false, exStopped = false;
             Processor[] result = new Processor[Reflections.Length];
-            Parallel.For(0, Logical.Length, (i, state) =>
+            Parallel.For(0, Queries.Length, (i, state) =>
             {
                 try
                 {
-                    result[i] = Reflections[i].Push(proc, Logical[i]);
+                    result[i] = Reflections[i].Push(proc, Queries[i]);
                 }
                 catch (Exception ex)
                 {
@@ -122,7 +121,7 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="processors">Массив карт для чтения первых символов их названий. Остальные символы игнорируются.</param>
         /// <returns>Возвращает все варианты запросов для распознавания какой-либо карты.</returns>
-        protected static IEnumerable<char[,]> Matrixes(ProcessorContainer[,] processors)
+        static IEnumerable<char[,]> Matrixes(ProcessorContainer[,] processors)
         {
             if (processors == null)
                 throw new ArgumentNullException(nameof(processors), $"{nameof(Matrixes)}: Массив карт равен null.");
@@ -162,7 +161,7 @@ namespace DynamicReflector
         ///     Если увеличение было произведено, возвращается значение <see langword="true" />, в противном случае -
         ///     <see langword="false" />.
         /// </returns>
-        protected static bool ChangeCount(int[] count, ProcessorContainer[,] processors)
+        static bool ChangeCount(int[] count, ProcessorContainer[,] processors)
         {
             if (count == null)
                 throw new ArgumentNullException(nameof(count), $"{nameof(ChangeCount)}: Массив-счётчик равен null.");
@@ -191,39 +190,39 @@ namespace DynamicReflector
             }
             return false;
         }
-    }
 
-    /// <inheritdoc />
-    /// <summary>
-    ///     Служит для сравнения карт (<see cref="Processor" />) без учёта значения свойства <see cref="Processor.Tag" />.
-    /// </summary>
-    public class ProcessorSame : EqualityComparer<Processor>
-    {
         /// <inheritdoc />
         /// <summary>
-        ///     Служит для сравнения карт без учёта значения свойства <see cref="Processor.Tag" />.
+        ///     Служит для сравнения карт (<see cref="Processor" />) без учёта значения свойства <see cref="Processor.Tag" />.
         /// </summary>
-        /// <param name="p1">Первая карта.</param>
-        /// <param name="p2">Вторая карта.</param>
-        /// <returns>В случае равенства возвращает значение <see langword="true" />, в противном случае - <see langword="false" />.</returns>
-        public override bool Equals(Processor p1, Processor p2)
+        public class ProcessorSame : EqualityComparer<Processor>
         {
-            if (p1 == null && p2 == null)
-                return true;
-            if (p1 == null || p2 == null)
-                return false;
-            if (p1.Width != p2.Width)
-                return false;
-            if (p1.Height != p2.Height)
-                return false;
-            for (int y = 0; y < p1.Height; y++)
-            for (int x = 0; x < p1.Width; x++)
-                if (p1[x, y] != p2[x, y])
+            /// <inheritdoc />
+            /// <summary>
+            ///     Служит для сравнения карт без учёта значения свойства <see cref="Processor.Tag" />.
+            /// </summary>
+            /// <param name="p1">Первая карта.</param>
+            /// <param name="p2">Вторая карта.</param>
+            /// <returns>В случае равенства возвращает значение <see langword="true" />, в противном случае - <see langword="false" />.</returns>
+            public override bool Equals(Processor p1, Processor p2)
+            {
+                if (p1 == null && p2 == null)
+                    return true;
+                if (p1 == null || p2 == null)
                     return false;
-            return true;
-        }
+                if (p1.Width != p2.Width)
+                    return false;
+                if (p1.Height != p2.Height)
+                    return false;
+                for (int y = 0; y < p1.Height; y++)
+                for (int x = 0; x < p1.Width; x++)
+                    if (p1[x, y] != p2[x, y])
+                        return false;
+                return true;
+            }
 
-        /// <inheritdoc />
-        public override int GetHashCode(Processor obj) => HashCreator.GetHash(obj);
+            /// <inheritdoc />
+            public override int GetHashCode(Processor obj) => HashCreator.GetHash(obj);
+        }
     }
 }

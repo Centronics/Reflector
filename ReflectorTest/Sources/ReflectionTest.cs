@@ -544,235 +544,6 @@ namespace ReflectorTest
         }
 
         [TestMethod]
-        public void ReflectionTest3()
-        {
-            ProcessorContainer[,] pc = new ProcessorContainer[1, 2];
-            pc[0, 0] = new ProcessorContainer(new Processor(new SignValue[1, 1], "1"),
-                new Processor(new SignValue[1, 1], "2"), new Processor(new SignValue[1, 1], "3"));
-            pc[0, 1] = new ProcessorContainer(new Processor(new SignValue[2, 2], "4"));
-
-            List<char[,]> chh = ReflectionTestClass.Matrixes(pc).ToList();
-            Assert.AreEqual(3, chh.Count);
-            Assert.AreEqual(pc.GetLength(0), chh[0].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[0].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[1].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[1].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[2].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[2].GetLength(1));
-
-            Assert.AreEqual('1', chh[0][0, 0]);
-            Assert.AreEqual('4', chh[0][0, 1]);
-
-            Assert.AreEqual('2', chh[1][0, 0]);
-            Assert.AreEqual('4', chh[1][0, 1]);
-
-            Assert.AreEqual('3', chh[2][0, 0]);
-            Assert.AreEqual('4', chh[2][0, 1]);
-
-            pc = new ProcessorContainer[2, 1];
-            pc[0, 0] = new ProcessorContainer(new Processor(new SignValue[3, 3], "1"),
-                new Processor(new SignValue[3, 3], "2"), new Processor(new SignValue[3, 3], "3"));
-            pc[1, 0] = new ProcessorContainer(new Processor(new SignValue[4, 4], "4"));
-
-            chh = ReflectionTestClass.Matrixes(pc).ToList();
-            Assert.AreEqual(3, chh.Count);
-            Assert.AreEqual(pc.GetLength(0), chh[0].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[0].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[1].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[1].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[2].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[2].GetLength(1));
-
-            Assert.AreEqual('1', chh[0][0, 0]);
-            Assert.AreEqual('4', chh[0][1, 0]);
-
-            Assert.AreEqual('2', chh[1][0, 0]);
-            Assert.AreEqual('4', chh[1][1, 0]);
-
-            Assert.AreEqual('3', chh[2][0, 0]);
-            Assert.AreEqual('4', chh[2][1, 0]);
-
-            pc = new ProcessorContainer[2, 2];
-            pc[0, 0] = new ProcessorContainer(new Processor(new SignValue[5, 6], "1"));
-            pc[1, 0] = new ProcessorContainer(new Processor(new SignValue[6, 7], "2"));
-            pc[0, 1] = new ProcessorContainer(new Processor(new SignValue[7, 8], "3"));
-            pc[1, 1] = new ProcessorContainer(new Processor(new SignValue[8, 9], "4"));
-
-            chh = ReflectionTestClass.Matrixes(pc).ToList();
-            Assert.AreEqual(1, chh.Count);
-            Assert.AreEqual(pc.GetLength(0), chh[0].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[0].GetLength(1));
-
-            Assert.AreEqual('1', chh[0][0, 0]);
-            Assert.AreEqual('2', chh[0][1, 0]);
-            Assert.AreEqual('3', chh[0][0, 1]);
-            Assert.AreEqual('4', chh[0][1, 1]);
-            /////////////////////////////////////////////////
-
-            pc = new ProcessorContainer[2, 2];
-            pc[0, 0] = new ProcessorContainer(new Processor(new SignValue[9, 11], "1"),
-                new Processor(new SignValue[9, 11], "5f"));
-            pc[1, 0] = new ProcessorContainer(new Processor(new SignValue[10, 12], "2"));
-            pc[0, 1] = new ProcessorContainer(new Processor(new SignValue[11, 13], "3"));
-            pc[1, 1] = new ProcessorContainer(new Processor(new SignValue[12, 14], "4"));
-
-            chh = ReflectionTestClass.Matrixes(pc).ToList();
-            Assert.AreEqual(2, chh.Count);
-            Assert.AreEqual(pc.GetLength(0), chh[0].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[0].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[1].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[1].GetLength(1));
-
-            Assert.AreEqual('1', chh[0][0, 0]);
-            Assert.AreEqual('2', chh[0][1, 0]);
-            Assert.AreEqual('3', chh[0][0, 1]);
-            Assert.AreEqual('4', chh[0][1, 1]);
-
-            Assert.AreEqual('5', chh[1][0, 0]);
-            Assert.AreEqual('2', chh[1][1, 0]);
-            Assert.AreEqual('3', chh[1][0, 1]);
-            Assert.AreEqual('4', chh[1][1, 1]);
-
-            pc = new ProcessorContainer[2, 2];
-            pc[0, 0] = new ProcessorContainer(new Processor(new SignValue[13, 20], "1"));
-            pc[1, 0] = new ProcessorContainer(new Processor(new SignValue[14, 21], "2"),
-                new Processor(new SignValue[14, 21], "6h"));
-            pc[0, 1] = new ProcessorContainer(new Processor(new SignValue[15, 22], "3"));
-            pc[1, 1] = new ProcessorContainer(new Processor(new SignValue[16, 23], "4"));
-
-            chh = ReflectionTestClass.Matrixes(pc).ToList();
-            Assert.AreEqual(2, chh.Count);
-            Assert.AreEqual(pc.GetLength(0), chh[0].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[0].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[1].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[1].GetLength(1));
-
-            Assert.AreEqual('1', chh[0][0, 0]);
-            Assert.AreEqual('2', chh[0][1, 0]);
-            Assert.AreEqual('3', chh[0][0, 1]);
-            Assert.AreEqual('4', chh[0][1, 1]);
-
-            Assert.AreEqual('1', chh[1][0, 0]);
-            Assert.AreEqual('6', chh[1][1, 0]);
-            Assert.AreEqual('3', chh[1][0, 1]);
-            Assert.AreEqual('4', chh[1][1, 1]);
-
-            pc = new ProcessorContainer[2, 2];
-            pc[0, 0] = new ProcessorContainer(new Processor(new SignValue[17, 24], "1"));
-            pc[1, 0] = new ProcessorContainer(new Processor(new SignValue[18, 25], "2"));
-            pc[0, 1] = new ProcessorContainer(new Processor(new SignValue[19, 26], "3"),
-                new Processor(new SignValue[19, 26], "7t"));
-            pc[1, 1] = new ProcessorContainer(new Processor(new SignValue[20, 27], "4"));
-
-            chh = ReflectionTestClass.Matrixes(pc).ToList();
-            Assert.AreEqual(2, chh.Count);
-            Assert.AreEqual(pc.GetLength(0), chh[0].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[0].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[1].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[1].GetLength(1));
-
-            Assert.AreEqual('1', chh[0][0, 0]);
-            Assert.AreEqual('2', chh[0][1, 0]);
-            Assert.AreEqual('3', chh[0][0, 1]);
-            Assert.AreEqual('4', chh[0][1, 1]);
-
-            Assert.AreEqual('1', chh[1][0, 0]);
-            Assert.AreEqual('2', chh[1][1, 0]);
-            Assert.AreEqual('7', chh[1][0, 1]);
-            Assert.AreEqual('4', chh[1][1, 1]);
-
-            pc = new ProcessorContainer[2, 2];
-            pc[0, 0] = new ProcessorContainer(new Processor(new SignValue[21, 30], "1"));
-            pc[1, 0] = new ProcessorContainer(new Processor(new SignValue[22, 31], "2"));
-            pc[0, 1] = new ProcessorContainer(new Processor(new SignValue[23, 31], "3"));
-            pc[1, 1] = new ProcessorContainer(new Processor(new SignValue[23, 31], "4"),
-                new Processor(new SignValue[23, 31], "8i"));
-
-            chh = ReflectionTestClass.Matrixes(pc).ToList();
-            Assert.AreEqual(2, chh.Count);
-            Assert.AreEqual(pc.GetLength(0), chh[0].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[0].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[1].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[1].GetLength(1));
-
-            Assert.AreEqual('1', chh[0][0, 0]);
-            Assert.AreEqual('2', chh[0][1, 0]);
-            Assert.AreEqual('3', chh[0][0, 1]);
-            Assert.AreEqual('4', chh[0][1, 1]);
-
-            Assert.AreEqual('1', chh[1][0, 0]);
-            Assert.AreEqual('2', chh[1][1, 0]);
-            Assert.AreEqual('3', chh[1][0, 1]);
-            Assert.AreEqual('8', chh[1][1, 1]);
-
-            pc = new ProcessorContainer[1, 1];
-            pc[0, 0] = new ProcessorContainer(new Processor(new SignValue[21, 30], "1"),
-                new Processor(new SignValue[21, 30], "2"), new Processor(new SignValue[21, 30], "3"));
-
-            chh = ReflectionTestClass.Matrixes(pc).ToList();
-            Assert.AreEqual(3, chh.Count);
-
-            Assert.AreEqual(pc.GetLength(0), chh[0].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[0].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[1].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[1].GetLength(1));
-            Assert.AreEqual(pc.GetLength(0), chh[2].GetLength(0));
-            Assert.AreEqual(pc.GetLength(1), chh[2].GetLength(1));
-
-            Assert.AreEqual('1', chh[0][0, 0]);
-            Assert.AreEqual('2', chh[1][0, 0]);
-            Assert.AreEqual('3', chh[2][0, 0]);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ReflectionException0()
-        {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            ReflectionTestClass.Matrixes(null).ToList();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ReflectionException1()
-        {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            ReflectionTestClass.Matrixes(new ProcessorContainer[0, 0]).ToList();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ReflectionException2()
-        {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            ReflectionTestClass.Matrixes(new ProcessorContainer[1, 0]).ToList();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ReflectionException3()
-        {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            ReflectionTestClass.Matrixes(new ProcessorContainer[0, 1]).ToList();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ReflectionException4()
-        {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            ReflectionTestClass.Matrixes(new ProcessorContainer[1, 1]).ToList();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ReflectionException5()
-        {
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            ReflectionTestClass.Matrixes(new ProcessorContainer[4, 3]).ToList();
-        }
-
-        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ReflectionException7()
         {
@@ -804,7 +575,7 @@ namespace ReflectorTest
             SignValue[,] sv2 = new SignValue[1, 2];
             sv1[0, 0] = new SignValue(1001);
 
-            ProcessorSame ps = new ProcessorSame();
+            Reflection.ProcessorSame ps = new Reflection.ProcessorSame();
             Assert.AreEqual(false, ps.Equals(new Processor(sv1, "1"), new Processor(sv2, "1")));
 
             sv1[0, 0] = new SignValue(1000);
@@ -956,159 +727,43 @@ namespace ReflectorTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void ExcptReflection1()
-        {
-            ReflectionTestClass reflection = new ReflectionTestClass(MainReflectionDiff);
-            reflection.Reflections[0] = null;
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            reflection.Push(GetTestProcessor(MainProcessor)).ToArray();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void ExcptReflection2()
-        {
-            ReflectionTestClass reflection = new ReflectionTestClass(MainReflectionDiff);
-            reflection.Logical[0] = null;
-            // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            reflection.Push(GetTestProcessor(MainProcessor)).ToArray();
-        }
-
-        [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ExcptReflection3()
         {
-            ReflectionTestClass reflection = new ReflectionTestClass(MainReflectionDiff);
             // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            reflection.Push(null).ToArray();
+            new Reflection(MainReflectionDiff).Push(null).ToArray();
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ExcptReflection4()
         {
-            ReflectionTestClass reflection = new ReflectionTestClass(MainReflectionDiff);
             // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            reflection.Push(new Processor(new SignValue[1, 4], "Tag")).ToArray();
+            new Reflection(MainReflectionDiff).Push(new Processor(new SignValue[1, 4], "Tag")).ToArray();
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ExcptReflection5()
         {
-            ReflectionTestClass reflection = new ReflectionTestClass(MainReflectionDiff);
             // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            reflection.Push(new Processor(new SignValue[4, 5], "Tag")).ToArray();
+            new Reflection(MainReflectionDiff).Push(new Processor(new SignValue[4, 5], "Tag")).ToArray();
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ExcptReflection6()
         {
-            ReflectionTestClass reflection = new ReflectionTestClass(MainReflectionDiff);
             // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            reflection.Push(new Processor(new SignValue[4, 3], "Tag")).ToArray();
+            new Reflection(MainReflectionDiff).Push(new Processor(new SignValue[4, 3], "Tag")).ToArray();
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ExcptReflection7()
         {
-            ReflectionTestClass reflection = new ReflectionTestClass(MainReflectionDiff);
             // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-            reflection.Push(new Processor(new SignValue[5, 4], "Tag")).ToArray();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ExcptChangeCount1()
-        {
-            ReflectionTestClass.ChangeCount(null, MainReflectionDiff);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ExcptChangeCount2()
-        {
-            ReflectionTestClass.ChangeCount(new int[0], MainReflectionDiff);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ExcptChangeCount3()
-        {
-            ReflectionTestClass.ChangeCount(new int[1], null);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ExcptChangeCount4()
-        {
-            ReflectionTestClass.ChangeCount(new int[1], new ProcessorContainer[1, 0]);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ExcptChangeCount5()
-        {
-            ReflectionTestClass.ChangeCount(new int[1], new ProcessorContainer[0, 0]);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ExcptChangeCount7()
-        {
-            bool ex = false;
-            try
-            {
-                Assert.AreEqual(true, ReflectionTestClass.ChangeCount(new int[4], MainReflectionDiff));
-            }
-            catch
-            {
-                ex = true;
-            }
-            Assert.AreEqual(false, ex);
-
-            try
-            {
-                Assert.AreEqual(true, ReflectionTestClass.ChangeCount(new int[4], MainReflectionDiff));
-            }
-            catch
-            {
-                ex = true;
-            }
-            Assert.AreEqual(false, ex);
-
-            ReflectionTestClass.ChangeCount(new int[3], MainReflectionDiff);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ExcptChangeCount8()
-        {
-            bool ex = false;
-            try
-            {
-                Assert.AreEqual(true, ReflectionTestClass.ChangeCount(new int[4], MainReflectionDiff));
-            }
-            catch
-            {
-                ex = true;
-            }
-            Assert.AreEqual(false, ex);
-
-            try
-            {
-                Assert.AreEqual(true, ReflectionTestClass.ChangeCount(new int[4], MainReflectionDiff));
-            }
-            catch
-            {
-                ex = true;
-            }
-            Assert.AreEqual(false, ex);
-
-            ReflectionTestClass.ChangeCount(new int[5], MainReflectionDiff);
+            new Reflection(MainReflectionDiff).Push(new Processor(new SignValue[5, 4], "Tag")).ToArray();
         }
 
         [TestMethod]
@@ -1532,22 +1187,6 @@ namespace ReflectorTest
             Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "A2")));
             Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "b3")));
             Assert.AreEqual(hashSum, HashCreator.GetHash(new Processor(new[] { new SignValue(567) }, "B4")));
-        }
-
-        sealed class ReflectionTestClass : Reflection
-        {
-            public ReflectionTestClass(ProcessorContainer[,] pc) : base(pc)
-            {
-            }
-
-            public new char[][,] Logical => base.Logical;
-            public new Reflector[] Reflections => base.Reflections;
-
-            public new static IEnumerable<char[,]> Matrixes(ProcessorContainer[,] processors) =>
-                Reflection.Matrixes(processors);
-
-            public new static bool ChangeCount(int[] count, ProcessorContainer[,] processors) =>
-                Reflection.ChangeCount(count, processors);
         }
     }
 }

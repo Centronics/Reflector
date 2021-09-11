@@ -16,12 +16,12 @@ namespace DynamicReflector
         /// <summary>
         ///     Карты для выборки результатов распознавания.
         /// </summary>
-        protected readonly Dictionary<char, Processor> _processors = new Dictionary<char, Processor>();
+        readonly Dictionary<char, Processor> _processors = new Dictionary<char, Processor>();
 
         /// <summary>
         ///     Процессы, которые будут происходить вне зависимости друг от друга.
         /// </summary>
-        protected readonly ProcessorContainer[,] _processorContainers;
+        readonly ProcessorContainer[,] _processorContainers;
 
         /// <summary>
         ///     Инициализирует текущий экземпляр класса, добавляя указанные карты в коллекцию класса, создавая её копию. Массив
@@ -46,7 +46,7 @@ namespace DynamicReflector
                 {
                     ProcessorContainer pc = processors[x, y];
                     _processorContainers[x, y] = CopyContainer(pc);
-                    CopyProcessorContainer(pc);
+                    AddToCache(pc);
                 }
             MapHeight = processors[0, 0].Height;
             MapWidth = processors[0, 0].Width;
@@ -55,22 +55,22 @@ namespace DynamicReflector
         /// <summary>
         ///     Размер добавленных карт для распознавания по высоте.
         /// </summary>
-        public virtual int MapHeight { get; }
+        public int MapHeight { get; }
 
         /// <summary>
         ///     Размер добавленных карт для распознавания по ширине.
         /// </summary>
-        public virtual int MapWidth { get; }
+        public int MapWidth { get; }
 
         /// <summary>
         ///     Размер, которому должна соответствовать входная распознаваемая карта по ширине.
         /// </summary>
-        public virtual int ProcessorWidth => _processorContainers.GetLength(0) * MapWidth;
+        public int ProcessorWidth => _processorContainers.GetLength(0) * MapWidth;
 
         /// <summary>
         ///     Размер, которому должна соответствовать входная распознаваемая карта по высоте.
         /// </summary>
-        public virtual int ProcessorHeight => _processorContainers.GetLength(1) * MapHeight;
+        public int ProcessorHeight => _processorContainers.GetLength(1) * MapHeight;
 
         /// <summary>
         /// Создаёт полную копию заданного контейнера.
@@ -92,20 +92,27 @@ namespace DynamicReflector
         ///     Добавление производится в общую коллекцию для ускорения поиска.
         /// </summary>
         /// <param name="pc">Коллекция добавляемых карт.</param>
-        protected void CopyProcessorContainer(ProcessorContainer pc)
+        void AddToCache(ProcessorContainer pc)
         {
             if (pc == null)
                 throw new ArgumentNullException(nameof(pc),
-                    $"{nameof(CopyProcessorContainer)}: Коллекция добавляемых карт отсутствует (null).");
+                    $"{nameof(AddToCache)}: Коллекция добавляемых карт отсутствует (null).");
+
             for (int k = 0; k < pc.Count; k++)
             {
                 Processor p = pc[k];
                 char tag = char.ToUpper(p.Tag[0]);
-                if (_processors.ContainsKey(tag))
+
+                try
+                {
+                    _processors.Add(tag, p);
+                }
+                catch (ArgumentException)
+                {
                     throw new ArgumentException(
-                        $"{nameof(CopyProcessorContainer)}: Обнаружены повторяющиеся карты: карта с таким названием ({tag}) уже была добавлена.",
+                        $"{nameof(AddToCache)}: Обнаружены повторяющиеся карты: карта с таким названием ({tag}) уже была добавлена.",
                         nameof(pc));
-                _processors[tag] = p;
+                }
             }
         }
 
@@ -122,7 +129,7 @@ namespace DynamicReflector
         ///     В случае успеха возвращает значение <see langword="true" />, в противном случае возвращает значение
         ///     <see langword="false" />.
         /// </returns>
-        protected static bool IsOneSize(ProcessorContainer[,] processors)
+        static bool IsOneSize(ProcessorContainer[,] processors)
         {
             if (processors == null)
                 throw new ArgumentNullException(nameof(processors),
@@ -174,7 +181,7 @@ namespace DynamicReflector
         ///     В случае нахождения карты с указанным названием, возвращает её. В противном случае выбрасывает исключение типа
         ///     <see cref="ArgumentNullException" />.
         /// </returns>
-        protected Processor GetMapByName(char tag)
+        Processor GetMapByName(char tag)
         {
             if (char.IsWhiteSpace(tag))
                 throw new ArgumentNullException(nameof(tag),
@@ -189,7 +196,7 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="processors">Карты, которые необходимо объединить.</param>
         /// <returns>Возвращает итоговую карту в виде массива <see cref="SignValue" />.</returns>
-        protected SignValue[,] CreateMap(Processor[,] processors)
+        SignValue[,] MergeMap(Processor[,] processors)
         {
             int mx = ProcessorWidth, my = ProcessorHeight;
             SignValue[,] sv = new SignValue[mx, my];
@@ -212,7 +219,7 @@ namespace DynamicReflector
         /// <param name="x">Координата X необходимой части карты.</param>
         /// <param name="y">Координата Y необходимой части карты.</param>
         /// <returns>Возвращает указанную часть карты в виде массива <see cref="SignValue" />.</returns>
-        protected SignValue[,] GetMapPiece(Processor processor, int x, int y)
+        SignValue[,] GetMapPiece(Processor processor, int x, int y)
         {
             SignValue[,] sv = new SignValue[MapWidth, MapHeight];
             for (int cy = y, y1 = 0, my = y + MapHeight; cy < my; cy++, y1++)
@@ -229,7 +236,7 @@ namespace DynamicReflector
         ///     В случае, если какой-либо символ является пробелом или ему подобным, возвращается значение
         ///     <see langword="true" />, в противном случае возвращается значение <see langword="false" />.
         /// </returns>
-        protected static bool IsNull(char[,] words)
+        static bool IsNull(char[,] words)
         {
             if (words == null || words.Length == 0)
                 return true;
@@ -259,7 +266,7 @@ namespace DynamicReflector
         ///     В случае нахождения результатов возвращает карту, составленную из тех карт, названия которых были указаны в
         ///     параметре matrix, в противном случае возвращает значение <see langword="null" />.
         /// </returns>
-        public virtual Processor Push(Processor proc, char[,] matrix)
+        public Processor Push(Processor proc, char[,] matrix)
         {
             if (proc == null)
                 throw new ArgumentNullException(nameof(proc), $"{nameof(Push)}: Распознаваемая карта равна null.");
@@ -294,7 +301,7 @@ namespace DynamicReflector
             for (int y = 0; y < my; y++)
                 for (int x = 0; x < mx; x++)
                     processors[x, y] = GetMapByName(matrix[x, y]);
-            return new Processor(CreateMap(processors), proc.Tag);
+            return new Processor(MergeMap(processors), proc.Tag);
         }
 
         /// <summary>
