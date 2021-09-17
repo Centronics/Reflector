@@ -25,14 +25,14 @@ namespace ReflectorExample.Sources
         readonly List<Processor>[,] _reflectorPartProcessors = new List<Processor>[3, 3];
 
         /// <summary>
-        /// Отвечает за операции с исходным изображением.
+        /// Отвечает за операции с исходным изображением, с поля Reflection.
         /// </summary>
-        readonly Painter _reflectionSourcePicturePainter;
+        readonly Painter _reflectionSourceImagePainter;
 
         /// <summary>
         /// Отвечает за операции с изображениями на поле Reflector.
         /// </summary>
-        readonly Painter[,] _reflectorPartPainters = new Painter[3, 3];
+        readonly Painter[,] _reflectorPartPainters = new Painter[3, 3];//можно упростить?
 
         /// <summary>
         /// Хранит коллекцию <see cref="Neuron"/>, созданных из изображений на поле Reflector и порождённых в процессе установления связи между существующими <see cref="Neuron"/>.
@@ -42,7 +42,7 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Служит для резервирования изначального значения поля "Результирующее изображение".
         /// </summary>
-        readonly string _resultString;
+        readonly string _commonImageResultString;
 
         /// <summary>
         ///     Таймер для измерения времени, затраченного на какую-либо операцию.
@@ -60,9 +60,9 @@ namespace ReflectorExample.Sources
         readonly string[,] _reflectorQueryFields = new string[3, 3];
 
         /// <summary>
-        /// Отражает номер результата в массиве результатов, на котором в текущий момент находится пользователь.
+        /// Отражает номер результата в массиве результатов работы компонентов <see cref="Reflector"/> и <see cref="Reflection"/>, на который смотрит пользователь в настоящее время.
         /// </summary>
-        int _currentResult;
+        int _currentCommonImageResultIndex;
 
         /// <summary>
         /// Основной объект для распознавания. Обновляется в случае добавления и/или изменения распознаваемых или распознающих карт.
@@ -75,16 +75,16 @@ namespace ReflectorExample.Sources
         Reflection _reflection;
 
         /// <summary>
-        /// Содержит результаты работы компонента <see cref="Reflection"/> (карты) в виде изображений.
+        /// Содержит результаты работы компонентов <see cref="Reflector"/> и <see cref="Reflection"/> в виде изображений.
         /// </summary>
-        Bitmap[] _recognizeResults;
+        Bitmap[] _commonImageResults;
 
         /// <summary>
         /// Отвечает за автоматическую обработку введённого в текстовое поле текста.
         /// Значение <see langword="true"/> получает для того, чтобы предотвратить повторную обработку текста, который уже находится в обработке.
         /// Другими словами, значение <see langword="true"/> запрещает событию изменения текста в текстовом поле выполняться во время обработки этого события.
         /// </summary>
-        bool _txtInProcessing;
+        bool _txtReflectorQueryPartInProcessing;
 
         /// <summary>
         ///     Поток, отвечающий за выполнение процедуры распознавания.
@@ -106,7 +106,7 @@ namespace ReflectorExample.Sources
             _reflectorPartPainters[0, 2] = new Painter(picReflectorPart02);
             _reflectorPartPainters[1, 2] = new Painter(picReflectorPart12);
             _reflectorPartPainters[2, 2] = new Painter(picReflectorPart22);
-            _reflectionSourcePicturePainter = new Painter(picReflectionSource);
+            _reflectionSourceImagePainter = new Painter(picReflectionSourceImage);
             _reflectorGroupBoxTextFields[0, 0] = grpReflectorPart00.Text;
             _reflectorGroupBoxTextFields[1, 0] = grpReflectorPart10.Text;
             _reflectorGroupBoxTextFields[2, 0] = grpReflectorPart20.Text;
@@ -125,13 +125,13 @@ namespace ReflectorExample.Sources
             _reflectorQueryFields[0, 2] = txtReflectorQueryPart02.Text;
             _reflectorQueryFields[1, 2] = txtReflectorQueryPart12.Text;
             _reflectorQueryFields[2, 2] = txtReflectorQueryPart22.Text;
-            _resultString = grpResult.Text;
+            _commonImageResultString = grpCommonImageResult.Text;
         }
 
         /// <summary>
-        /// Получает карты, содержащиеся на поле Reflector.
+        /// Получает контейнеры карт с поля Reflector.
         /// </summary>
-        ProcessorContainer[,] Containers
+        ProcessorContainer[,] ReflectorFieldContainers
         {
             get
             {
@@ -145,7 +145,7 @@ namespace ReflectorExample.Sources
                         catch (Exception ex)
                         {
                             throw new Exception(
-                                $"{nameof(Containers)}: Ошибка в поле с координатами ({x}, {y}): {ex.Message}");
+                                $"{nameof(ReflectorFieldContainers)}: Ошибка в поле с координатами ({x}, {y}): {ex.Message}");
                         }
                 return pcs;
             }
@@ -154,12 +154,12 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Получает значение, отражающее, совпадает ли текущее результирующее изображение с исходным (<see langword="true"/>), или нет (<see langword="false"/>).
         /// </summary>
-        bool CompareWithResult
+        bool IsSelectedResultImageEqualWithSelectedCommonImageResult
         {
             get
             {
-                Bitmap b1 = _reflectionSourcePicturePainter.CurrentBitmap;
-                Bitmap b2 = _recognizeResults[_currentResult];
+                Bitmap b1 = _reflectionSourceImagePainter.CurrentBitmap;
+                Bitmap b2 = _commonImageResults[_currentCommonImageResultIndex];
                 if (b2.Width != b1.Width || b2.Height != b1.Height)
                     return false;
                 for (int y = 0; y < b1.Height; y++)
@@ -173,11 +173,10 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Предназначено для отключения элементов управления на время выполнения операции, и включения их после её завершения.
         /// </summary>
-        bool EnableButtons
+        bool IsButtonsEnabled
         {
             set
             {
-                grpReflectorQuery.Enabled = value;
                 grpReflectorPart00.Enabled = value;
                 grpReflectorPart01.Enabled = value;
                 grpReflectorPart02.Enabled = value;
@@ -187,6 +186,8 @@ namespace ReflectorExample.Sources
                 grpReflectorPart21.Enabled = value;
                 grpReflectorPart12.Enabled = value;
                 grpReflectorPart22.Enabled = value;
+                grpReflectorParameters.Enabled = value;
+                grpReflectorQuery.Enabled = value;
                 grpNeuron.Enabled = value;
             }
         }
@@ -201,24 +202,21 @@ namespace ReflectorExample.Sources
         {
             try
             {
-                VerifyPictureBoxSizes();
+                VerifyImageBoxSizes();
                 for (int y = 0; y < _reflectorPartProcessors.GetLength(1); y++)
                     for (int x = 0; x < _reflectorPartProcessors.GetLength(0); x++)
                     {
-                        _reflectorPartProcessors[x, y] = new List<Processor>(ReflectorFieldDataBase.GetProcessors(x, y));
-                        if (!VerifyMapsImageSizes(_reflectorPartProcessors[x, y]))
-                        {
-                            Application.Exit();
-                            return;
-                        }
-                        ReflectorPartPrevButton(x, y);
+                        List<Processor> lst = _reflectorPartProcessors[x, y] = new List<Processor>(ReflectorFieldDataBase.GetProcessors(x, y));
+                        CheckReflectorLoadedProcessorSizes(lst);
+                        if (lst.Count > 0)
+                            ViewSelectedReflectorPart(x, y, lst[0]);
                     }
                 string main = Path.Combine(Application.StartupPath, "main.bmp");
                 if (!File.Exists(main))
                     return;
                 using (FileStream fs = new FileStream(main, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    _reflectionSourcePicturePainter.CurrentBitmap = new Bitmap(fs);
-                if (!VerifyMainImageSize(_reflectionSourcePicturePainter.CurrentBitmap))
+                    _reflectionSourceImagePainter.CurrentBitmap = new Bitmap(fs);
+                if (!CheckMainProcessorSize(_reflectionSourceImagePainter.CurrentBitmap))
                     Application.Exit();
             }
             catch (Exception ex)
@@ -232,16 +230,16 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Выполняет операцию самоконтроля изначальных параметров работы программы, чтобы не было ошибок при подаче входных данных в тестируемые компоненты.
         /// </summary>
-        void VerifyPictureBoxSizes()
+        void VerifyImageBoxSizes()
         {
             Size main = picReflectorPart00.Size;
             if (picReflectorPart00.Size != main || picReflectorPart10.Size != main || picReflectorPart20.Size != main ||
                 picReflectorPart01.Size != main || picReflectorPart11.Size != main || picReflectorPart21.Size != main ||
                 picReflectorPart02.Size != main || picReflectorPart12.Size != main || picReflectorPart22.Size != main)
                 throw new Exception("Обнаружены поля рисования различных размеров.");
-            if (picReflectionSource.Width % main.Width != 0)
+            if (picReflectionSourceImage.Width % main.Width != 0)
                 throw new Exception("Ширина основного поля должна быть кратна ширине всех полей для рисования.");
-            if (picReflectionSource.Height % main.Height != 0)
+            if (picReflectionSourceImage.Height % main.Height != 0)
                 throw new Exception("Высота основного поля должна быть кратна высоте всех полей для рисования.");
         }
 
@@ -254,13 +252,8 @@ namespace ReflectorExample.Sources
         TextBox GetReflectorQueryPartTextBox(int x, int y)
         {
             foreach (Control c in from Control c in grpReflectorQuery.Controls where c.GetType() == typeof(TextBox) select c)
-            {
-                if (!GetControlCoords(out int px, out int py, c.Name, "txtReflectorQuery"))
-                    continue;
-                if (px != x || py != y)
-                    continue;
-                return (TextBox)c;
-            }
+                if (GetControlCoords(out int px, out int py, c.Name, "txtReflectorQuery") && px == x && py == y)
+                    return (TextBox)c;
             throw new Exception($"Требуемый {nameof(TextBox)} почему-то отсутствует на поле ({x}, {y}).");
         }
 
@@ -314,7 +307,7 @@ namespace ReflectorExample.Sources
             List<Processor> reflectorPartProcessors = _reflectorPartProcessors[x, y];
             reflectorPartProcessors.Add(p.CurrentProcessor);
             _reflectorPartImageCurrentIndex[x, y] = reflectorPartProcessors.Count - 1;
-            DisplayReflectorPartStatus(x, y);
+            DisplayReflectorPartStatusOnGroupBox(x, y);
             return true;
         }
 
@@ -397,19 +390,19 @@ namespace ReflectorExample.Sources
             }
         }
 
-        void BtnReflectionSourceClear_Click(object sender, EventArgs e) => _reflectionSourcePicturePainter.Clear();
+        void BtnReflectionSourceImageClear_Click(object sender, EventArgs e) => _reflectionSourceImagePainter.Clear();
 
         /// <summary>
         /// Разбивает исходное изображение на изображения равных размеров, затем распределяет их по полю Reflector, и сохраняет на жёсткий диск, отображая на экране.
         /// </summary>
         /// <param name="sender">Вызывающий объект. Не используется.</param>
         /// <param name="e">Аргументы. Не используется.</param>
-        void BtnReflectionSourceAdd_Click(object sender, EventArgs e)
+        void BtnReflectionSourceImageAdd_Click(object sender, EventArgs e)
         {
             try
             {
-                _reflectionSourcePicturePainter.CurrentProcessorName = "main";
-                Bitmap[] btms = ImageSplit(_reflectionSourcePicturePainter.CurrentProcessor, picReflectorPart00.Width, picReflectorPart00.Height).ToArray();
+                _reflectionSourceImagePainter.CurrentProcessorName = "main";
+                Bitmap[] btms = ImageSplit(_reflectionSourceImagePainter.CurrentProcessor, picReflectorPart00.Width, picReflectorPart00.Height).ToArray();
                 if (btms.Length != 9)
                 {
                     MessageBox.Show(this, $@"Количество карт неверное ({btms.Length}). Должно быть 9.");
@@ -466,163 +459,210 @@ namespace ReflectorExample.Sources
                 }
         }
 
-        void ResetResults()
+        /// <summary>
+        /// Производит полную очистку результатов выполнения запроса.
+        /// Актуализирует состояние пользовательского интерфейса.
+        /// Блокирует кнопки перемотки и сохранения.
+        /// </summary>
+        void ResetCommonImageResults()
         {
-            _recognizeResults = null;
-            _currentResult = 0;
-            BtnNextResult_Click(btnNextReflectionResult, new EventArgs());
-            btnPrevReflectionResult.Enabled = btnNextReflectionResult.Enabled = btnSaveReflectionResultImage.Enabled = false;
+            _commonImageResults = null;
+            _currentCommonImageResultIndex = 0;
+            btnPrevCommonImageResult.Enabled = btnNextCommonImageResult.Enabled = btnSaveCommonImageResult.Enabled = false;
+            picCommonImageResult.Image = null;
+            grpCommonImageResult.Text = _commonImageResultString;
         }
 
+        /// <summary>
+        /// Обрабатывает запрос (с помощью класса <see cref="Reflection"/>) на составление результирующих карт, из карт, которые располагаются (не только отображаются в текущий момент) на поле Reflector.
+        /// Возвращаются все карты, которые можно составить из карт, содержащихся на поле Reflector, используя различные запросы.
+        /// Результаты отображаются на панели "Результат выполнения запроса".
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
         void BtnReflectionPush_Click(object sender, EventArgs e) => SafetyExecute(() =>
         {
             if (_workThread?.IsAlive ?? false)
                 return;
-            ResetResults();
-            EnableButtons = false;
-            _workThread = new Thread(() => SafetyExecute(() =>
-            {
-                if (_reflection == null)
-                {
-                    InvokeFunction(() => btnReflectionPush.Text = @"Подготовка...");
-                    _reflection = new Reflection(Containers);
-                }
-                InvokeFunction(() =>
-                {
-                    txtReflectionMapWidth.Text = _reflection.MapWidth.ToString();
-                    txtReflectionMapHeight.Text = _reflection.MapHeight.ToString();
-                });
-                _reflectionSourcePicturePainter.CurrentProcessorName = "main";
-                WaitableTimer(btnReflectionPush);
-                IEnumerable<Processor> processors = _reflection.Push(_reflectionSourcePicturePainter.CurrentProcessor);
-                _stopwatch.Stop();
-                if ((_recognizeResults = processors?.Select(ProcessorToBitmap).ToArray()) == null)
-                    return;
-                InvokeFunction(() =>
-                {
-                    btnSaveReflectionResultImage.Enabled = true;
-                    btnPrevReflectionResult.Enabled = btnNextReflectionResult.Enabled = _recognizeResults.Length > 1;
-                    BtnPrevResult_Click(btnPrevReflectionResult, new EventArgs());
-                });
-            }))
-            { IsBackground = true, Name = nameof(Reflection), Priority = ThreadPriority.Highest };
-            _workThread.Start();
-        });
 
-        void BtnReflectorPush_Click(object sender, EventArgs e) => SafetyExecute(() =>
-        {
-            if (_workThread?.IsAlive ?? false)
-                return;
-            ResetResults();
-            EnableButtons = false;
+            if (_reflection == null)
+                _reflection = new Reflection(ReflectorFieldContainers);
+
+            txtCommonImageWidth.Text = _reflection.MapWidth.ToString();
+            txtCommonImageHeight.Text = _reflection.MapHeight.ToString();
+
+            ResetCommonImageResults();
+            IsButtonsEnabled = false;
+
             _workThread = new Thread(() => SafetyExecute(() =>
             {
-                if (_reflector == null)
-                {
-                    InvokeFunction(() => btnReflectorPush.Text = @"Подготовка...");
-                    _reflector = new Reflector(Containers);
-                }
-                char[,] ch = null;
-                InvokeFunction(() =>
-                {
-                    ch = CurrentReflectorQuery;
-                    txtReflectorMapWidth.Text = _reflector.MapWidth.ToString();
-                    txtReflectorMapHeight.Text = _reflector.MapHeight.ToString();
-                    txtReflectorProcessorWidth.Text = _reflector.ProcessorWidth.ToString();
-                    txtReflectorProcessorHeight.Text = _reflector.ProcessorHeight.ToString();
-                });
-                _reflectionSourcePicturePainter.CurrentProcessorName = "main";
-                WaitableTimer(btnReflectorPush);
-                Processor p = _reflector.Push(_reflectionSourcePicturePainter.CurrentProcessor, ch);
+                _reflectionSourceImagePainter.CurrentProcessorName = "main";
+                WaitableTimer(btnReflectionPush);
+                IEnumerable<Processor> processors = _reflection.Push(_reflectionSourceImagePainter.CurrentProcessor);
                 _stopwatch.Stop();
-                Bitmap result = ProcessorToBitmap(p);
-                if ((_recognizeResults = result != null ? new[] { result } : null) == null)
+                if ((_commonImageResults = processors?.Select(ProcessorToBitmap).ToArray()) == null)
                     return;
                 InvokeFunction(() =>
                 {
-                    btnSaveReflectionResultImage.Enabled = true;
-                    btnPrevReflectionResult.Enabled = btnNextReflectionResult.Enabled = false;
-                    BtnPrevResult_Click(btnPrevReflectionResult, new EventArgs());
+                    btnSaveCommonImageResult.Enabled = true;
+                    btnPrevCommonImageResult.Enabled = btnNextCommonImageResult.Enabled = _commonImageResults.Length > 1;
+                    ViewSelectedCommonResult(0);
                 });
             }))
-            { IsBackground = true, Name = nameof(Reflection), Priority = ThreadPriority.Highest };
+            {
+                IsBackground = true,
+                Name = nameof(Reflection),
+                Priority = ThreadPriority.Highest
+            };
+
             _workThread.Start();
         });
 
         /// <summary>
-        /// 
+        /// Обрабатывает запрос (с помощью класса <see cref="Reflector"/>) на составление результирующей карты, из карт, которые располагаются (не только отображаются в текущий момент) на поле Reflector, в случае, если исходную карту возможно распознать посредством указанного запроса.
+        /// Результаты отображаются на панели "Результат выполнения запроса".
         /// </summary>
-        /// <param name="sender">Вызывающий объект.</param>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
         /// <param name="e">Аргументы. Не используется.</param>
-        void BtnNeuronFindRelation_Click(object sender, EventArgs e) => SafetyExecute(() =>
+        void BtnReflectorPush_Click(object sender, EventArgs e) => SafetyExecute(() =>
         {
             if (_workThread?.IsAlive ?? false)
                 return;
-            if (lstNeurons.SelectedIndex < 0)
-            {
-                MessageBox.Show(this, @"Ошибка! Выберите нейрон, с помощью которого будет создан новый нейрон!", @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            ResetResults();
-            EnableButtons = false;
+
+            if (_reflector == null)
+                _reflector = new Reflector(ReflectorFieldContainers);
+
+            char[,] ch = CurrentReflectorQuery;
+            txtReflectorMapWidth.Text = _reflector.MapWidth.ToString();
+            txtReflectorMapHeight.Text = _reflector.MapHeight.ToString();
+            txtReflectorProcessorWidth.Text = _reflector.ProcessorWidth.ToString();
+            txtReflectorProcessorHeight.Text = _reflector.ProcessorHeight.ToString();
+
+            ResetCommonImageResults();
+            IsButtonsEnabled = false;
+
             _workThread = new Thread(() => SafetyExecute(() =>
             {
-                int selIndex = -1;
+                _reflectionSourceImagePainter.CurrentProcessorName = "main";
+                WaitableTimer(btnReflectorPush);
+                Processor p = _reflector.Push(_reflectionSourceImagePainter.CurrentProcessor, ch);
+                _stopwatch.Stop();
+                Bitmap result = ProcessorToBitmap(p);
+                if ((_commonImageResults = result != null ? new[] { result } : null) == null)
+                    return;
                 InvokeFunction(() =>
                 {
-                    btnNeuronFindRelation.Text = @"Подготовка...";
-                    selIndex = lstNeurons.SelectedIndex - 1;
+                    btnSaveCommonImageResult.Enabled = true;
+                    btnPrevCommonImageResult.Enabled = btnNextCommonImageResult.Enabled = false;
+                    ViewSelectedCommonResult(0);
                 });
+            }))
+            {
+                IsBackground = true,
+                Name = nameof(Reflector),
+                Priority = ThreadPriority.Highest
+            };
 
-                if (selIndex < 0)
-                {
-                    Neuron currentNeuron = CurrentNeuron;
-                    InvokeFunction(() =>
-                    {
-                        _neurons.Insert(0, currentNeuron);
-                        lstNeurons.Items.Insert(1, $@"({currentNeuron.Processors.Count()}) {DateTime.Now:HH:mm:ss} ({currentNeuron})");
-                        lstNeurons.SelectedIndex = 1;
-                    });
-                    return;
-                }
+            _workThread.Start();
+        });
 
-                WaitableTimer((Control)sender);
+        /// <summary>
+        /// Отвечает за операции с <see cref="Neuron"/>: как за создание нового, так и за порождение нового из уже существующего.
+        /// Схема работы следующая: нарисовав что-либо на поле Reflector, можно создать новый <see cref="Neuron"/>, выбрав соответствующий пункт в списке существующих <see cref="Neuron"/>.
+        /// Чтобы увидеть содержимое <see cref="Neuron"/>, надо выбрать его в спике существующих <see cref="Neuron"/>.
+        /// Если в процессе порождения нового <see cref="Neuron"/> произойдёт какая-либо ошибка, он не будет добавлен в список.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
+        void BtnNeuronFindRelation_Click(object sender, EventArgs e) => SafetyExecute(() =>
+        {
+            string GetNeuronString() => $@"(№{_neurons.Count + 1}) {DateTime.Now:HH:mm:ss}";
 
-                Neuron derivedNeuron = _neurons[selIndex].FindRelation(NeuronQuery);
+            void AddNeuronInfoToListBox(string neuronString) => InvokeFunction(() => lstNeurons.Items.Insert(1, neuronString));
+
+            if (_workThread?.IsAlive ?? false)
+                return;
+
+            int selIndex = lstNeurons.SelectedIndex - 1;
+
+            if (selIndex < -1)
+            {
+                MessageBox.Show(this, @"Ошибка! Выберите нейрон, с помощью которого будет создан новый нейрон!", @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (selIndex == -1)
+            {
+                string newNeuronString = GetNeuronString();
+                _neurons.Insert(0, CurrentNeuron);
+                AddNeuronInfoToListBox(newNeuronString);
+                return;
+            }
+
+            Neuron parentNeuron = _neurons[selIndex];
+
+            IEnumerable<(Processor, string)> enNeuronQuery = CurrentNeuronQuery;
+
+            if (enNeuronQuery == null)
+                throw new Exception(@"Неизвестная ошибка при чтении запроса.");
+
+            (Processor, string)[] neuronQuery = enNeuronQuery.ToArray();
+
+            ResetCommonImageResults();
+            IsButtonsEnabled = false;
+
+            _workThread = new Thread(() => SafetyExecute(() =>
+            {
+                WaitableTimer(btnNeuronFindRelation);
+
+                Neuron derivedNeuron = parentNeuron.FindRelation(neuronQuery);
 
                 _stopwatch.Stop();
 
                 if (derivedNeuron == null)
-                {
-                    InvokeFunction(() => MessageBox.Show(this, $@"{nameof(Neuron)} не создался.",
-                        @"Результат", MessageBoxButtons.OK, MessageBoxIcon.Information));
                     return;
-                }
 
-                InvokeFunction(() =>
-                {
-                    _neurons.Insert(0, derivedNeuron);
-                    lstNeurons.Items.Insert(1, $@"({_neurons.Count}) {DateTime.Now:HH:mm:ss} ({derivedNeuron})");
-                    lstNeurons.SelectedIndex = 1;
-                });
+                string derivedNeuronString = GetNeuronString();
 
-                for (int y = 0, j = 0; y < 3; y++)
-                    for (int x = 0; x < 3; x++, j++)
-                    {
-                        Processor p = derivedNeuron.Processors.ElementAt(j);
-                        _reflectorPartPainters[x, y].CurrentProcessor = p;
-                        GetReflectorQueryPartTextBox(x, y).Text = p.Tag;
-                    }
+                IEnumerable<Processor> enDerivedNeuronProcessors = derivedNeuron.Processors;
+                if (enDerivedNeuronProcessors == null)
+                    throw new Exception($@"Ошибка при получении содержимого порождённого {nameof(Neuron)}. Он будет отсутствовать в списке.");
 
-                InvokeFunction(() =>
-                {
-                    btnSaveReflectionResultImage.Enabled = true;
-                    btnPrevReflectionResult.Enabled = btnNextReflectionResult.Enabled = _recognizeResults.Length > 1;
-                    BtnPrevResult_Click(btnPrevReflectionResult, new EventArgs());
-                });
+                int neuronProcessorsCount = enDerivedNeuronProcessors.Count();
+                if (neuronProcessorsCount != 9)
+                    throw new Exception($@"Количество карт в порождённом {nameof(Neuron)} отличается от 9, и равно {neuronProcessorsCount}. Он будет отсутствовать в списке.");
+
+                _neurons.Insert(0, derivedNeuron);
+
+                AddNeuronInfoToListBox(derivedNeuronString);
             }))
-            { IsBackground = true, Name = nameof(Reflection), Priority = ThreadPriority.Highest };
+            {
+                IsBackground = true,
+                Name = nameof(Reflection),
+                Priority = ThreadPriority.Highest
+            };
+
             _workThread.Start();
+        });
+
+        /// <summary>
+        /// Отображает содержимое выбранного <see cref="Neuron"/> на форме.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
+        void LstNeurons_SelectedIndexChanged(object sender, EventArgs e) => SafetyExecute(() =>
+        {
+            int selIndex = lstNeurons.SelectedIndex - 1;
+            if (selIndex < 0)
+                return;
+            Processor[] neuronProcessors = _neurons[selIndex].Processors.ToArray();
+            for (int y = 0, index = 0; y < 3; y++)
+                for (int x = 0; x < 3; x++, index++)
+                {
+                    Processor processor = neuronProcessors[index];
+                    _reflectorPartPainters[x, y].CurrentProcessor = processor;
+                    GetReflectorQueryPartTextBox(x, y).Text = processor.Tag;
+                }
         });
 
         /// <summary>
@@ -641,7 +681,7 @@ namespace ReflectorExample.Sources
             return result;
         }
 
-        void BtnImageLoad_Click(object sender, EventArgs e)
+        void BtnReflectionSourceImageLoad_Click(object sender, EventArgs e)
         {
             try
             {
@@ -651,9 +691,9 @@ namespace ReflectorExample.Sources
                 using (FileStream fs = new FileStream(OpenFile.FileName, FileMode.Open, FileAccess.Read,
                     FileShare.Read))
                     b = new Bitmap(fs);
-                if (!VerifyMainImageSize(b))
+                if (!CheckMainProcessorSize(b))
                     return;
-                _reflectionSourcePicturePainter.CurrentBitmap = b;
+                _reflectionSourceImagePainter.CurrentBitmap = b;
             }
             catch (Exception ex)
             {
@@ -661,53 +701,53 @@ namespace ReflectorExample.Sources
             }
         }
 
-        bool VerifyMainImageSize(Image b)
+        bool CheckMainProcessorSize(Image b)
         {
             if (b == null)
                 throw new ArgumentNullException(nameof(b), @"Требуется задать главное изображение для проверки.");
-            if (b.Width != picReflectionSource.Width)
+            if (b.Width != picReflectionSourceImage.Width)
             {
                 MessageBox.Show(this,
-                    $@"Главное загружаемое изображение не соответствует по ширине ({b.Width} != {picReflectionSource.Width}).");
+                    $@"Главное загружаемое изображение не соответствует по ширине ({b.Width} != {picReflectionSourceImage.Width}).");
                 return false;
             }
-            if (b.Height == picReflectionSource.Height)
+            if (b.Height == picReflectionSourceImage.Height)
                 return true;
             MessageBox.Show(this,
-                $@"Главное загружаемое изображение не соответствует по высоте ({b.Height} != {picReflectionSource.Height}).");
+                $@"Главное загружаемое изображение не соответствует по высоте ({b.Height} != {picReflectionSourceImage.Height}).");
             return false;
         }
-
-        bool VerifyMapsImageSizes(IEnumerable<Processor> bs)
+        //необходимо определить с размерами кнопок ОК и "удалить"
+        /// <summary>
+        /// Проверяет размеры загружаемых карт, предназначенных для поля Reflector.
+        /// </summary>
+        /// <param name="processors">Проверяемые карты.</param>
+        void CheckReflectorLoadedProcessorSizes(IEnumerable<Processor> processors)
         {
-            if (bs == null)
-                throw new ArgumentNullException(nameof(bs), @"Требуется задать хотя бы одно изображение для проверки.");
-            foreach (Processor b in bs)
+            if (processors == null)
+                throw new ArgumentNullException(nameof(processors), @"Требуется задать хотя бы одну карту для проверки.");
+            foreach (Processor processor in processors)
             {
-                if (b == null)
-                    throw new ArgumentNullException(nameof(bs), @"Требуется задать изображение для проверки.");
-                if (b.Width != picReflectorPart00.Width)
-                {
-                    MessageBox.Show(this,
-                        $@"Загружаемое изображение ({b.Tag}) не соответствует по ширине ({b.Width} != {picReflectorPart00.Width}).");
-                    return false;
-                }
-                if (b.Height == picReflectorPart00.Height)
-                    continue;
-                MessageBox.Show(this,
-                    $@"Загружаемое изображение ({b.Tag}) не соответствует по высоте ({b.Height} != {picReflectorPart00.Height}).");
-                return false;
+                if (processor == null)
+                    throw new ArgumentNullException(nameof(processors), @"Требуется задать карту для проверки (null).");
+                if (processor.Width != picReflectorPart00.Width)
+                    throw new ArgumentException($@"Загружаемая карта ({processor.Tag}) не соответствует по ширине ({processor.Width} != {picReflectorPart00.Width}).", nameof(processors));
+                if (processor.Height != picReflectorPart00.Height)
+                    throw new ArgumentException($@"Загружаемая карта ({processor.Tag}) не соответствует по высоте ({processor.Height} != {picReflectorPart00.Height}).", nameof(processors));
             }
-            return true;
         }
 
-        void BtnImageSave_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Сохраняет исходное изображение с поля Reflection.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
+        void BtnReflectionSourceImageSave_Click(object sender, EventArgs e)
         {
             try
             {
-                if (SaveFile.ShowDialog(this) != DialogResult.OK)
-                    return;
-                _reflectionSourcePicturePainter.CurrentBitmap.Save(SaveFile.FileName, ImageFormat.Bmp);
+                if (SaveFile.ShowDialog(this) == DialogResult.OK)
+                    _reflectionSourceImagePainter.CurrentBitmap.Save(SaveFile.FileName, ImageFormat.Bmp);
             }
             catch (Exception ex)
             {
@@ -720,12 +760,12 @@ namespace ReflectorExample.Sources
         /// </summary>
         /// <param name="sender">Вызывающий объект. Не используется.</param>
         /// <param name="e">Аргументы. Не используется.</param>
-        void BtnSaveResultImage_Click(object sender, EventArgs e)
+        void BtnSaveCommonImageResult_Click(object sender, EventArgs e)
         {
             try
             {
-                if (_recognizeResults != null && SaveFile.ShowDialog(this) == DialogResult.OK)
-                    _recognizeResults[_currentResult].Save(SaveFile.FileName, ImageFormat.Bmp);
+                if (_commonImageResults != null && SaveFile.ShowDialog(this) == DialogResult.OK)
+                    _commonImageResults[_currentCommonImageResultIndex].Save(SaveFile.FileName, ImageFormat.Bmp);
             }
             catch (Exception ex)
             {
@@ -734,27 +774,34 @@ namespace ReflectorExample.Sources
         }
 
         /// <summary>
+        /// Отображает результат выполнения запроса с указанным индексом.
+        /// Указанный индекс записывается в переменную <see cref="_currentCommonImageResultIndex"/>.
+        /// </summary>
+        /// <param name="index">Если меньше ноля, отображается текущий выбранный результат, в противном случае будет совершён переход к результату с указанным индексом.</param>
+        void ViewSelectedCommonResult(int index = -1)
+        {
+            if (index < 0)
+                index = _currentCommonImageResultIndex;
+
+            picCommonImageResult.Image = _commonImageResults[_currentCommonImageResultIndex = index];
+            PrintResultComment();
+        }
+
+        /// <summary>
         /// Отображает следующую результирующую карту.
         /// Поддерживает круговую перемотку.
         /// </summary>
         /// <param name="sender">Вызывающий объект. Не используется.</param>
         /// <param name="e">Аргументы. Не используется.</param>
-        void BtnNextResult_Click(object sender, EventArgs e)
+        void BtnNextCommonImageResult_Click(object sender, EventArgs e)
         {
             try
             {
-                if (_recognizeResults == null)
-                {
-                    picReflectionResult.Image = null;
-                    grpResult.Text = _resultString;
-                    return;
-                }
-                if (_currentResult < _recognizeResults.Length - 1)
-                    _currentResult++;
-                else
-                    _currentResult = 0;
-                picReflectionResult.Image = _recognizeResults[_currentResult];
-                PrintResultComment();
+                _currentCommonImageResultIndex = _currentCommonImageResultIndex < _commonImageResults.Length - 1
+                    ? ++_currentCommonImageResultIndex
+                    : 0;
+
+                ViewSelectedCommonResult();
             }
             catch (Exception ex)
             {
@@ -768,22 +815,15 @@ namespace ReflectorExample.Sources
         /// </summary>
         /// <param name="sender">Вызывающий объект. Не используется.</param>
         /// <param name="e">Аргументы. Не используется.</param>
-        void BtnPrevResult_Click(object sender, EventArgs e)
+        void BtnPrevCommonImageResult_Click(object sender, EventArgs e)
         {
             try
             {
-                if (_recognizeResults == null)
-                {
-                    picReflectionResult.Image = null;
-                    grpResult.Text = _resultString;
-                    return;
-                }
-                if (_currentResult > 0)
-                    _currentResult--;
-                else
-                    _currentResult = _recognizeResults.Length - 1;
-                picReflectionResult.Image = _recognizeResults[_currentResult];
-                PrintResultComment();
+                _currentCommonImageResultIndex = _currentCommonImageResultIndex > 0
+                    ? --_currentCommonImageResultIndex
+                    : _commonImageResults.Length - 1;
+
+                ViewSelectedCommonResult();
             }
             catch (Exception ex)
             {
@@ -794,9 +834,9 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Выводит результат работы <see cref="Reflector"/> или <see cref="Reflection"/> в понятной для пользователя форме.
         /// </summary>
-        void PrintResultComment() => grpResult.Text =
-            $@"{_resultString} ({_recognizeResults.Length}) - {(CompareWithResult ? "Совпадает" : "Различается")} [{
-                    _currentResult + 1
+        void PrintResultComment() => grpCommonImageResult.Text =
+            $@"{_commonImageResultString} ({_commonImageResults.Length}) - {(IsSelectedResultImageEqualWithSelectedCommonImageResult ? "Совпадает" : "Различается")} [{
+                    _currentCommonImageResultIndex + 1
                 }]";
 
         /// <summary>
@@ -813,16 +853,13 @@ namespace ReflectorExample.Sources
                 List<Processor> partProcessors = _reflectorPartProcessors[x, y];
                 if (partProcessors.Count <= 0)
                 {
-                    DisplayReflectorPartStatus(x, y);
+                    DisplayReflectorPartStatusOnGroupBox(x, y);
                     return;
                 }
                 int index = toEnd ? partProcessors.Count : ++_reflectorPartImageCurrentIndex[x, y];
                 if (index >= partProcessors.Count)
                     index = _reflectorPartImageCurrentIndex[x, y] = partProcessors.Count - 1;
-                Processor partProcessor = partProcessors[index];
-                DisplayReflectorPartStatus(x, y);
-                _reflectorPartPainters[x, y].CurrentProcessor = partProcessor;
-                GetReflectorQueryPartTextBox(x, y).Text = partProcessor.Tag;
+                ViewSelectedReflectorPart(x, y, partProcessors[index]);
             }
             catch (Exception ex)
             {
@@ -843,21 +880,31 @@ namespace ReflectorExample.Sources
                 List<Processor> partProcessors = _reflectorPartProcessors[x, y];
                 if (partProcessors.Count <= 0)
                 {
-                    DisplayReflectorPartStatus(x, y);
+                    DisplayReflectorPartStatusOnGroupBox(x, y);
                     return;
                 }
                 int index = --_reflectorPartImageCurrentIndex[x, y];
                 if (index < 0)
                     index = _reflectorPartImageCurrentIndex[x, y] = 0;
-                Processor partProcessor = partProcessors[index];
-                DisplayReflectorPartStatus(x, y);
-                _reflectorPartPainters[x, y].CurrentProcessor = partProcessor;
-                GetReflectorQueryPartTextBox(x, y).Text = partProcessor.Tag;
+                ViewSelectedReflectorPart(x, y, partProcessors[index]);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, ex.Message, @"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Отображает содержимое указанной карты, по указанным координатам, на поле Reflector.
+        /// </summary>
+        /// <param name="x">Координата X.</param>
+        /// <param name="y">Координата Y.</param>
+        /// <param name="partProcessor">Карта, содержимое которой требуется отобразить на поле Reflector, по указанным координатам.</param>
+        void ViewSelectedReflectorPart(int x, int y, Processor partProcessor)
+        {
+            _reflectorPartPainters[x, y].CurrentProcessor = partProcessor ?? throw new ArgumentNullException(nameof(partProcessor), @"Карта должна быть указана (null).");
+            GetReflectorQueryPartTextBox(x, y).Text = partProcessor.Tag;
+            DisplayReflectorPartStatusOnGroupBox(x, y);
         }
 
         /// <summary>
@@ -951,11 +998,12 @@ namespace ReflectorExample.Sources
         }
 
         /// <summary>
-        /// Отображает статус части объекта <see cref="Reflector"/>, т.е. количество изображений и индекс указанного изображения, начиная с единицы.
+        /// Отображает статус указанной части объекта <see cref="Reflector"/>, т.е. количество изображений и индекс указанного изображения, начиная с единицы.
+        /// Статус отображается на <see cref="GroupBox"/> по указанным координатам.
         /// </summary>
         /// <param name="x">Координата X.</param>
         /// <param name="y">Координата Y.</param>
-        void DisplayReflectorPartStatus(int x, int y)
+        void DisplayReflectorPartStatusOnGroupBox(int x, int y)
         {
             Control[] grpBox = (from Control c in grpReflector.Controls
                                 where c.GetType() == typeof(GroupBox)
@@ -980,10 +1028,10 @@ namespace ReflectorExample.Sources
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    _reflectionSourcePicturePainter.DrawBlackPoint(e.X, e.Y);
+                    _reflectionSourceImagePainter.DrawBlackPoint(e.X, e.Y);
                     break;
                 case MouseButtons.Right:
-                    _reflectionSourcePicturePainter.DrawWhitePoint(e.X, e.Y);
+                    _reflectionSourceImagePainter.DrawWhitePoint(e.X, e.Y);
                     break;
             }
         }
@@ -998,9 +1046,9 @@ namespace ReflectorExample.Sources
         /// <param name="e">Аргументы. Не используется.</param>
         void TxtReflectorQueryPart_TextChanged(object sender, EventArgs e)
         {
-            if (_txtInProcessing)
+            if (_txtReflectorQueryPartInProcessing)
                 return;
-            _txtInProcessing = true;
+            _txtReflectorQueryPartInProcessing = true;
             try
             {
                 TextBox tb = (TextBox)sender;
@@ -1008,8 +1056,8 @@ namespace ReflectorExample.Sources
                     throw new ArgumentException(@"Не могу идентифицировать поле ввода запроса.", nameof(sender));
                 int selectionStart = tb.SelectionStart;
                 tb.Text = string.IsNullOrWhiteSpace(tb.Text) ? _reflectorQueryFields[x, y] : tb.Text.ToUpper();
-                _reflectorQueryFields[x, y] = tb.Text;
                 tb.SelectionStart = selectionStart;
+                _reflectorQueryFields[x, y] = tb.Text;
             }
             catch (Exception ex)
             {
@@ -1017,14 +1065,13 @@ namespace ReflectorExample.Sources
             }
             finally
             {
-                _txtInProcessing = false;
+                _txtReflectorQueryPartInProcessing = false;
             }
         }
 
         /// <summary>
         /// Обрабатывает отпускание определённой клавиши над основной формой приложения.
         /// Кнопка <see cref="Keys.Escape"/> завершает работу программы.
-        /// Кнопка <see cref="Keys.Delete"/> удаляет выбранный <see cref="Neuron"/> из списка на форме, а так же внутренней коллекции, в случае нахождения фокуса ввода над ним.
         /// </summary>
         /// <param name="sender">Вызывающий объект. Не используется.</param>
         /// <param name="e">Аргументы.</param>
@@ -1038,12 +1085,6 @@ namespace ReflectorExample.Sources
                 case Keys.Escape:
                     Application.Exit();
                     return;
-                case Keys.Delete:
-                    if (!lstNeurons.Focused || lstNeurons.SelectedIndex < 1)
-                        return;
-                    _neurons.RemoveAt(lstNeurons.SelectedIndex - 1);
-                    lstNeurons.Items.RemoveAt(lstNeurons.SelectedIndex);
-                    return;
             }
         }
 
@@ -1055,14 +1096,13 @@ namespace ReflectorExample.Sources
         /// <param name="e">Аргументы.</param>
         void TxtReflectorQueryPart_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if ((Keys)e.KeyChar == Keys.Escape || (Keys)e.KeyChar == Keys.Enter || (Keys)e.KeyChar == Keys.Tab ||
-                (Keys)e.KeyChar == Keys.Pause || (Keys)e.KeyChar == Keys.XButton1 || e.KeyChar == 15)
+            if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsPunctuation(e.KeyChar))
             {
                 e.Handled = true;
                 return;
             }
 
-            _txtInProcessing = true;
+            _txtReflectorQueryPartInProcessing = true;
 
             try
             {
@@ -1070,7 +1110,7 @@ namespace ReflectorExample.Sources
             }
             finally
             {
-                _txtInProcessing = false;
+                _txtReflectorQueryPartInProcessing = false;
             }
         }
 
@@ -1101,7 +1141,7 @@ namespace ReflectorExample.Sources
                 finally
                 {
                     _stopwatch.Stop();
-                    Invoke((Action)(() => EnableButtons = true));
+                    Invoke((Action)(() => IsButtonsEnabled = true));
                 }
             }))
             {
@@ -1228,7 +1268,7 @@ namespace ReflectorExample.Sources
         /// Он получается из текущих изображений на поле Reflector.
         /// Названия карт берутся из текущих букв запроса, относящихся к конкретным изображениям.
         /// </summary>
-        IEnumerable<(Processor, string)> NeuronQuery
+        IEnumerable<(Processor, string)> CurrentNeuronQuery
         {
             get
             {
@@ -1253,5 +1293,12 @@ namespace ReflectorExample.Sources
         /// <param name="sender">Вызывающий объект. Не используется.</param>
         /// <param name="e">Аргументы.</param>
         void LstNeurons_DrawItem(object sender, DrawItemEventArgs e) => TextRenderer.DrawText(e.Graphics, lstNeurons.Items[e.Index].ToString(), e.Font, e.Bounds, e.ForeColor, e.BackColor, TextFormatFlags.HorizontalCenter);
+
+        /// <summary>
+        /// Предотвращает реакцию на нажатие клавиши <see cref="Keys.Delete"/> для единообразия эффектов от нажатий клавиш <see cref="Keys.Delete"/> и <see cref="Keys.Back"/>.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы.</param>
+        void TxtReflectorQueryPart_KeyDown(object sender, KeyEventArgs e) => e.Handled = e.KeyCode == Keys.Delete;
     }
 }

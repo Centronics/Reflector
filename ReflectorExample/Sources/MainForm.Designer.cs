@@ -28,23 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.picReflectionSource = new System.Windows.Forms.PictureBox();
-            this.grpReflectionSource = new System.Windows.Forms.GroupBox();
+            this.picReflectionSourceImage = new System.Windows.Forms.PictureBox();
+            this.grpReflectionSourceImage = new System.Windows.Forms.GroupBox();
             this.grpReflection = new System.Windows.Forms.GroupBox();
-            this.btnReflectionSourceClear = new System.Windows.Forms.Button();
+            this.btnReflectionSourceImageClear = new System.Windows.Forms.Button();
             this.btnReflectionPush = new System.Windows.Forms.Button();
-            this.btnReflectionSourceAdd = new System.Windows.Forms.Button();
-            this.btnReflectionSourceSave = new System.Windows.Forms.Button();
-            this.btnReflectionSourceLoad = new System.Windows.Forms.Button();
-            this.txtReflectionMapHeight = new System.Windows.Forms.TextBox();
-            this.txtReflectionMapWidth = new System.Windows.Forms.TextBox();
-            this.lblReflectionMapWidth = new System.Windows.Forms.Label();
-            this.lblReflectionMapHeight = new System.Windows.Forms.Label();
-            this.grpResult = new System.Windows.Forms.GroupBox();
-            this.btnSaveReflectionResultImage = new System.Windows.Forms.Button();
-            this.btnNextReflectionResult = new System.Windows.Forms.Button();
-            this.btnPrevReflectionResult = new System.Windows.Forms.Button();
-            this.picReflectionResult = new System.Windows.Forms.PictureBox();
+            this.btnReflectionSourceImageAdd = new System.Windows.Forms.Button();
+            this.btnReflectionSourceImageSave = new System.Windows.Forms.Button();
+            this.btnReflectionSourceImageLoad = new System.Windows.Forms.Button();
+            this.txtCommonImageHeight = new System.Windows.Forms.TextBox();
+            this.txtCommonImageWidth = new System.Windows.Forms.TextBox();
+            this.lblCommonImageWidth = new System.Windows.Forms.Label();
+            this.lblCommonImageHeight = new System.Windows.Forms.Label();
+            this.grpCommonImageResult = new System.Windows.Forms.GroupBox();
+            this.btnSaveCommonImageResult = new System.Windows.Forms.Button();
+            this.btnNextCommonImageResult = new System.Windows.Forms.Button();
+            this.btnPrevCommonImageResult = new System.Windows.Forms.Button();
+            this.picCommonImageResult = new System.Windows.Forms.PictureBox();
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
             this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.grpReflectorPart12 = new System.Windows.Forms.GroupBox();
@@ -139,17 +139,17 @@
             this.btnDelReflectorPart00 = new System.Windows.Forms.Button();
             this.picReflectorPart00 = new System.Windows.Forms.PictureBox();
             this.grpReflector = new System.Windows.Forms.GroupBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.grpReflectorParameters = new System.Windows.Forms.GroupBox();
             this.grpNeurons = new System.Windows.Forms.GroupBox();
             this.lstNeurons = new System.Windows.Forms.ListBox();
             this.btnNeuronFindRelation = new System.Windows.Forms.Button();
             this.grpNeuron = new System.Windows.Forms.GroupBox();
             this.grpCommonResult = new System.Windows.Forms.GroupBox();
-            ((System.ComponentModel.ISupportInitialize)(this.picReflectionSource)).BeginInit();
-            this.grpReflectionSource.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picReflectionSourceImage)).BeginInit();
+            this.grpReflectionSourceImage.SuspendLayout();
             this.grpReflection.SuspendLayout();
-            this.grpResult.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picReflectionResult)).BeginInit();
+            this.grpCommonImageResult.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picCommonImageResult)).BeginInit();
             this.grpReflectorPart12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picReflectorPart12)).BeginInit();
             this.grpReflectorPart10.SuspendLayout();
@@ -170,42 +170,42 @@
             this.grpReflectorPart00.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picReflectorPart00)).BeginInit();
             this.grpReflector.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.grpReflectorParameters.SuspendLayout();
             this.grpNeurons.SuspendLayout();
             this.grpNeuron.SuspendLayout();
             this.grpCommonResult.SuspendLayout();
             this.SuspendLayout();
             // 
-            // picReflectionSource
+            // picReflectionSourceImage
             // 
-            this.picReflectionSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picReflectionSource.Location = new System.Drawing.Point(6, 18);
-            this.picReflectionSource.Name = "picReflectionSource";
-            this.picReflectionSource.Size = new System.Drawing.Size(300, 150);
-            this.picReflectionSource.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picReflectionSource.TabIndex = 0;
-            this.picReflectionSource.TabStop = false;
-            this.picReflectionSource.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PicReflection_MouseDown_MouseMove);
-            this.picReflectionSource.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PicReflection_MouseDown_MouseMove);
+            this.picReflectionSourceImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picReflectionSourceImage.Location = new System.Drawing.Point(6, 18);
+            this.picReflectionSourceImage.Name = "picReflectionSourceImage";
+            this.picReflectionSourceImage.Size = new System.Drawing.Size(300, 150);
+            this.picReflectionSourceImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picReflectionSourceImage.TabIndex = 0;
+            this.picReflectionSourceImage.TabStop = false;
+            this.picReflectionSourceImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PicReflection_MouseDown_MouseMove);
+            this.picReflectionSourceImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PicReflection_MouseDown_MouseMove);
             // 
-            // grpReflectionSource
+            // grpReflectionSourceImage
             // 
-            this.grpReflectionSource.Controls.Add(this.picReflectionSource);
-            this.grpReflectionSource.Location = new System.Drawing.Point(6, 19);
-            this.grpReflectionSource.Name = "grpReflectionSource";
-            this.grpReflectionSource.Size = new System.Drawing.Size(312, 175);
-            this.grpReflectionSource.TabIndex = 1;
-            this.grpReflectionSource.TabStop = false;
-            this.grpReflectionSource.Text = "Исходное изображение (ЛКМ - рисовать, ПКМ - стереть)";
+            this.grpReflectionSourceImage.Controls.Add(this.picReflectionSourceImage);
+            this.grpReflectionSourceImage.Location = new System.Drawing.Point(6, 19);
+            this.grpReflectionSourceImage.Name = "grpReflectionSourceImage";
+            this.grpReflectionSourceImage.Size = new System.Drawing.Size(312, 175);
+            this.grpReflectionSourceImage.TabIndex = 1;
+            this.grpReflectionSourceImage.TabStop = false;
+            this.grpReflectionSourceImage.Text = "Исходное изображение (ЛКМ - рисовать, ПКМ - стереть)";
             // 
             // grpReflection
             // 
-            this.grpReflection.Controls.Add(this.btnReflectionSourceClear);
+            this.grpReflection.Controls.Add(this.btnReflectionSourceImageClear);
             this.grpReflection.Controls.Add(this.btnReflectionPush);
-            this.grpReflection.Controls.Add(this.btnReflectionSourceAdd);
-            this.grpReflection.Controls.Add(this.btnReflectionSourceSave);
-            this.grpReflection.Controls.Add(this.btnReflectionSourceLoad);
-            this.grpReflection.Controls.Add(this.grpReflectionSource);
+            this.grpReflection.Controls.Add(this.btnReflectionSourceImageAdd);
+            this.grpReflection.Controls.Add(this.btnReflectionSourceImageSave);
+            this.grpReflection.Controls.Add(this.btnReflectionSourceImageLoad);
+            this.grpReflection.Controls.Add(this.grpReflectionSourceImage);
             this.grpReflection.Location = new System.Drawing.Point(12, 6);
             this.grpReflection.Name = "grpReflection";
             this.grpReflection.Size = new System.Drawing.Size(324, 330);
@@ -213,19 +213,20 @@
             this.grpReflection.TabStop = false;
             this.grpReflection.Text = "Класс Reflection";
             // 
-            // btnReflectionSourceClear
+            // btnReflectionSourceImageClear
             // 
-            this.btnReflectionSourceClear.Location = new System.Drawing.Point(12, 296);
-            this.btnReflectionSourceClear.Name = "btnReflectionSourceClear";
-            this.btnReflectionSourceClear.Size = new System.Drawing.Size(300, 23);
-            this.btnReflectionSourceClear.TabIndex = 82;
-            this.btnReflectionSourceClear.Text = "Очистить";
-            this.btnReflectionSourceClear.UseVisualStyleBackColor = true;
-            this.btnReflectionSourceClear.Click += new System.EventHandler(this.BtnReflectionSourceClear_Click);
+            this.btnReflectionSourceImageClear.Location = new System.Drawing.Point(12, 257);
+            this.btnReflectionSourceImageClear.Name = "btnReflectionSourceImageClear";
+            this.btnReflectionSourceImageClear.Size = new System.Drawing.Size(106, 23);
+            this.btnReflectionSourceImageClear.TabIndex = 82;
+            this.btnReflectionSourceImageClear.Text = "Очистить";
+            this.btnReflectionSourceImageClear.UseVisualStyleBackColor = true;
+            this.btnReflectionSourceImageClear.Click += new System.EventHandler(this.BtnReflectionSourceImageClear_Click);
             // 
             // btnReflectionPush
             // 
-            this.btnReflectionPush.Location = new System.Drawing.Point(12, 258);
+            this.btnReflectionPush.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnReflectionPush.Location = new System.Drawing.Point(12, 288);
             this.btnReflectionPush.Name = "btnReflectionPush";
             this.btnReflectionPush.Size = new System.Drawing.Size(300, 34);
             this.btnReflectionPush.TabIndex = 77;
@@ -233,127 +234,127 @@
             this.btnReflectionPush.UseVisualStyleBackColor = true;
             this.btnReflectionPush.Click += new System.EventHandler(this.BtnReflectionPush_Click);
             // 
-            // btnReflectionSourceAdd
+            // btnReflectionSourceImageAdd
             // 
-            this.btnReflectionSourceAdd.Location = new System.Drawing.Point(124, 201);
-            this.btnReflectionSourceAdd.Name = "btnReflectionSourceAdd";
-            this.btnReflectionSourceAdd.Size = new System.Drawing.Size(188, 52);
-            this.btnReflectionSourceAdd.TabIndex = 2;
-            this.btnReflectionSourceAdd.Text = "Добавить изображение в Reflector";
-            this.btnReflectionSourceAdd.UseVisualStyleBackColor = true;
-            this.btnReflectionSourceAdd.Click += new System.EventHandler(this.BtnReflectionSourceAdd_Click);
+            this.btnReflectionSourceImageAdd.Location = new System.Drawing.Point(124, 199);
+            this.btnReflectionSourceImageAdd.Name = "btnReflectionSourceImageAdd";
+            this.btnReflectionSourceImageAdd.Size = new System.Drawing.Size(188, 81);
+            this.btnReflectionSourceImageAdd.TabIndex = 2;
+            this.btnReflectionSourceImageAdd.Text = "Добавить изображение в Reflector";
+            this.btnReflectionSourceImageAdd.UseVisualStyleBackColor = true;
+            this.btnReflectionSourceImageAdd.Click += new System.EventHandler(this.BtnReflectionSourceImageAdd_Click);
             // 
-            // btnReflectionSourceSave
+            // btnReflectionSourceImageSave
             // 
-            this.btnReflectionSourceSave.Location = new System.Drawing.Point(12, 230);
-            this.btnReflectionSourceSave.Name = "btnReflectionSourceSave";
-            this.btnReflectionSourceSave.Size = new System.Drawing.Size(106, 23);
-            this.btnReflectionSourceSave.TabIndex = 1;
-            this.btnReflectionSourceSave.Text = "Сохранить";
-            this.btnReflectionSourceSave.UseVisualStyleBackColor = true;
-            this.btnReflectionSourceSave.Click += new System.EventHandler(this.BtnImageSave_Click);
+            this.btnReflectionSourceImageSave.Location = new System.Drawing.Point(12, 228);
+            this.btnReflectionSourceImageSave.Name = "btnReflectionSourceImageSave";
+            this.btnReflectionSourceImageSave.Size = new System.Drawing.Size(106, 23);
+            this.btnReflectionSourceImageSave.TabIndex = 1;
+            this.btnReflectionSourceImageSave.Text = "Сохранить";
+            this.btnReflectionSourceImageSave.UseVisualStyleBackColor = true;
+            this.btnReflectionSourceImageSave.Click += new System.EventHandler(this.BtnReflectionSourceImageSave_Click);
             // 
-            // btnReflectionSourceLoad
+            // btnReflectionSourceImageLoad
             // 
-            this.btnReflectionSourceLoad.Location = new System.Drawing.Point(12, 201);
-            this.btnReflectionSourceLoad.Name = "btnReflectionSourceLoad";
-            this.btnReflectionSourceLoad.Size = new System.Drawing.Size(106, 23);
-            this.btnReflectionSourceLoad.TabIndex = 0;
-            this.btnReflectionSourceLoad.Text = "Загрузить";
-            this.btnReflectionSourceLoad.UseVisualStyleBackColor = true;
-            this.btnReflectionSourceLoad.Click += new System.EventHandler(this.BtnImageLoad_Click);
+            this.btnReflectionSourceImageLoad.Location = new System.Drawing.Point(12, 199);
+            this.btnReflectionSourceImageLoad.Name = "btnReflectionSourceImageLoad";
+            this.btnReflectionSourceImageLoad.Size = new System.Drawing.Size(106, 23);
+            this.btnReflectionSourceImageLoad.TabIndex = 0;
+            this.btnReflectionSourceImageLoad.Text = "Загрузить";
+            this.btnReflectionSourceImageLoad.UseVisualStyleBackColor = true;
+            this.btnReflectionSourceImageLoad.Click += new System.EventHandler(this.BtnReflectionSourceImageLoad_Click);
             // 
-            // txtReflectionMapHeight
+            // txtCommonImageHeight
             // 
-            this.txtReflectionMapHeight.Location = new System.Drawing.Point(159, 45);
-            this.txtReflectionMapHeight.Name = "txtReflectionMapHeight";
-            this.txtReflectionMapHeight.ReadOnly = true;
-            this.txtReflectionMapHeight.Size = new System.Drawing.Size(77, 20);
-            this.txtReflectionMapHeight.TabIndex = 79;
-            this.txtReflectionMapHeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtCommonImageHeight.Location = new System.Drawing.Point(159, 45);
+            this.txtCommonImageHeight.Name = "txtCommonImageHeight";
+            this.txtCommonImageHeight.ReadOnly = true;
+            this.txtCommonImageHeight.Size = new System.Drawing.Size(77, 20);
+            this.txtCommonImageHeight.TabIndex = 79;
+            this.txtCommonImageHeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // txtReflectionMapWidth
+            // txtCommonImageWidth
             // 
-            this.txtReflectionMapWidth.Location = new System.Drawing.Point(159, 23);
-            this.txtReflectionMapWidth.Name = "txtReflectionMapWidth";
-            this.txtReflectionMapWidth.ReadOnly = true;
-            this.txtReflectionMapWidth.Size = new System.Drawing.Size(77, 20);
-            this.txtReflectionMapWidth.TabIndex = 78;
-            this.txtReflectionMapWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtCommonImageWidth.Location = new System.Drawing.Point(159, 23);
+            this.txtCommonImageWidth.Name = "txtCommonImageWidth";
+            this.txtCommonImageWidth.ReadOnly = true;
+            this.txtCommonImageWidth.Size = new System.Drawing.Size(77, 20);
+            this.txtCommonImageWidth.TabIndex = 78;
+            this.txtCommonImageWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // lblReflectionMapWidth
+            // lblCommonImageWidth
             // 
-            this.lblReflectionMapWidth.AutoSize = true;
-            this.lblReflectionMapWidth.Location = new System.Drawing.Point(85, 26);
-            this.lblReflectionMapWidth.Name = "lblReflectionMapWidth";
-            this.lblReflectionMapWidth.Size = new System.Drawing.Size(68, 13);
-            this.lblReflectionMapWidth.TabIndex = 81;
-            this.lblReflectionMapWidth.Text = "MapWidth  =";
+            this.lblCommonImageWidth.AutoSize = true;
+            this.lblCommonImageWidth.Location = new System.Drawing.Point(85, 26);
+            this.lblCommonImageWidth.Name = "lblCommonImageWidth";
+            this.lblCommonImageWidth.Size = new System.Drawing.Size(68, 13);
+            this.lblCommonImageWidth.TabIndex = 81;
+            this.lblCommonImageWidth.Text = "MapWidth  =";
             // 
-            // lblReflectionMapHeight
+            // lblCommonImageHeight
             // 
-            this.lblReflectionMapHeight.AutoSize = true;
-            this.lblReflectionMapHeight.Location = new System.Drawing.Point(85, 47);
-            this.lblReflectionMapHeight.Name = "lblReflectionMapHeight";
-            this.lblReflectionMapHeight.Size = new System.Drawing.Size(68, 13);
-            this.lblReflectionMapHeight.TabIndex = 80;
-            this.lblReflectionMapHeight.Text = "MapHeight =";
+            this.lblCommonImageHeight.AutoSize = true;
+            this.lblCommonImageHeight.Location = new System.Drawing.Point(85, 47);
+            this.lblCommonImageHeight.Name = "lblCommonImageHeight";
+            this.lblCommonImageHeight.Size = new System.Drawing.Size(68, 13);
+            this.lblCommonImageHeight.TabIndex = 80;
+            this.lblCommonImageHeight.Text = "MapHeight =";
             // 
-            // grpResult
+            // grpCommonImageResult
             // 
-            this.grpResult.Controls.Add(this.btnSaveReflectionResultImage);
-            this.grpResult.Controls.Add(this.btnNextReflectionResult);
-            this.grpResult.Controls.Add(this.btnPrevReflectionResult);
-            this.grpResult.Controls.Add(this.picReflectionResult);
-            this.grpResult.Location = new System.Drawing.Point(6, 75);
-            this.grpResult.Name = "grpResult";
-            this.grpResult.Size = new System.Drawing.Size(312, 212);
-            this.grpResult.TabIndex = 76;
-            this.grpResult.TabStop = false;
-            this.grpResult.Text = "Результирующее изображение";
+            this.grpCommonImageResult.Controls.Add(this.btnSaveCommonImageResult);
+            this.grpCommonImageResult.Controls.Add(this.btnNextCommonImageResult);
+            this.grpCommonImageResult.Controls.Add(this.btnPrevCommonImageResult);
+            this.grpCommonImageResult.Controls.Add(this.picCommonImageResult);
+            this.grpCommonImageResult.Location = new System.Drawing.Point(6, 75);
+            this.grpCommonImageResult.Name = "grpCommonImageResult";
+            this.grpCommonImageResult.Size = new System.Drawing.Size(312, 212);
+            this.grpCommonImageResult.TabIndex = 76;
+            this.grpCommonImageResult.TabStop = false;
+            this.grpCommonImageResult.Text = "Результирующее изображение";
             // 
-            // btnSaveReflectionResultImage
+            // btnSaveCommonImageResult
             // 
-            this.btnSaveReflectionResultImage.Enabled = false;
-            this.btnSaveReflectionResultImage.Location = new System.Drawing.Point(95, 172);
-            this.btnSaveReflectionResultImage.Name = "btnSaveReflectionResultImage";
-            this.btnSaveReflectionResultImage.Size = new System.Drawing.Size(122, 34);
-            this.btnSaveReflectionResultImage.TabIndex = 57;
-            this.btnSaveReflectionResultImage.Text = "Сохранить";
-            this.btnSaveReflectionResultImage.UseVisualStyleBackColor = true;
-            this.btnSaveReflectionResultImage.Click += new System.EventHandler(this.BtnSaveResultImage_Click);
+            this.btnSaveCommonImageResult.Enabled = false;
+            this.btnSaveCommonImageResult.Location = new System.Drawing.Point(95, 172);
+            this.btnSaveCommonImageResult.Name = "btnSaveCommonImageResult";
+            this.btnSaveCommonImageResult.Size = new System.Drawing.Size(122, 34);
+            this.btnSaveCommonImageResult.TabIndex = 57;
+            this.btnSaveCommonImageResult.Text = "Сохранить";
+            this.btnSaveCommonImageResult.UseVisualStyleBackColor = true;
+            this.btnSaveCommonImageResult.Click += new System.EventHandler(this.BtnSaveCommonImageResult_Click);
             // 
-            // btnNextReflectionResult
+            // btnNextCommonImageResult
             // 
-            this.btnNextReflectionResult.Enabled = false;
-            this.btnNextReflectionResult.Location = new System.Drawing.Point(223, 172);
-            this.btnNextReflectionResult.Name = "btnNextReflectionResult";
-            this.btnNextReflectionResult.Size = new System.Drawing.Size(83, 34);
-            this.btnNextReflectionResult.TabIndex = 58;
-            this.btnNextReflectionResult.Text = "Следующее";
-            this.btnNextReflectionResult.UseVisualStyleBackColor = true;
-            this.btnNextReflectionResult.Click += new System.EventHandler(this.BtnNextResult_Click);
+            this.btnNextCommonImageResult.Enabled = false;
+            this.btnNextCommonImageResult.Location = new System.Drawing.Point(223, 172);
+            this.btnNextCommonImageResult.Name = "btnNextCommonImageResult";
+            this.btnNextCommonImageResult.Size = new System.Drawing.Size(83, 34);
+            this.btnNextCommonImageResult.TabIndex = 58;
+            this.btnNextCommonImageResult.Text = "Следующее";
+            this.btnNextCommonImageResult.UseVisualStyleBackColor = true;
+            this.btnNextCommonImageResult.Click += new System.EventHandler(this.BtnNextCommonImageResult_Click);
             // 
-            // btnPrevReflectionResult
+            // btnPrevCommonImageResult
             // 
-            this.btnPrevReflectionResult.Enabled = false;
-            this.btnPrevReflectionResult.Location = new System.Drawing.Point(6, 172);
-            this.btnPrevReflectionResult.Name = "btnPrevReflectionResult";
-            this.btnPrevReflectionResult.Size = new System.Drawing.Size(83, 34);
-            this.btnPrevReflectionResult.TabIndex = 56;
-            this.btnPrevReflectionResult.Text = "Предыдущее";
-            this.btnPrevReflectionResult.UseVisualStyleBackColor = true;
-            this.btnPrevReflectionResult.Click += new System.EventHandler(this.BtnPrevResult_Click);
+            this.btnPrevCommonImageResult.Enabled = false;
+            this.btnPrevCommonImageResult.Location = new System.Drawing.Point(6, 172);
+            this.btnPrevCommonImageResult.Name = "btnPrevCommonImageResult";
+            this.btnPrevCommonImageResult.Size = new System.Drawing.Size(83, 34);
+            this.btnPrevCommonImageResult.TabIndex = 56;
+            this.btnPrevCommonImageResult.Text = "Предыдущее";
+            this.btnPrevCommonImageResult.UseVisualStyleBackColor = true;
+            this.btnPrevCommonImageResult.Click += new System.EventHandler(this.BtnPrevCommonImageResult_Click);
             // 
-            // picReflectionResult
+            // picCommonImageResult
             // 
-            this.picReflectionResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picReflectionResult.Location = new System.Drawing.Point(6, 18);
-            this.picReflectionResult.Name = "picReflectionResult";
-            this.picReflectionResult.Size = new System.Drawing.Size(300, 150);
-            this.picReflectionResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picReflectionResult.TabIndex = 58;
-            this.picReflectionResult.TabStop = false;
+            this.picCommonImageResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picCommonImageResult.Location = new System.Drawing.Point(6, 18);
+            this.picCommonImageResult.Name = "picCommonImageResult";
+            this.picCommonImageResult.Size = new System.Drawing.Size(300, 150);
+            this.picCommonImageResult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picCommonImageResult.TabIndex = 58;
+            this.picCommonImageResult.TabStop = false;
             // 
             // OpenFile
             // 
@@ -572,9 +573,9 @@
             // 
             // btnOKReflectorPart20
             // 
-            this.btnOKReflectorPart20.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart20.Location = new System.Drawing.Point(66, 100);
             this.btnOKReflectorPart20.Name = "btnOKReflectorPart20";
-            this.btnOKReflectorPart20.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart20.Size = new System.Drawing.Size(40, 23);
             this.btnOKReflectorPart20.TabIndex = 14;
             this.btnOKReflectorPart20.Text = "ОК";
             this.btnOKReflectorPart20.UseVisualStyleBackColor = true;
@@ -594,7 +595,7 @@
             // 
             this.btnDelReflectorPart20.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart20.Name = "btnDelReflectorPart20";
-            this.btnDelReflectorPart20.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart20.Size = new System.Drawing.Size(58, 23);
             this.btnDelReflectorPart20.TabIndex = 13;
             this.btnDelReflectorPart20.Text = "Удалить";
             this.btnDelReflectorPart20.UseVisualStyleBackColor = true;
@@ -1083,6 +1084,7 @@
             this.txtReflectorQueryPart22.Text = "I";
             this.txtReflectorQueryPart22.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart22.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart22.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart22.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // txtReflectorQueryPart12
@@ -1095,6 +1097,7 @@
             this.txtReflectorQueryPart12.Text = "H";
             this.txtReflectorQueryPart12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart12.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart12.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart12.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // txtReflectorQueryPart02
@@ -1107,6 +1110,7 @@
             this.txtReflectorQueryPart02.Text = "G";
             this.txtReflectorQueryPart02.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart02.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart02.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart02.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // txtReflectorQueryPart00
@@ -1119,6 +1123,7 @@
             this.txtReflectorQueryPart00.Text = "A";
             this.txtReflectorQueryPart00.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart00.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart00.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart00.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // txtReflectorQueryPart21
@@ -1131,6 +1136,7 @@
             this.txtReflectorQueryPart21.Text = "F";
             this.txtReflectorQueryPart21.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart21.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart21.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart21.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // lblReflectorQueryPart00
@@ -1152,6 +1158,7 @@
             this.txtReflectorQueryPart10.Text = "B";
             this.txtReflectorQueryPart10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart10.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart10.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart10.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // txtReflectorQueryPart11
@@ -1164,6 +1171,7 @@
             this.txtReflectorQueryPart11.Text = "E";
             this.txtReflectorQueryPart11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart11.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart11.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // txtReflectorQueryPart20
@@ -1176,6 +1184,7 @@
             this.txtReflectorQueryPart20.Text = "C";
             this.txtReflectorQueryPart20.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart20.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart20.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart20.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // txtReflectorQueryPart01
@@ -1188,6 +1197,7 @@
             this.txtReflectorQueryPart01.Text = "D";
             this.txtReflectorQueryPart01.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtReflectorQueryPart01.TextChanged += new System.EventHandler(this.TxtReflectorQueryPart_TextChanged);
+            this.txtReflectorQueryPart01.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtReflectorQueryPart_KeyDown);
             this.txtReflectorQueryPart01.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtReflectorQueryPart_KeyPress);
             // 
             // grpReflectorPart01
@@ -1269,6 +1279,7 @@
             // 
             // btnReflectorPush
             // 
+            this.btnReflectorPush.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnReflectorPush.Location = new System.Drawing.Point(5, 587);
             this.btnReflectorPush.Name = "btnReflectorPush";
             this.btnReflectorPush.Size = new System.Drawing.Size(349, 40);
@@ -1356,7 +1367,7 @@
             // 
             // grpReflector
             // 
-            this.grpReflector.Controls.Add(this.groupBox1);
+            this.grpReflector.Controls.Add(this.grpReflectorParameters);
             this.grpReflector.Controls.Add(this.grpReflectorPart00);
             this.grpReflector.Controls.Add(this.btnReflectorPush);
             this.grpReflector.Controls.Add(this.grpReflectorPart01);
@@ -1375,22 +1386,22 @@
             this.grpReflector.TabStop = false;
             this.grpReflector.Text = "Класс Reflector";
             // 
-            // groupBox1
+            // grpReflectorParameters
             // 
-            this.groupBox1.Controls.Add(this.lblReflectorMapWidth);
-            this.groupBox1.Controls.Add(this.txtReflectorMapWidth);
-            this.groupBox1.Controls.Add(this.lblReflectorProcessorHeight);
-            this.groupBox1.Controls.Add(this.txtReflectorMapHeight);
-            this.groupBox1.Controls.Add(this.lblReflectorProcessorWidth);
-            this.groupBox1.Controls.Add(this.txtReflectorProcessorHeight);
-            this.groupBox1.Controls.Add(this.txtReflectorProcessorWidth);
-            this.groupBox1.Controls.Add(this.lblReflectorMapHeight);
-            this.groupBox1.Location = new System.Drawing.Point(6, 425);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(347, 70);
-            this.groupBox1.TabIndex = 71;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Ширина и высота";
+            this.grpReflectorParameters.Controls.Add(this.lblReflectorMapWidth);
+            this.grpReflectorParameters.Controls.Add(this.txtReflectorMapWidth);
+            this.grpReflectorParameters.Controls.Add(this.lblReflectorProcessorHeight);
+            this.grpReflectorParameters.Controls.Add(this.txtReflectorMapHeight);
+            this.grpReflectorParameters.Controls.Add(this.lblReflectorProcessorWidth);
+            this.grpReflectorParameters.Controls.Add(this.txtReflectorProcessorHeight);
+            this.grpReflectorParameters.Controls.Add(this.txtReflectorProcessorWidth);
+            this.grpReflectorParameters.Controls.Add(this.lblReflectorMapHeight);
+            this.grpReflectorParameters.Location = new System.Drawing.Point(6, 425);
+            this.grpReflectorParameters.Name = "grpReflectorParameters";
+            this.grpReflectorParameters.Size = new System.Drawing.Size(347, 70);
+            this.grpReflectorParameters.TabIndex = 71;
+            this.grpReflectorParameters.TabStop = false;
+            this.grpReflectorParameters.Text = "Ширина и высота";
             // 
             // grpNeurons
             // 
@@ -1400,7 +1411,7 @@
             this.grpNeurons.Size = new System.Drawing.Size(204, 565);
             this.grpNeurons.TabIndex = 1;
             this.grpNeurons.TabStop = false;
-            this.grpNeurons.Text = "Созданные нейроны";
+            this.grpNeurons.Text = "Существующие Neuron";
             // 
             // lstNeurons
             // 
@@ -1414,9 +1425,11 @@
             this.lstNeurons.Size = new System.Drawing.Size(192, 535);
             this.lstNeurons.TabIndex = 2;
             this.lstNeurons.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.LstNeurons_DrawItem);
+            this.lstNeurons.SelectedIndexChanged += new System.EventHandler(this.LstNeurons_SelectedIndexChanged);
             // 
             // btnNeuronFindRelation
             // 
+            this.btnNeuronFindRelation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnNeuronFindRelation.Location = new System.Drawing.Point(5, 587);
             this.btnNeuronFindRelation.Name = "btnNeuronFindRelation";
             this.btnNeuronFindRelation.Size = new System.Drawing.Size(206, 40);
@@ -1438,11 +1451,11 @@
             // 
             // grpCommonResult
             // 
-            this.grpCommonResult.Controls.Add(this.lblReflectionMapWidth);
-            this.grpCommonResult.Controls.Add(this.lblReflectionMapHeight);
-            this.grpCommonResult.Controls.Add(this.txtReflectionMapHeight);
-            this.grpCommonResult.Controls.Add(this.grpResult);
-            this.grpCommonResult.Controls.Add(this.txtReflectionMapWidth);
+            this.grpCommonResult.Controls.Add(this.lblCommonImageWidth);
+            this.grpCommonResult.Controls.Add(this.lblCommonImageHeight);
+            this.grpCommonResult.Controls.Add(this.txtCommonImageHeight);
+            this.grpCommonResult.Controls.Add(this.grpCommonImageResult);
+            this.grpCommonResult.Controls.Add(this.txtCommonImageWidth);
             this.grpCommonResult.Location = new System.Drawing.Point(12, 346);
             this.grpCommonResult.Name = "grpCommonResult";
             this.grpCommonResult.Size = new System.Drawing.Size(324, 293);
@@ -1468,11 +1481,11 @@
             this.Text = "Пример применения библиотеки Reflector";
             this.Shown += new System.EventHandler(this.FrmMain_Shown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyUp);
-            ((System.ComponentModel.ISupportInitialize)(this.picReflectionSource)).EndInit();
-            this.grpReflectionSource.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picReflectionSourceImage)).EndInit();
+            this.grpReflectionSourceImage.ResumeLayout(false);
             this.grpReflection.ResumeLayout(false);
-            this.grpResult.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picReflectionResult)).EndInit();
+            this.grpCommonImageResult.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picCommonImageResult)).EndInit();
             this.grpReflectorPart12.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picReflectorPart12)).EndInit();
             this.grpReflectorPart10.ResumeLayout(false);
@@ -1494,8 +1507,8 @@
             this.grpReflectorPart00.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picReflectorPart00)).EndInit();
             this.grpReflector.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.grpReflectorParameters.ResumeLayout(false);
+            this.grpReflectorParameters.PerformLayout();
             this.grpNeurons.ResumeLayout(false);
             this.grpNeuron.ResumeLayout(false);
             this.grpCommonResult.ResumeLayout(false);
@@ -1506,24 +1519,24 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox picReflectionSource;
-        private System.Windows.Forms.GroupBox grpReflectionSource;
+        private System.Windows.Forms.PictureBox picReflectionSourceImage;
+        private System.Windows.Forms.GroupBox grpReflectionSourceImage;
         private System.Windows.Forms.GroupBox grpReflection;
-        private System.Windows.Forms.Button btnReflectionSourceLoad;
-        private System.Windows.Forms.Button btnReflectionSourceSave;
+        private System.Windows.Forms.Button btnReflectionSourceImageLoad;
+        private System.Windows.Forms.Button btnReflectionSourceImageSave;
         private System.Windows.Forms.OpenFileDialog OpenFile;
         private System.Windows.Forms.SaveFileDialog SaveFile;
-        private System.Windows.Forms.Button btnReflectionSourceAdd;
-        private System.Windows.Forms.Button btnReflectionSourceClear;
-        private System.Windows.Forms.TextBox txtReflectionMapHeight;
-        private System.Windows.Forms.TextBox txtReflectionMapWidth;
-        private System.Windows.Forms.Label lblReflectionMapWidth;
-        private System.Windows.Forms.Label lblReflectionMapHeight;
-        private System.Windows.Forms.GroupBox grpResult;
-        private System.Windows.Forms.Button btnSaveReflectionResultImage;
-        private System.Windows.Forms.Button btnNextReflectionResult;
-        private System.Windows.Forms.Button btnPrevReflectionResult;
-        private System.Windows.Forms.PictureBox picReflectionResult;
+        private System.Windows.Forms.Button btnReflectionSourceImageAdd;
+        private System.Windows.Forms.Button btnReflectionSourceImageClear;
+        private System.Windows.Forms.TextBox txtCommonImageHeight;
+        private System.Windows.Forms.TextBox txtCommonImageWidth;
+        private System.Windows.Forms.Label lblCommonImageWidth;
+        private System.Windows.Forms.Label lblCommonImageHeight;
+        private System.Windows.Forms.GroupBox grpCommonImageResult;
+        private System.Windows.Forms.Button btnSaveCommonImageResult;
+        private System.Windows.Forms.Button btnNextCommonImageResult;
+        private System.Windows.Forms.Button btnPrevCommonImageResult;
+        private System.Windows.Forms.PictureBox picCommonImageResult;
         private System.Windows.Forms.Button btnReflectionPush;
         private System.Windows.Forms.GroupBox grpReflectorPart12;
         private System.Windows.Forms.Button btnClearReflectorPart12;
@@ -1622,7 +1635,7 @@
         private System.Windows.Forms.GroupBox grpNeuron;
         private System.Windows.Forms.GroupBox grpCommonResult;
         private System.Windows.Forms.ListBox lstNeurons;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox grpReflectorParameters;
     }
 }
 
