@@ -86,7 +86,7 @@ namespace ReflectorExample.Sources
         /// <param name="x">Координата X на поле Reflector.</param>
         /// <param name="y">Координата Y на поле Reflector.</param>
         /// <returns>В случае успеха, возвращает коллекции путей к изображениям, в противном случае возникает исключение <see cref="ArgumentException"/>.</returns>
-        static List<string> GetNamesList(int x, int y)
+        static List<string> GetImagePathsList(int x, int y)
         {
             if (x < 0 || x > 2)
                 throw new ArgumentException($@"Координата X выходит за пределы поля Reflector {x}.", nameof(x));
@@ -156,7 +156,7 @@ namespace ReflectorExample.Sources
         /// <returns>Возвращает последовательность изображений.</returns>
         public static IEnumerable<Processor> GetProcessors(int x, int y)
         {
-            foreach (string imagePath in GetNamesList(x, y))
+            foreach (string imagePath in GetImagePathsList(x, y))
                 using (FileStream fs = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read))
                     yield return new Processor(new Bitmap(fs), Path.GetFileNameWithoutExtension(imagePath));
         }
@@ -169,7 +169,7 @@ namespace ReflectorExample.Sources
         /// <param name="imagePath">Путь, который необходимо сохранить в базе данных.</param>
         public static void Save(int x, int y, string imagePath)
         {
-            GetNamesList(x, y).Add(imagePath.ToUpper());
+            GetImagePathsList(x, y).Add(imagePath.ToUpper());
             Serialize();
         }
 
@@ -181,7 +181,7 @@ namespace ReflectorExample.Sources
         /// <param name="imagePath">Путь, который необходимо удалить из базы данных.</param>
         public static void Delete(int x, int y, string imagePath)
         {
-            GetNamesList(x, y).Remove(imagePath.ToUpper());
+            GetImagePathsList(x, y).Remove(imagePath.ToUpper());
             Serialize();
         }
     }

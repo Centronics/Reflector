@@ -75,27 +75,59 @@ namespace ReflectorExample.Sources
 
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value), @"Карта равна null.");
-                Bitmap btm = new Bitmap(value.Width, value.Height);
-                for (int y = 0; y < value.Height; y++)
-                    for (int x = 0; x < value.Width; x++)
-                        btm.SetPixel(x, y, value[x, y].ValueColor);
-                CurrentBitmap = btm;
-                CurrentProcessorName = value.Tag;
+                CurrentBitmap = ProcessorToBitmap(value);
+                CurrentProcessorName = value?.Tag;
             }
         }
 
         /// <summary>
-        /// Получает или задаёт текущее изображение, т.е. с которым ведётся работа в настоящее время.
+        /// Преобразует указанную карту в изображение.
+        /// Поле <see cref="Processor.Tag"/> игнорируется.
+        /// </summary>
+        /// <param name="processor">Карта, которую треуется преобразовать.</param>
+        /// <returns>Возвращает изображение, содержащее данные с карты. Если она равна <see langword="null"/>, возвращается <see langword="null"/>.</returns>
+        public static Bitmap ProcessorToBitmap(Processor processor)
+        {
+            if (processor == null)
+                return null;
+            Bitmap result = new Bitmap(processor.Width, processor.Height);
+            for (int y = 0; y < processor.Height; y++)
+                for (int x = 0; x < processor.Width; x++)
+                    result.SetPixel(x, y, processor[x, y].ValueColor);
+            return result;
+        }
+
+        /// <summary>
+        /// Создаёт полную копию указанного изображения.
+        /// </summary>
+        /// <param name="what">Изображение, которое требуется скопировать.</param>
+        /// <returns>Возвращает полную копию указанного изображения. Если оно равно <see langword="null"/>, возвращается <see langword="null"/>.</returns>
+        public static Bitmap BitmapCopy(Bitmap what)
+        {
+            if (what == null)
+                return null;
+            Bitmap result = new Bitmap(what.Width, what.Height);
+            for (int y = 0; y < what.Height; y++)
+                for (int x = 0; x < what.Width; x++)
+                    result.SetPixel(x, y, what.GetPixel(x, y));
+            return result;
+        }
+
+        /// <summary>
+        /// Получает или задаёт изображение, с которым ведётся работа в настоящее время.
         /// </summary>
         public Bitmap CurrentBitmap
         {
             get => _currentBitmap;
             set
             {
+                if (value == null)
+                {
+                    Clear();
+                    return;
+                }
                 _currentBitmap?.Dispose();
-                _currentBitmap = value ?? throw new ArgumentNullException(nameof(value), @"Изображение должно быть указано (null).");
+                _currentBitmap = BitmapCopy(value);
                 _grFront = Graphics.FromImage(_currentBitmap);
                 _currentBitmap.SetPixel(0, 0, _currentBitmap.GetPixel(0, 0)); //Необходим для устранения "Ошибки общего вида в GDI+" при попытке сохранения загруженного файла.
                 _pb.Image = _currentBitmap;
