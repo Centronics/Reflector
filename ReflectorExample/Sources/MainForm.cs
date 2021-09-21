@@ -25,14 +25,14 @@ namespace ReflectorExample.Sources
         readonly List<Processor>[,] _reflectorPartProcessors = new List<Processor>[3, 3];
 
         /// <summary>
-        /// Отвечает за операции с исходным изображением, с поля Reflection.
+        /// Отвечает за операции над "Исходным изображением" с поля Reflection.
         /// </summary>
         readonly Painter _reflectionSourceImagePainter;
 
         /// <summary>
         /// Отвечает за операции с изображениями на поле Reflector.
         /// </summary>
-        readonly Painter[,] _reflectorPartPainters = new Painter[3, 3];//можно упростить?
+        readonly Painter[,] _reflectorPartPainters = new Painter[3, 3];
 
         /// <summary>
         /// Хранит коллекцию <see cref="Neuron"/>, созданных из изображений на поле Reflector и порождённых в процессе установления связи между существующими <see cref="Neuron"/>.
@@ -52,12 +52,12 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Служит для резервирования изначальных значений частей рабочего поля Reflector.
         /// </summary>
-        readonly string[,] _reflectorGroupBoxTextFields = new string[3, 3];
+        readonly string[,] _reflectorPartGroupBoxTextFields = new string[3, 3];
 
         /// <summary>
         /// Служит для резервирования изначальных значений частей запроса на поле Reflector.
         /// </summary>
-        readonly string[,] _reflectorQueryTextBoxFields = new string[3, 3];
+        readonly string[,] _reflectorQueryPartTextBoxFields = new string[3, 3];
 
         /// <summary>
         /// Отражает номер результата в массиве результатов работы компонентов <see cref="Reflector"/> и <see cref="Reflection"/>, на который смотрит пользователь в настоящее время.
@@ -97,35 +97,34 @@ namespace ReflectorExample.Sources
         public FrmMain()
         {
             InitializeComponent();
-            _reflectorPartPainters[0, 0] = new Painter(picReflectorPart00);
-            _reflectorPartPainters[1, 0] = new Painter(picReflectorPart10);
-            _reflectorPartPainters[2, 0] = new Painter(picReflectorPart20);
-            _reflectorPartPainters[0, 1] = new Painter(picReflectorPart01);
-            _reflectorPartPainters[1, 1] = new Painter(picReflectorPart11);
-            _reflectorPartPainters[2, 1] = new Painter(picReflectorPart21);
-            _reflectorPartPainters[0, 2] = new Painter(picReflectorPart02);
-            _reflectorPartPainters[1, 2] = new Painter(picReflectorPart12);
-            _reflectorPartPainters[2, 2] = new Painter(picReflectorPart22);
+
             _reflectionSourceImagePainter = new Painter(picReflectionSourceImage);
-            _reflectorGroupBoxTextFields[0, 0] = grpReflectorPart00.Text;
-            _reflectorGroupBoxTextFields[1, 0] = grpReflectorPart10.Text;
-            _reflectorGroupBoxTextFields[2, 0] = grpReflectorPart20.Text;
-            _reflectorGroupBoxTextFields[0, 1] = grpReflectorPart01.Text;
-            _reflectorGroupBoxTextFields[1, 1] = grpReflectorPart11.Text;
-            _reflectorGroupBoxTextFields[2, 1] = grpReflectorPart21.Text;
-            _reflectorGroupBoxTextFields[0, 2] = grpReflectorPart02.Text;
-            _reflectorGroupBoxTextFields[1, 2] = grpReflectorPart12.Text;
-            _reflectorGroupBoxTextFields[2, 2] = grpReflectorPart22.Text;
-            _reflectorQueryTextBoxFields[0, 0] = txtReflectorQueryPart00.Text;
-            _reflectorQueryTextBoxFields[1, 0] = txtReflectorQueryPart10.Text;
-            _reflectorQueryTextBoxFields[2, 0] = txtReflectorQueryPart20.Text;
-            _reflectorQueryTextBoxFields[0, 1] = txtReflectorQueryPart01.Text;
-            _reflectorQueryTextBoxFields[1, 1] = txtReflectorQueryPart11.Text;
-            _reflectorQueryTextBoxFields[2, 1] = txtReflectorQueryPart21.Text;
-            _reflectorQueryTextBoxFields[0, 2] = txtReflectorQueryPart02.Text;
-            _reflectorQueryTextBoxFields[1, 2] = txtReflectorQueryPart12.Text;
-            _reflectorQueryTextBoxFields[2, 2] = txtReflectorQueryPart22.Text;
             _commonImageResultString = grpCommonImageResult.Text;
+
+            for (int y = 0; y < 3; y++)
+                for (int x = 0; x < 3; x++)
+                {
+                    _reflectorPartPainters[x, y] = new Painter(GetReflectorPartPictureBox(x, y));
+                    _reflectorPartGroupBoxTextFields[x, y] = GetReflectorPartGroupBox(x, y).Text;
+                    _reflectorQueryPartTextBoxFields[x, y] = GetReflectorQueryPartTextBox(x, y).Text;
+                }
+        }
+
+        /// <summary>
+        /// Возвращает <see cref="PictureBox"/>, по указанным координатам, с поля Reflector.
+        /// </summary>
+        /// <param name="x">Координата X.</param>
+        /// <param name="y">Координата Y.</param>
+        /// <returns>Возвращает требуемый <see cref="PictureBox"/>.</returns>
+        PictureBox GetReflectorPartPictureBox(int x, int y)
+        {
+            Control[] picBox = (from Control c in grpReflector.Controls
+                                where c.GetType() == typeof(PictureBox)
+                                where c.Name == $"picReflectorPart{x}{y}"
+                                select c).ToArray();
+            if (picBox.Length != 1)
+                throw new Exception($"Найдены {nameof(PictureBox)} с одинаковыми именами или требуемый элемент отсутствует.");
+            return (PictureBox)picBox[0];
         }
 
         /// <summary>
@@ -202,17 +201,13 @@ namespace ReflectorExample.Sources
         {
             try
             {
-                VerifyImageBoxSizes();
+                CheckImageBoxSizes();
+
                 for (int y = 0; y < _reflectorPartProcessors.GetLength(1); y++)
                     for (int x = 0; x < _reflectorPartProcessors.GetLength(0); x++)
                         ViewSelectedReflectorPart(x, y, CheckReflectorLoadedProcessorSizes(_reflectorPartProcessors[x, y] = new List<Processor>(ReflectorFieldDataBase.GetProcessors(x, y))));
 
-                using (FileStream fs = new FileStream(Path.Combine(Application.StartupPath, "main.bmp"), FileMode.Open, FileAccess.Read, FileShare.Read))
-                    _reflectionSourceImagePainter.CurrentBitmap = CheckMainProcessorSize(new Bitmap(fs));
-            }
-            catch (FileNotFoundException)
-            {
-
+                LoadReflectionSourceImage();
             }
             catch (Exception ex)
             {
@@ -223,23 +218,49 @@ namespace ReflectorExample.Sources
         }
 
         /// <summary>
-        /// Выполняет операцию самоконтроля изначальных параметров работы программы, чтобы не было ошибок при подаче входных данных в тестируемые компоненты.
+        /// Загружает "Исходное изображение", которое располагается на поле Reflection.
+        /// Проверяет его размеры.
+        /// В случае отсутствия файла с изображением на жёстком диске, метод не производит каких-либо действий.
         /// </summary>
-        void VerifyImageBoxSizes()
+        void LoadReflectionSourceImage()
         {
-            Size main = picReflectorPart00.Size;
-            if (picReflectorPart00.Size != main || picReflectorPart10.Size != main || picReflectorPart20.Size != main ||
-                picReflectorPart01.Size != main || picReflectorPart11.Size != main || picReflectorPart21.Size != main ||
-                picReflectorPart02.Size != main || picReflectorPart12.Size != main || picReflectorPart22.Size != main)
-                throw new Exception("Обнаружены поля рисования различных размеров.");
-            if (picReflectionSourceImage.Width % main.Width != 0)
-                throw new Exception("Ширина основного поля должна быть кратна ширине всех полей для рисования.");
-            if (picReflectionSourceImage.Height % main.Height != 0)
-                throw new Exception("Высота основного поля должна быть кратна высоте всех полей для рисования.");
+            try
+            {
+                using (FileStream fs = new FileStream(GetImagePath("main"), FileMode.Open, FileAccess.Read, FileShare.Read))
+                    _reflectionSourceImagePainter.CurrentBitmap = CheckReflectionSourceImageSize(new Bitmap(fs));
+            }
+            catch (FileNotFoundException)
+            {
+                //ignored
+            }
         }
 
         /// <summary>
-        /// Получает <see cref="TextBox"/> запроса по указанным координатам на поле Reflector.
+        /// Выполняет операцию самоконтроля изначальных параметров работы программы, чтобы не было ошибок при подаче входных данных в тестируемые компоненты.
+        /// </summary>
+        void CheckImageBoxSizes()
+        {
+            Size checkSize = new Size(100, 50);
+            if (picReflectorPart00.Size != checkSize || picReflectorPart10.Size != checkSize || picReflectorPart20.Size != checkSize ||
+                picReflectorPart01.Size != checkSize || picReflectorPart11.Size != checkSize || picReflectorPart21.Size != checkSize ||
+                picReflectorPart02.Size != checkSize || picReflectorPart12.Size != checkSize || picReflectorPart22.Size != checkSize)
+                throw new Exception("Обнаружены поля для рисования различных размеров.");
+            if (picReflectionSourceImage.Width % checkSize.Width != 0)
+                throw new Exception("Ширина исходного изображения должна быть кратна ширине всех полей для рисования.");
+            if (picReflectionSourceImage.Height % checkSize.Height != 0)
+                throw new Exception("Высота исходного изображения должна быть кратна высоте всех полей для рисования.");
+            if (picReflectionSourceImage.Width / checkSize.Width != 3)
+                throw new Exception("Количество полей для рисования (по ширине) должно быть три.");
+            if (picReflectionSourceImage.Height / checkSize.Height != 3)
+                throw new Exception("Количество полей для рисования (по высоте) должно быть три.");
+            if (picCommonImageResult.Width != picReflectionSourceImage.Width)
+                throw new Exception("Ширина результирующего изображения должна совпадать с шириной исходного изображения.");
+            if (picCommonImageResult.Height != picReflectionSourceImage.Height)
+                throw new Exception("Высота результирующего изображения должна совпадать с высотой исходного изображения.");
+        }
+
+        /// <summary>
+        /// Получает <see cref="TextBox"/> запроса, по указанным координатам, с поля Reflector.
         /// </summary>
         /// <param name="x">Координата X на поле Reflector.</param>
         /// <param name="y">Координата Y на поле Reflector.</param>
@@ -247,7 +268,7 @@ namespace ReflectorExample.Sources
         TextBox GetReflectorQueryPartTextBox(int x, int y)
         {
             foreach (Control c in from Control c in grpReflectorQuery.Controls where c.GetType() == typeof(TextBox) select c)
-                if (GetControlCoords(out int px, out int py, c.Name, "txtReflectorQuery") && px == x && py == y)
+                if (GetControlCoords(out int px, out int py, c.Name, "txtReflectorQueryPart") && px == x && py == y)
                     return (TextBox)c;
             throw new Exception($"Требуемый {nameof(TextBox)} почему-то отсутствует на поле ({x}, {y}).");
         }
@@ -260,10 +281,10 @@ namespace ReflectorExample.Sources
         /// <returns>Возвращает часть запроса по заданным координатам.</returns>
         string GetCurrentReflectorPartOfQuery(int x, int y)
         {
-            string pName = GetReflectorQueryPartTextBox(x, y).Text;
-            if (string.IsNullOrWhiteSpace(pName))
+            string partOfQuery = GetReflectorQueryPartTextBox(x, y).Text;
+            if (string.IsNullOrWhiteSpace(partOfQuery))
                 throw new ArgumentException($@"Название искомой карты в поле ({x}, {y}) не задано.");
-            return pName;
+            return partOfQuery;
         }
 
         /// <summary>
@@ -278,32 +299,23 @@ namespace ReflectorExample.Sources
         /// </summary>
         /// <param name="x">Координата X на поле Reflector.</param>
         /// <param name="y">Координата Y на поле Reflector.</param>
-        /// <param name="test">Флаг проверки возможности выполнения операции. Значение <see langword="true"/> указывает на то, что необходимо проверить, все ли условия позволяют успешно выполнить операцию, при этом, сама операция выполнена не будет.</param>
-        /// <returns>Возвращает значение <see langword="true"/> в случае успеха или успешного прохождения проверки возможности выполнения операции. В противном случае - <see langword="false"/>.</returns>
-        bool SaveReflectorPartImage(int x, int y, bool test = false)
+        void SaveReflectorPartImage(int x, int y)
         {
             string mapName = GetCurrentReflectorPartOfQuery(x, y);
             string path = GetImagePath(mapName);
-            if (File.Exists(path))
-            {
-                if (!test)
-                    MessageBox.Show(this, $@"Ошибка: Файл ({x}, {y}) существует. Операция отменена.", @"Ошибка",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Exclamation);
-                return false;
-            }
-            if (test)
-                return true;
             Painter p = _reflectorPartPainters[x, y];
+
             using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                ReflectorFieldDataBase.Save(x, y, path);
                 p.CurrentBitmap.Save(fs, ImageFormat.Bmp);
-            ReflectorFieldDataBase.Save(x, y, path);
+            }
+
             p.CurrentProcessorName = mapName;
             List<Processor> reflectorPartProcessors = _reflectorPartProcessors[x, y];
             reflectorPartProcessors.Add(p.CurrentProcessor);
             _reflectorPartImageCurrentIndex[x, y] = reflectorPartProcessors.Count - 1;
             DisplayReflectorPartStatusOnGroupBox(x, y);
-            return true;
         }
 
         /// <summary>
@@ -317,13 +329,19 @@ namespace ReflectorExample.Sources
             string mapName = _reflectorPartPainters[x, y].CurrentProcessorName;
             if (string.IsNullOrWhiteSpace(mapName))
                 throw new ArgumentException("Для удаления карты необходимо сначала сохранить её.");
+
             string path = GetImagePath(mapName);
             File.Delete(path);
             ReflectorFieldDataBase.Delete(x, y, path);
-            List<Processor> proc = _reflectorPartProcessors[x, y];
-            for (int k = 0; k < proc.Count; k++)
-                if (proc[k].Tag == mapName)
-                    proc.RemoveAt(k);
+            List<Processor> reflectorPartProcessors = _reflectorPartProcessors[x, y];
+
+            for (int k = 0; k < reflectorPartProcessors.Count; k++)
+                if (reflectorPartProcessors[k].Tag == mapName)
+                {
+                    reflectorPartProcessors.RemoveAt(k);
+                    break;
+                }
+
             ReflectorPartPrevButton(x, y);
         }
 
@@ -385,6 +403,11 @@ namespace ReflectorExample.Sources
             }
         }
 
+        /// <summary>
+        /// Очищает белым цветом "Исходное изображение" с поля Reflection.
+        /// </summary>
+        /// <param name="sender">Вызывающий объект. Не используется.</param>
+        /// <param name="e">Аргументы. Не используется.</param>
         void BtnReflectionSourceImageClear_Click(object sender, EventArgs e) => _reflectionSourceImagePainter.Clear();
 
         /// <summary>
@@ -398,21 +421,6 @@ namespace ReflectorExample.Sources
             {
                 _reflectionSourceImagePainter.CurrentProcessorName = "main";
                 Bitmap[,] btms = ImageSplit(_reflectionSourceImagePainter.CurrentProcessor, picReflectorPart00.Width, picReflectorPart00.Height);
-                if (btms.Length != 9)
-                {
-                    MessageBox.Show(this, $@"Количество карт неверное ({btms.Length}). Должно быть 9.");
-                    return;
-                }
-                for (int y = 0; y < 3; y++)
-                    for (int x = 0; x < 3; x++)
-                    {
-                        if (SaveReflectorPartImage(x, y, true))
-                            continue;
-                        MessageBox.Show(this,
-                            $@"Файл ({x}, {y}) невозможно сохранить, т.к. он уже существует. Задайте другое имя.",
-                            @"Файл уже существует.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
                 for (int y = 0; y < 3; y++)
                     for (int x = 0; x < 3; x++)
                     {
@@ -701,7 +709,7 @@ namespace ReflectorExample.Sources
                 if (OpenFile.ShowDialog(this) != DialogResult.OK)
                     return;
                 using (FileStream fs = new FileStream(OpenFile.FileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    _reflectionSourceImagePainter.CurrentBitmap = CheckMainProcessorSize(new Bitmap(fs));
+                    _reflectionSourceImagePainter.CurrentBitmap = CheckReflectionSourceImageSize(new Bitmap(fs));
             }
             catch (Exception ex)
             {
@@ -713,8 +721,8 @@ namespace ReflectorExample.Sources
         /// Проверяет размеры изображения, загружаемого как "Исходное изображение", на поле Reflection.
         /// </summary>
         /// <param name="bitmap">Изображение, которое требуется проверить.</param>
-        /// <returns>Возвращает исходное изображение.</returns>
-        Bitmap CheckMainProcessorSize(Bitmap bitmap)
+        /// <returns>Возвращает проверяемое изображение.</returns>
+        Bitmap CheckReflectionSourceImageSize(Bitmap bitmap)
         {
             if (bitmap == null)
                 throw new ArgumentNullException(nameof(bitmap), @"Требуется задать главное изображение для проверки.");
@@ -915,7 +923,7 @@ namespace ReflectorExample.Sources
         void ViewSelectedReflectorPart(int x, int y, Processor partProcessor)
         {
             _reflectorPartPainters[x, y].CurrentProcessor = partProcessor;
-            GetReflectorQueryPartTextBox(x, y).Text = partProcessor == null ? _reflectorQueryTextBoxFields[x, y] : partProcessor.Tag;
+            GetReflectorQueryPartTextBox(x, y).Text = partProcessor == null ? _reflectorQueryPartTextBoxFields[x, y] : partProcessor.Tag;
             DisplayReflectorPartStatusOnGroupBox(x, y);
         }
 
@@ -956,8 +964,7 @@ namespace ReflectorExample.Sources
             {
                 if (!GetControlCoords(out int x, out int y, ((Button)sender).Name, "btnOKReflectorPart"))
                     throw new ArgumentException(@"Не могу идентифицировать поле ввода запроса.", nameof(sender));
-                if (!SaveReflectorPartImage(x, y))
-                    return;
+                SaveReflectorPartImage(x, y);
                 _reflection = null;
                 _reflector = null;
             }
@@ -1010,6 +1017,23 @@ namespace ReflectorExample.Sources
         }
 
         /// <summary>
+        /// Возвращает <see cref="GroupBox"/>, по указанным координатам, с поля Reflector.
+        /// </summary>
+        /// <param name="x">Координата X.</param>
+        /// <param name="y">Координата Y.</param>
+        /// <returns>Возвращает требуемый <see cref="GroupBox"/>.</returns>
+        GroupBox GetReflectorPartGroupBox(int x, int y)
+        {
+            Control[] grpBox = (from Control c in grpReflector.Controls
+                                where c.GetType() == typeof(GroupBox)
+                                where c.Name == $"grpReflectorPart{x}{y}"
+                                select c).ToArray();
+            if (grpBox.Length != 1)
+                throw new Exception($"Найдены {nameof(GroupBox)} с одинаковыми именами или требуемый элемент отсутствует.");
+            return (GroupBox)grpBox[0];
+        }
+
+        /// <summary>
         /// Отображает статус указанной части объекта <see cref="Reflector"/>, т.е. количество изображений и индекс указанного изображения, начиная с единицы.
         /// Статус отображается на <see cref="GroupBox"/> по указанным координатам.
         /// </summary>
@@ -1017,15 +1041,8 @@ namespace ReflectorExample.Sources
         /// <param name="y">Координата Y.</param>
         void DisplayReflectorPartStatusOnGroupBox(int x, int y)
         {
-            Control[] grpBox = (from Control c in grpReflector.Controls
-                                where c.GetType() == typeof(GroupBox)
-                                where c.Name == $"grpReflectorPart{x}{y}"
-                                select c).ToArray();
-            if (grpBox.Length != 1)
-                throw new Exception(
-                    $"Найдены {nameof(GroupBox)} с одинаковыми именами или требуемый элемент отсутствует.");
             int count = _reflectorPartProcessors[x, y].Count;
-            grpBox[0].Text = count <= 0 ? _reflectorGroupBoxTextFields[x, y] : $@"{_reflectorGroupBoxTextFields[x, y]} ({count}) [{_reflectorPartImageCurrentIndex[x, y] + 1}]";
+            GetReflectorPartGroupBox(x, y).Text = count <= 0 ? _reflectorPartGroupBoxTextFields[x, y] : $@"{_reflectorPartGroupBoxTextFields[x, y]} ({count}) [{_reflectorPartImageCurrentIndex[x, y] + 1}]";
         }
 
         /// <summary>
@@ -1067,9 +1084,9 @@ namespace ReflectorExample.Sources
                 if (!GetControlCoords(out int x, out int y, tb.Name, "txtReflectorQueryPart"))
                     throw new ArgumentException(@"Не могу идентифицировать поле ввода запроса.", nameof(sender));
                 int selectionStart = tb.SelectionStart;
-                tb.Text = string.IsNullOrWhiteSpace(tb.Text) ? _reflectorQueryTextBoxFields[x, y] : tb.Text.ToUpper();
+                tb.Text = string.IsNullOrWhiteSpace(tb.Text) ? _reflectorQueryPartTextBoxFields[x, y] : tb.Text.ToUpper();
                 tb.SelectionStart = selectionStart;
-                _reflectorQueryTextBoxFields[x, y] = tb.Text;
+                _reflectorQueryPartTextBoxFields[x, y] = tb.Text;
             }
             catch (Exception ex)
             {

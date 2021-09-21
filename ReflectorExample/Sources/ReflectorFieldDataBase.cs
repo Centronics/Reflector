@@ -18,7 +18,7 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Содержит путь к базе данных, где хранятся пути к изображениям, которые находятся на поле Reflector.
         /// </summary>
-        static readonly string SaveToFile = Path.Combine(Application.StartupPath, "ReflectorFieldDataBase.txt");
+        static readonly string FullDataBaseFilePath = Path.Combine(Application.StartupPath, "ReflectorFieldDataBase.txt");
 
         /// <summary>
         /// Объект для сериализации / десериализации базы данных.
@@ -38,47 +38,47 @@ namespace ReflectorExample.Sources
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 0, Y = 0.
         /// </summary>
-        public List<string> BitPaths00 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths00 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 1, Y = 0.
         /// </summary>
-        public List<string> BitPaths10 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths10 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 2, Y = 0.
         /// </summary>
-        public List<string> BitPaths20 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths20 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 0, Y = 1.
         /// </summary>
-        public List<string> BitPaths01 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths01 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 1, Y = 1.
         /// </summary>
-        public List<string> BitPaths11 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths11 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 2, Y = 1.
         /// </summary>
-        public List<string> BitPaths21 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths21 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 0, Y = 2.
         /// </summary>
-        public List<string> BitPaths02 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths02 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 1, Y = 2.
         /// </summary>
-        public List<string> BitPaths12 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths12 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Коллекция изображений с поля Reflector, находящаяся по координатам X = 2, Y = 2.
         /// </summary>
-        public List<string> BitPaths22 { get; set; } = new List<string>();
+        public HashSet<string> BitPaths22 { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Возвращает коллекции путей к изображениям, находящихся по указанным координатам, на поле Reflector.
@@ -86,7 +86,7 @@ namespace ReflectorExample.Sources
         /// <param name="x">Координата X на поле Reflector.</param>
         /// <param name="y">Координата Y на поле Reflector.</param>
         /// <returns>В случае успеха, возвращает коллекции путей к изображениям, в противном случае возникает исключение <see cref="ArgumentException"/>.</returns>
-        static List<string> GetImagePathsList(int x, int y)
+        static HashSet<string> GetImagePathsList(int x, int y)
         {
             if (x < 0 || x > 2)
                 throw new ArgumentException($@"Координата X выходит за пределы поля Reflector {x}.", nameof(x));
@@ -125,7 +125,7 @@ namespace ReflectorExample.Sources
         /// </summary>
         static void Serialize()
         {
-            using (FileStream fs = new FileStream(SaveToFile, FileMode.Create, FileAccess.Write))
+            using (FileStream fs = new FileStream(FullDataBaseFilePath, FileMode.Create, FileAccess.Write))
                 Serializer.Serialize(fs, _dataBase ?? new ReflectorFieldDataBase());
         }
 
@@ -138,8 +138,8 @@ namespace ReflectorExample.Sources
                 return;
             try
             {
-                using (FileStream fs = new FileStream(SaveToFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    _dataBase = (ReflectorFieldDataBase) Serializer.Deserialize(fs) ?? new ReflectorFieldDataBase();
+                using (FileStream fs = new FileStream(FullDataBaseFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    _dataBase = (ReflectorFieldDataBase)Serializer.Deserialize(fs) ?? new ReflectorFieldDataBase();
             }
             catch (FileNotFoundException)
             {
@@ -163,13 +163,15 @@ namespace ReflectorExample.Sources
 
         /// <summary>
         /// Записывает указанный путь в базу данных, сохраняя изменение на жёсткий диск.
+        /// В случае, если путь уже присутствует в базе данных, создаётся исключение <see cref="ArgumentException"/>.
         /// </summary>
         /// <param name="x">Координата X на поле Reflector.</param>
         /// <param name="y">Координата Y на поле Reflector.</param>
         /// <param name="imagePath">Путь, который необходимо сохранить в базе данных.</param>
         public static void Save(int x, int y, string imagePath)
         {
-            GetImagePathsList(x, y).Add(imagePath.ToUpper());
+            if (!GetImagePathsList(x, y).Add(imagePath.ToUpper()))
+                throw new ArgumentException(@"Попытка добавить путь, который был ранее добавлен к базу данных.", nameof(imagePath));
             Serialize();
         }
 
