@@ -118,6 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="Clear" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAYAAAA/mJfHAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        xAAADsQBlSsOGwAAAjFJREFUOE+dU0trGmEU9Z8KiiAYdaxag1N80KAoKaZYXRiji3Rh7SKZZppuYoJG
+        wY2oG6tgtL5wfKO4S+F07peYamIK9cKBGf3uud8954yi1WphV4zHY+RyOSS/JtHtdrEz2Wg0gsfjQeY2
+        g3Q6jbPzs93IptMp+Hc8Op0OqLxeL35Wq/9PNpvNEAgEUJWbqZxOJ65SV+j3+9vJ2u02pL6EwWDAptNv
+        vV4Pk8kEPr8P+Xwe5XIZNpsNlUqFEdGZF2TU1Gg0EA6H8f7gAMViEfP5nOlCzbTicfQYp59P2fNqGGGD
+        jBwpFAqw2+3sIJXL5YLVaoUgCOw9kUjg8sclM2C9l7BBtlgsYDab0Ww2WeOqaLVsNouWvP7RxyNM5Eis
+        963AyEgjukkoFALHcXA4HKjf3T1SPVQ0GoVKpcJwOGTnnxMRFPQHXdnn88FgMEAURfA8D71ez0Rer2Qy
+        iXg8DkmStpORE263GxaLBRfiBUwmE4KfgojFYlCr1UilUo9UD2WXB20jIijSmQxL8vXNDXQ6HaInJwgG
+        g3gjk57Lomu1WuYc1f3ve7yVHd0mPiOjKJBeSqUS4ncRhx8OsW/bxxd5JaPRiEgkwhylgRbZ1Xq9jk77
+        bxw2yFYPy+WS6UYrC98E6Pf2mD5+v5+ZQhuQJOu5eo4nMjKi+aspr3sNjUbDckXEnIlDrVZ7Svm/sJEz
+        mkqfR6lUYobQd0dBJinWz72GDTICEdINKSIk9GuZeokW/gAum0uK7fPIlAAAAABJRU5ErkJggg==
+</value>
+    <comment>Очищает поле рисования.</comment>
+  </data>
   <data name="Trash" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -129,6 +145,6 @@
         7ts9iaJIV5p19n1fN3M8HksQBJqp6cOj2+12bZM8z6Xb7cp8PtcBnoT6WXjG8OiKovgwKeUdn8xpf6A6
         wt0AAAAASUVORK5CYII=
 </value>
-    <comment>Обозначение удаления файла.</comment>
+    <comment>Удаляет файл.</comment>
   </data>
 </root>

@@ -381,11 +381,11 @@
             // 
             // btnClearReflectorPart12
             // 
+            this.btnClearReflectorPart12.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart12.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart12.Name = "btnClearReflectorPart12";
             this.btnClearReflectorPart12.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart12.TabIndex = 79;
-            this.btnClearReflectorPart12.Text = "X";
             this.btnClearReflectorPart12.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart12.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
@@ -476,11 +476,11 @@
             // 
             // btnClearReflectorPart10
             // 
+            this.btnClearReflectorPart10.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart10.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart10.Name = "btnClearReflectorPart10";
             this.btnClearReflectorPart10.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart10.TabIndex = 29;
-            this.btnClearReflectorPart10.Text = "X";
             this.btnClearReflectorPart10.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart10.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
@@ -553,11 +553,11 @@
             // 
             // btnClearReflectorPart20
             // 
+            this.btnClearReflectorPart20.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart20.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart20.Name = "btnClearReflectorPart20";
             this.btnClearReflectorPart20.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart20.TabIndex = 30;
-            this.btnClearReflectorPart20.Text = "X";
             this.btnClearReflectorPart20.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart20.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
@@ -648,11 +648,11 @@
             // 
             // btnClearReflectorPart21
             // 
+            this.btnClearReflectorPart21.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart21.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart21.Name = "btnClearReflectorPart21";
             this.btnClearReflectorPart21.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart21.TabIndex = 77;
-            this.btnClearReflectorPart21.Text = "X";
             this.btnClearReflectorPart21.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart21.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
@@ -725,11 +725,11 @@
             // 
             // btnClearReflectorPart02
             // 
+            this.btnClearReflectorPart02.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart02.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart02.Name = "btnClearReflectorPart02";
             this.btnClearReflectorPart02.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart02.TabIndex = 78;
-            this.btnClearReflectorPart02.Text = "X";
             this.btnClearReflectorPart02.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart02.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
@@ -820,11 +820,11 @@
             // 
             // btnClearReflectorPart11
             // 
+            this.btnClearReflectorPart11.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart11.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart11.Name = "btnClearReflectorPart11";
             this.btnClearReflectorPart11.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart11.TabIndex = 76;
-            this.btnClearReflectorPart11.Text = "X";
             this.btnClearReflectorPart11.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart11.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
@@ -897,11 +897,11 @@
             // 
             // btnClearReflectorPart22
             // 
+            this.btnClearReflectorPart22.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart22.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart22.Name = "btnClearReflectorPart22";
             this.btnClearReflectorPart22.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart22.TabIndex = 80;
-            this.btnClearReflectorPart22.Text = "X";
             this.btnClearReflectorPart22.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart22.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
@@ -1217,11 +1217,11 @@
             // 
             // btnClearReflectorPart01
             // 
+            this.btnClearReflectorPart01.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart01.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart01.Name = "btnClearReflectorPart01";
             this.btnClearReflectorPart01.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart01.TabIndex = 75;
-            this.btnClearReflectorPart01.Text = "X";
             this.btnClearReflectorPart01.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart01.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
@@ -1305,11 +1305,11 @@
             // 
             // btnClearReflectorPart00
             // 
+            this.btnClearReflectorPart00.Image = global::ReflectorExample.Resources.Clear;
             this.btnClearReflectorPart00.Location = new System.Drawing.Point(44, 20);
             this.btnClearReflectorPart00.Name = "btnClearReflectorPart00";
             this.btnClearReflectorPart00.Size = new System.Drawing.Size(25, 23);
             this.btnClearReflectorPart00.TabIndex = 28;
-            this.btnClearReflectorPart00.Text = "X";
             this.btnClearReflectorPart00.UseVisualStyleBackColor = true;
             this.btnClearReflectorPart00.Click += new System.EventHandler(this.BtnClearReflectorPart_Click);
             // 
