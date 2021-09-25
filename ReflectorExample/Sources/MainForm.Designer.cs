@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.picReflectionSourceImage = new System.Windows.Forms.PictureBox();
             this.grpReflectionSourceImage = new System.Windows.Forms.GroupBox();
+            this.picReflectionSourceImage = new System.Windows.Forms.PictureBox();
             this.grpReflection = new System.Windows.Forms.GroupBox();
             this.btnReflectionSourceImageClear = new System.Windows.Forms.Button();
             this.btnReflectionPush = new System.Windows.Forms.Button();
@@ -145,8 +145,8 @@
             this.btnNeuronFindRelation = new System.Windows.Forms.Button();
             this.grpNeuron = new System.Windows.Forms.GroupBox();
             this.grpCommonResult = new System.Windows.Forms.GroupBox();
-            ((System.ComponentModel.ISupportInitialize)(this.picReflectionSourceImage)).BeginInit();
             this.grpReflectionSourceImage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picReflectionSourceImage)).BeginInit();
             this.grpReflection.SuspendLayout();
             this.grpCommonImageResult.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCommonImageResult)).BeginInit();
@@ -176,6 +176,16 @@
             this.grpCommonResult.SuspendLayout();
             this.SuspendLayout();
             // 
+            // grpReflectionSourceImage
+            // 
+            this.grpReflectionSourceImage.Controls.Add(this.picReflectionSourceImage);
+            this.grpReflectionSourceImage.Location = new System.Drawing.Point(6, 19);
+            this.grpReflectionSourceImage.Name = "grpReflectionSourceImage";
+            this.grpReflectionSourceImage.Size = new System.Drawing.Size(312, 175);
+            this.grpReflectionSourceImage.TabIndex = 1;
+            this.grpReflectionSourceImage.TabStop = false;
+            this.grpReflectionSourceImage.Text = "Исходное изображение (ЛКМ - рисовать, ПКМ - стереть)";
+            // 
             // picReflectionSourceImage
             // 
             this.picReflectionSourceImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -187,16 +197,6 @@
             this.picReflectionSourceImage.TabStop = false;
             this.picReflectionSourceImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PicReflection_MouseDown_MouseMove);
             this.picReflectionSourceImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PicReflection_MouseDown_MouseMove);
-            // 
-            // grpReflectionSourceImage
-            // 
-            this.grpReflectionSourceImage.Controls.Add(this.picReflectionSourceImage);
-            this.grpReflectionSourceImage.Location = new System.Drawing.Point(6, 19);
-            this.grpReflectionSourceImage.Name = "grpReflectionSourceImage";
-            this.grpReflectionSourceImage.Size = new System.Drawing.Size(312, 175);
-            this.grpReflectionSourceImage.TabIndex = 1;
-            this.grpReflectionSourceImage.TabStop = false;
-            this.grpReflectionSourceImage.Text = "Исходное изображение (ЛКМ - рисовать, ПКМ - стереть)";
             // 
             // grpReflection
             // 
@@ -411,9 +411,9 @@
             // 
             // btnOKReflectorPart12
             // 
-            this.btnOKReflectorPart12.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart12.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart12.Name = "btnOKReflectorPart12";
-            this.btnOKReflectorPart12.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart12.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart12.TabIndex = 34;
             this.btnOKReflectorPart12.Text = "ОК";
             this.btnOKReflectorPart12.UseVisualStyleBackColor = true;
@@ -421,11 +421,11 @@
             // 
             // btnDelReflectorPart12
             // 
+            this.btnDelReflectorPart12.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart12.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart12.Name = "btnDelReflectorPart12";
-            this.btnDelReflectorPart12.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart12.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart12.TabIndex = 33;
-            this.btnDelReflectorPart12.Text = "Удалить";
             this.btnDelReflectorPart12.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart12.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -496,9 +496,9 @@
             // 
             // btnOKReflectorPart10
             // 
-            this.btnOKReflectorPart10.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart10.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart10.Name = "btnOKReflectorPart10";
-            this.btnOKReflectorPart10.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart10.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart10.TabIndex = 10;
             this.btnOKReflectorPart10.Text = "ОК";
             this.btnOKReflectorPart10.UseVisualStyleBackColor = true;
@@ -516,11 +516,11 @@
             // 
             // btnDelReflectorPart10
             // 
+            this.btnDelReflectorPart10.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart10.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart10.Name = "btnDelReflectorPart10";
-            this.btnDelReflectorPart10.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart10.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart10.TabIndex = 9;
-            this.btnDelReflectorPart10.Text = "Удалить";
             this.btnDelReflectorPart10.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart10.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -573,9 +573,9 @@
             // 
             // btnOKReflectorPart20
             // 
-            this.btnOKReflectorPart20.Location = new System.Drawing.Point(66, 100);
+            this.btnOKReflectorPart20.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart20.Name = "btnOKReflectorPart20";
-            this.btnOKReflectorPart20.Size = new System.Drawing.Size(40, 23);
+            this.btnOKReflectorPart20.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart20.TabIndex = 14;
             this.btnOKReflectorPart20.Text = "ОК";
             this.btnOKReflectorPart20.UseVisualStyleBackColor = true;
@@ -593,11 +593,11 @@
             // 
             // btnDelReflectorPart20
             // 
+            this.btnDelReflectorPart20.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart20.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart20.Name = "btnDelReflectorPart20";
-            this.btnDelReflectorPart20.Size = new System.Drawing.Size(58, 23);
+            this.btnDelReflectorPart20.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart20.TabIndex = 13;
-            this.btnDelReflectorPart20.Text = "Удалить";
             this.btnDelReflectorPart20.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart20.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -678,9 +678,9 @@
             // 
             // btnOKReflectorPart21
             // 
-            this.btnOKReflectorPart21.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart21.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart21.Name = "btnOKReflectorPart21";
-            this.btnOKReflectorPart21.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart21.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart21.TabIndex = 26;
             this.btnOKReflectorPart21.Text = "ОК";
             this.btnOKReflectorPart21.UseVisualStyleBackColor = true;
@@ -688,11 +688,11 @@
             // 
             // btnDelReflectorPart21
             // 
+            this.btnDelReflectorPart21.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart21.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart21.Name = "btnDelReflectorPart21";
-            this.btnDelReflectorPart21.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart21.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart21.TabIndex = 25;
-            this.btnDelReflectorPart21.Text = "Удалить";
             this.btnDelReflectorPart21.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart21.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -755,9 +755,9 @@
             // 
             // btnOKReflectorPart02
             // 
-            this.btnOKReflectorPart02.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart02.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart02.Name = "btnOKReflectorPart02";
-            this.btnOKReflectorPart02.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart02.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart02.TabIndex = 30;
             this.btnOKReflectorPart02.Text = "ОК";
             this.btnOKReflectorPart02.UseVisualStyleBackColor = true;
@@ -765,11 +765,11 @@
             // 
             // btnDelReflectorPart02
             // 
+            this.btnDelReflectorPart02.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart02.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart02.Name = "btnDelReflectorPart02";
-            this.btnDelReflectorPart02.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart02.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart02.TabIndex = 29;
-            this.btnDelReflectorPart02.Text = "Удалить";
             this.btnDelReflectorPart02.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart02.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -850,9 +850,9 @@
             // 
             // btnOKReflectorPart11
             // 
-            this.btnOKReflectorPart11.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart11.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart11.Name = "btnOKReflectorPart11";
-            this.btnOKReflectorPart11.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart11.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart11.TabIndex = 22;
             this.btnOKReflectorPart11.Text = "ОК";
             this.btnOKReflectorPart11.UseVisualStyleBackColor = true;
@@ -860,11 +860,11 @@
             // 
             // btnDelReflectorPart11
             // 
+            this.btnDelReflectorPart11.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart11.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart11.Name = "btnDelReflectorPart11";
-            this.btnDelReflectorPart11.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart11.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart11.TabIndex = 21;
-            this.btnDelReflectorPart11.Text = "Удалить";
             this.btnDelReflectorPart11.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart11.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -927,9 +927,9 @@
             // 
             // btnOKReflectorPart22
             // 
-            this.btnOKReflectorPart22.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart22.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart22.Name = "btnOKReflectorPart22";
-            this.btnOKReflectorPart22.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart22.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart22.TabIndex = 38;
             this.btnOKReflectorPart22.Text = "ОК";
             this.btnOKReflectorPart22.UseVisualStyleBackColor = true;
@@ -937,11 +937,11 @@
             // 
             // btnDelReflectorPart22
             // 
+            this.btnDelReflectorPart22.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart22.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart22.Name = "btnDelReflectorPart22";
-            this.btnDelReflectorPart22.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart22.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart22.TabIndex = 37;
-            this.btnDelReflectorPart22.Text = "Удалить";
             this.btnDelReflectorPart22.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart22.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -1247,9 +1247,9 @@
             // 
             // btnOKReflectorPart01
             // 
-            this.btnOKReflectorPart01.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart01.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart01.Name = "btnOKReflectorPart01";
-            this.btnOKReflectorPart01.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart01.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart01.TabIndex = 18;
             this.btnOKReflectorPart01.Text = "ОК";
             this.btnOKReflectorPart01.UseVisualStyleBackColor = true;
@@ -1257,11 +1257,11 @@
             // 
             // btnDelReflectorPart01
             // 
+            this.btnDelReflectorPart01.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart01.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart01.Name = "btnDelReflectorPart01";
-            this.btnDelReflectorPart01.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart01.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart01.TabIndex = 17;
-            this.btnDelReflectorPart01.Text = "Удалить";
             this.btnDelReflectorPart01.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart01.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -1325,9 +1325,9 @@
             // 
             // btnOKReflectorPart00
             // 
-            this.btnOKReflectorPart00.Location = new System.Drawing.Point(71, 100);
+            this.btnOKReflectorPart00.Location = new System.Drawing.Point(31, 100);
             this.btnOKReflectorPart00.Name = "btnOKReflectorPart00";
-            this.btnOKReflectorPart00.Size = new System.Drawing.Size(36, 23);
+            this.btnOKReflectorPart00.Size = new System.Drawing.Size(75, 23);
             this.btnOKReflectorPart00.TabIndex = 6;
             this.btnOKReflectorPart00.Text = "ОК";
             this.btnOKReflectorPart00.UseVisualStyleBackColor = true;
@@ -1345,11 +1345,11 @@
             // 
             // btnDelReflectorPart00
             // 
+            this.btnDelReflectorPart00.Image = global::ReflectorExample.Resources.Trash;
             this.btnDelReflectorPart00.Location = new System.Drawing.Point(6, 100);
             this.btnDelReflectorPart00.Name = "btnDelReflectorPart00";
-            this.btnDelReflectorPart00.Size = new System.Drawing.Size(63, 23);
+            this.btnDelReflectorPart00.Size = new System.Drawing.Size(23, 23);
             this.btnDelReflectorPart00.TabIndex = 5;
-            this.btnDelReflectorPart00.Text = "Удалить";
             this.btnDelReflectorPart00.UseVisualStyleBackColor = true;
             this.btnDelReflectorPart00.Click += new System.EventHandler(this.BtnDelReflectorPart_Click);
             // 
@@ -1481,8 +1481,8 @@
             this.Text = "Пример применения библиотеки Reflector";
             this.Shown += new System.EventHandler(this.FrmMain_Shown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyUp);
-            ((System.ComponentModel.ISupportInitialize)(this.picReflectionSourceImage)).EndInit();
             this.grpReflectionSourceImage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picReflectionSourceImage)).EndInit();
             this.grpReflection.ResumeLayout(false);
             this.grpCommonImageResult.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picCommonImageResult)).EndInit();

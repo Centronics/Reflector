@@ -732,7 +732,7 @@ namespace ReflectorExample.Sources
                 throw new ArgumentException($@"Главное загружаемое изображение не соответствует по высоте ({bitmap.Height} != {picReflectionSourceImage.Height}).", nameof(bitmap));
             return bitmap;
         }
-        //необходимо определить с размерами кнопок ОК и "удалить"
+
         /// <summary>
         /// Проверяет размеры загружаемых карт, предназначенных для поля Reflector.
         /// В том числе, проверяет их на значение <see langword="null"/>.
