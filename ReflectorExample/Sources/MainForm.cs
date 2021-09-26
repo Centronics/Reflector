@@ -12,6 +12,9 @@ using DynamicReflector;
 
 namespace ReflectorExample.Sources
 {
+    /// <summary>
+    /// Отвечает за создание, хранение и контроль состояния тестируемых компонентов (<see cref="Reflection"/>, <see cref="Reflector"/>, <see cref="Neuron"/>), а также за вывод результата их работы.
+    /// </summary>
     public partial class FrmMain : Form
     {
         /// <summary>
@@ -279,7 +282,7 @@ namespace ReflectorExample.Sources
         /// <param name="x">Координата X на поле Reflector.</param>
         /// <param name="y">Координата Y на поле Reflector.</param>
         /// <returns>Возвращает часть запроса по заданным координатам.</returns>
-        string GetCurrentReflectorPartOfQuery(int x, int y)
+        string GetCurrentReflectorQueryPartString(int x, int y)
         {
             string partOfQuery = GetReflectorQueryPartTextBox(x, y).Text;
             if (string.IsNullOrWhiteSpace(partOfQuery))
@@ -301,7 +304,7 @@ namespace ReflectorExample.Sources
         /// <param name="y">Координата Y на поле Reflector.</param>
         void SaveReflectorPartImage(int x, int y)
         {
-            string mapName = GetCurrentReflectorPartOfQuery(x, y);
+            string mapName = GetCurrentReflectorQueryPartString(x, y);
             string path = GetImagePath(mapName);
             Painter p = _reflectorPartPainters[x, y];
 
@@ -424,7 +427,7 @@ namespace ReflectorExample.Sources
                 for (int y = 0; y < 3; y++)
                     for (int x = 0; x < 3; x++)
                     {
-                        _reflectorPartPainters[x, y].CurrentProcessor = new Processor(btms[x, y], GetCurrentReflectorPartOfQuery(x, y));
+                        _reflectorPartPainters[x, y].CurrentProcessor = new Processor(btms[x, y], GetCurrentReflectorQueryPartString(x, y));
                         SaveReflectorPartImage(x, y);
                         ReflectorPartNextButton(x, y, true);
                     }
@@ -1283,7 +1286,7 @@ namespace ReflectorExample.Sources
                         for (int x = 0; x < 3; x++)
                         {
                             Painter p = _reflectorPartPainters[x, y];
-                            p.CurrentProcessorName = GetCurrentReflectorPartOfQuery(x, y);
+                            p.CurrentProcessorName = GetCurrentReflectorQueryPartString(x, y);
                             yield return p.CurrentProcessor;
                         }
                 }
@@ -1307,7 +1310,7 @@ namespace ReflectorExample.Sources
                         for (int x = 0; x < 3; x++)
                         {
                             Painter p = _reflectorPartPainters[x, y];
-                            p.CurrentProcessorName = GetCurrentReflectorPartOfQuery(x, y);
+                            p.CurrentProcessorName = GetCurrentReflectorQueryPartString(x, y);
                             yield return (p.CurrentProcessor, p.CurrentProcessorName);
                         }
                 }
