@@ -32,7 +32,7 @@ namespace DynamicReflector
         /// <summary>
         ///     Инициализирует текущий экземпляр класса, инициализируя внутренние объекты <see cref="Reflector" /> для
         ///     распознавания указанных карт.
-        ///     Остальные правила те же, что и для класса <see cref="Reflector" />, т.к. класс <see cref="Reflection" /> использует
+        ///     Остальные правила те же, что и для класса <see cref="Reflector" />, т.к. этот класс использует
         ///     его.
         /// </summary>
         /// <param name="processors">Карты, которые требуется узнать на входной карте.</param>
@@ -119,7 +119,7 @@ namespace DynamicReflector
         /// <summary>
         ///     Возвращает все варианты запросов для распознавания какой-либо карты.
         /// </summary>
-        /// <param name="processors">Массив карт для чтения первых символов их названий. Остальные символы игнорируются.</param>
+        /// <param name="processors">Массив карт для чтения первых символов их названий, остальные символы игнорируются.</param>
         /// <returns>Возвращает все варианты запросов для распознавания какой-либо карты.</returns>
         static IEnumerable<char[,]> Matrixes(ProcessorContainer[,] processors)
         {
@@ -148,13 +148,13 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Увеличивает значение старших разрядов счётчика букв, если это возможно.
+        ///     Увеличивает значение младших разрядов счётчика букв, если это возможно.
         ///     Если увеличение было произведено, возвращается значение <see langword="true" />, в противном случае -
         ///     <see langword="false" />.
         /// </summary>
         /// <param name="count">Массив-счётчик.</param>
         /// <param name="processors">
-        ///     Требуется для уточнения количества карт в каждом элементе массива и определения предела
+        ///     Требуется для уточнения количества карт в каждом элементе массива, и определения предела
         ///     увеличения значения каждого разряда массива-счётчика.
         /// </param>
         /// <returns>
@@ -203,7 +203,7 @@ namespace DynamicReflector
             /// </summary>
             /// <param name="p1">Первая карта.</param>
             /// <param name="p2">Вторая карта.</param>
-            /// <returns>В случае равенства возвращает значение <see langword="true" />, в противном случае - <see langword="false" />.</returns>
+            /// <returns>В случае равенства возвращается значение <see langword="true" />, в противном случае - <see langword="false" />.</returns>
             public override bool Equals(Processor p1, Processor p2)
             {
                 if (p1 == null && p2 == null)

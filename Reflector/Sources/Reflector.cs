@@ -53,22 +53,22 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Размер добавленных карт для распознавания по высоте.
+        ///     Размер добавленных карт для распознавания, по высоте.
         /// </summary>
         public int MapHeight { get; }
 
         /// <summary>
-        ///     Размер добавленных карт для распознавания по ширине.
+        ///     Размер добавленных карт для распознавания, по ширине.
         /// </summary>
         public int MapWidth { get; }
 
         /// <summary>
-        ///     Размер, которому должна соответствовать входная распознаваемая карта по ширине.
+        ///     Размер, которому должна соответствовать входная распознаваемая карта, по ширине.
         /// </summary>
         public int ProcessorWidth => _processorContainers.GetLength(0) * MapWidth;
 
         /// <summary>
-        ///     Размер, которому должна соответствовать входная распознаваемая карта по высоте.
+        ///     Размер, которому должна соответствовать входная распознаваемая карта, по высоте.
         /// </summary>
         public int ProcessorHeight => _processorContainers.GetLength(1) * MapHeight;
 
@@ -88,8 +88,8 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Добавляет карты в коллекцию, проверяя их на предмет совпадающих значений свойств <see cref="Processor.Tag" />.
-        ///     Добавление производится в общую коллекцию для ускорения поиска.
+        ///     Добавляет указанные карты в коллекцию, проверяя их на предмет совпадающих значений свойств <see cref="Processor.Tag" />.
+        ///     Для ускорения поиска, добавление карт производится в общую коллекцию.
         /// </summary>
         /// <param name="pc">Коллекция добавляемых карт.</param>
         void AddToCache(ProcessorContainer pc)
@@ -126,7 +126,7 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="processors">Проверяемые карты.</param>
         /// <returns>
-        ///     В случае успеха возвращает значение <see langword="true" />, в противном случае возвращает значение
+        ///     В случае успеха, возвращает значение <see langword="true" />, в противном случае, возвращает значение
         ///     <see langword="false" />.
         /// </returns>
         static bool IsOneSize(ProcessorContainer[,] processors)
@@ -178,7 +178,7 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="tag">Название карты, которую необходимо выбрать.</param>
         /// <returns>
-        ///     В случае нахождения карты с указанным названием, возвращает её. В противном случае выбрасывает исключение типа
+        ///     В случае нахождения карты с указанным названием, возвращает её. В противном случае, выбрасывает исключение
         ///     <see cref="ArgumentNullException" />.
         /// </returns>
         Processor GetMapByName(char tag)
@@ -190,7 +190,7 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Объединяет указанные карты в единую карту в соответствии с расположением карт в указанном массиве.
+        ///     Объединяет указанные карты в единую карту, в соответствии с расположением карт в указанном массиве.
         ///     При этом важно, чтобы все указанные карты были одного размера.
         ///     Карты со значением <see langword="null" /> должны отсутствовать.
         /// </summary>
@@ -218,7 +218,7 @@ namespace DynamicReflector
         /// <param name="processor">Карта, часть которой необходимо получить.</param>
         /// <param name="x">Координата X необходимой части карты.</param>
         /// <param name="y">Координата Y необходимой части карты.</param>
-        /// <returns>Возвращает указанную часть карты в виде массива <see cref="SignValue" />.</returns>
+        /// <returns>Возвращает указанную часть карты, в виде массива <see cref="SignValue" />.</returns>
         SignValue[,] GetMapPiece(Processor processor, int x, int y)
         {
             SignValue[,] sv = new SignValue[MapWidth, MapHeight];
@@ -234,7 +234,7 @@ namespace DynamicReflector
         /// <param name="words">Массив проверяемых символов.</param>
         /// <returns>
         ///     В случае, если какой-либо символ является пробелом или ему подобным, возвращается значение
-        ///     <see langword="true" />, в противном случае возвращается значение <see langword="false" />.
+        ///     <see langword="true" />, в противном случае, возвращается значение <see langword="false" />.
         /// </returns>
         static bool IsNull(char[,] words)
         {
@@ -248,9 +248,9 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Распознаёт указанную карту в соответствии с указанным шаблоном.
+        ///     Распознаёт указанную карту, в соответствии с указанным шаблоном.
         ///     В случае нахождения результатов, возвращает карту, составленную из тех карт, названия которых были указаны в
-        ///     параметре matrix, в противном случае возвращает значение <see langword="null" />.
+        ///     параметре matrix, в противном случае, возвращает значение <see langword="null" />.
         /// </summary>
         /// <param name="proc">
         ///     Карта, которую требуется распознать. Её размеры должны соответствовать значению свойств
@@ -263,8 +263,8 @@ namespace DynamicReflector
         ///     <see cref="ProcessorHeight" /> <see langword="/" /> <see cref="MapHeight" />.
         /// </param>
         /// <returns>
-        ///     В случае нахождения результатов возвращает карту, составленную из тех карт, названия которых были указаны в
-        ///     параметре matrix, в противном случае возвращает значение <see langword="null" />.
+        ///     В случае нахождения результатов, возвращает карту, составленную из тех карт, названия которых были указаны в
+        ///     параметре matrix. В противном случае, возвращает значение <see langword="null" />.
         /// </returns>
         public Processor Push(Processor proc, char[,] matrix)
         {
