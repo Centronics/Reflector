@@ -19,37 +19,29 @@ namespace DynamicReflector
         readonly Dictionary<char, Processor> _processors = new Dictionary<char, Processor>();
 
         /// <summary>
-        ///     Процессы, которые будут происходить вне зависимости друг от друга.
+        ///     Предназначены для процессов распознавания, которые будут происходить параллельно.
         /// </summary>
         readonly ProcessorContainer[,] _processorContainers;
 
         /// <summary>
-        ///     Инициализирует текущий экземпляр класса, добавляя указанные карты в коллекцию класса, создавая её копию. Массив
-        ///     <see cref="ProcessorContainer" /> не может быть пустым или равен <see langword="null" />.
-        ///     Производится проверка на отсутствие карт с одинаковыми значениями свойств <see cref="Processor.Tag" />, также
-        ///     необходимо, чтобы все объекты <see cref="ProcessorContainer" /> были одинакового размера.
-        ///     Количество карт в объектах <see cref="ProcessorContainer" /> должно быть не менее двух, а их свойства
-        ///     <see cref="Processor.Tag" /> состояли не более, чем из одного символа.
-        ///     Объекты <see cref="ProcessorContainer" /> не могут быть равны <see langword="null" />.
+        ///     Инициализирует текущий экземпляр класса, добавляя указанные карты в коллекцию класса, создавая её копию.
+        ///     Проверяет, чтобы все <see cref="ProcessorContainer" /> были одного размера, и отсутствовали карты с одинаковыми значениями свойств <see cref="Processor.Tag" />.
+        ///     Количество карт в каждом массиве <see cref="ProcessorContainer" /> должно быть не менее двух, а их свойства <see cref="Processor.Tag" /> состояли из одного символа.
         /// </summary>
         /// <param name="processors">Карты, которые требуется распознать.</param>
         public Reflector(ProcessorContainer[,] processors)
         {
-            if (!IsOneSize(processors))
-                throw new ArgumentException(
-                    $"{nameof(Reflector)}: Искомые карты не прошли проверку на размер и/или количество карт в массиве, а также на значение null или значение свойства {nameof(Processor.Tag)}.",
-                    nameof(processors));
-            int lx = processors.GetLength(0), ly = processors.GetLength(1);
-            _processorContainers = new ProcessorContainer[lx, ly];
-            for (int y = 0; y < ly; y++)
-                for (int x = 0; x < lx; x++)
-                {
-                    ProcessorContainer pc = processors[x, y];
-                    _processorContainers[x, y] = CopyContainer(pc);
-                    AddToCache(pc);
-                }
-            MapHeight = processors[0, 0].Height;
+            CheckContainers(processors);
+
+            int mx = processors.GetLength(0), my = processors.GetLength(1);
+            _processorContainers = new ProcessorContainer[mx, my];
+
+            for (int y = 0; y < my; y++)
+                for (int x = 0; x < mx; x++)
+                    AddToCache(_processorContainers[x, y] = CopyContainer(processors[x, y]));
+
             MapWidth = processors[0, 0].Width;
+            MapHeight = processors[0, 0].Height;
         }
 
         /// <summary>
@@ -117,76 +109,48 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Выполняет проверку указанного массива объектов <see cref="ProcessorContainer" /> без их изменения.
-        ///     Необходимо, чтобы все объекты <see cref="ProcessorContainer" /> были одинакового размера. Массив
-        ///     <see cref="ProcessorContainer" /> не может быть пустым или равен <see langword="null" />.
-        ///     Количество карт в каждом объекте <see cref="ProcessorContainer" /> должно быть не менее двух, а их свойства
-        ///     <see cref="Processor.Tag" /> состояли не более, чем из одного символа.
-        ///     Объекты <see cref="ProcessorContainer" /> не могут быть равны <see langword="null" />.
+        ///     Проверяет, чтобы все <see cref="ProcessorContainer" /> были одного размера.
+        ///     Количество карт в каждом массиве <see cref="ProcessorContainer" /> должно быть не менее двух, а их свойства <see cref="Processor.Tag" /> состояли из одного символа.
         /// </summary>
         /// <param name="processors">Проверяемые карты.</param>
-        /// <returns>
-        ///     В случае успеха, возвращает значение <see langword="true" />, в противном случае, возвращает значение
-        ///     <see langword="false" />.
-        /// </returns>
-        static bool IsOneSize(ProcessorContainer[,] processors)
+        static void CheckContainers(ProcessorContainer[,] processors)
         {
             if (processors == null)
                 throw new ArgumentNullException(nameof(processors),
-                    $"{nameof(IsOneSize)}: Проверяемые карты отсутствуют (null).");
+                    $"{nameof(CheckContainers)}: Проверяемые карты отсутствуют (null).");
             if (processors.GetLength(0) <= 0)
-                throw new ArgumentException($"{nameof(IsOneSize)}: Массив проверяемых карт пустой (ось X).",
+                throw new ArgumentException($"{nameof(CheckContainers)}: Массив проверяемых карт пустой (ось X).",
                     nameof(processors));
             if (processors.GetLength(1) <= 0)
-                throw new ArgumentException($"{nameof(IsOneSize)}: Массив проверяемых карт пустой (ось Y).",
+                throw new ArgumentException($"{nameof(CheckContainers)}: Массив проверяемых карт пустой (ось Y).",
                     nameof(processors));
             ProcessorContainer fpc = processors[0, 0];
             if (fpc == null)
                 throw new ArgumentNullException(nameof(processors),
-                    $"{nameof(IsOneSize)}: Первый проверяемый массив карт равен null.");
+                    $"{nameof(CheckContainers)}: Первый проверяемый массив карт равен null.");
             if (fpc.Count < 2)
                 throw new ArgumentException(
-                    $"{nameof(IsOneSize)}: В первом проверяемом массиве менее двух карт ({fpc.Count}).",
+                    $"{nameof(CheckContainers)}: В первом проверяемом массиве менее двух карт ({fpc.Count}).",
                     nameof(processors));
-            int cx = fpc.Width;
-            int cy = fpc.Height;
             for (int y = 0, my = processors.GetLength(1); y < my; y++)
                 for (int x = 0, mx = processors.GetLength(0); x < mx; x++)
                 {
                     ProcessorContainer pc = processors[x, y];
                     if (pc == null)
                         throw new ArgumentNullException(nameof(processors),
-                            $"{nameof(IsOneSize)}: Обнаружен контейнер, равный null.");
+                            $"{nameof(CheckContainers)}: Обнаружен контейнер, равный null.");
                     if (pc.Count < 2)
                         throw new ArgumentException(
-                            $"{nameof(IsOneSize)}: Обнаружен контейнер, в котором менее двух карт ({pc.Count}).",
+                            $"{nameof(CheckContainers)}: Обнаружен контейнер, в котором менее двух карт ({pc.Count}).",
                             nameof(processors));
                     for (int k = 0; k < pc.Count; k++)
                         if (pc[k].Tag.Length != 1)
                             throw new ArgumentException(
-                                $"{nameof(IsOneSize)}: Обнаружен контейнер, в котором название карты состоит более или менее, чем из одного символа ({pc[k].Tag.Length}): ({pc[k].Tag}).",
+                                $"{nameof(CheckContainers)}: Обнаружен контейнер ({x}, {y}), в котором название карты состоит более или менее, чем из одного символа ({pc[k].Tag.Length}): ({pc[k].Tag}).",
                                 nameof(processors));
-                    if (pc.Width != cx || pc.Height != cy)
-                        return false;
+                    if (pc.Width != fpc.Width || pc.Height != fpc.Height)
+                        throw new ArgumentException($"{nameof(CheckContainers)}: Проверяемые карты не прошли проверку размера.", nameof(processors));
                 }
-            return true;
-        }
-
-        /// <summary>
-        ///     В случае нахождения карты с указанным названием, возвращает её.
-        ///     Название не может состоять из символа пробела или ему подобных.
-        /// </summary>
-        /// <param name="tag">Название карты, которую необходимо выбрать.</param>
-        /// <returns>
-        ///     В случае нахождения карты с указанным названием, возвращает её. В противном случае, выбрасывает исключение
-        ///     <see cref="ArgumentNullException" />.
-        /// </returns>
-        Processor GetMapByName(char tag)
-        {
-            if (char.IsWhiteSpace(tag))
-                throw new ArgumentNullException(nameof(tag),
-                    $"{nameof(GetMapByName)}: Название карты должно состоять из любых значимых символов ({tag}).");
-            return _processors[char.ToUpper(tag)];
         }
 
         /// <summary>
@@ -226,25 +190,6 @@ namespace DynamicReflector
                 for (int cx = x, x1 = 0, mx = x + MapWidth; cx < mx; cx++, x1++)
                     sv[x1, y1] = processor[cx, cy];
             return sv;
-        }
-
-        /// <summary>
-        ///     Выполняет проверку каждого символа на то, является ли он пробелом или ему подобным.
-        /// </summary>
-        /// <param name="words">Массив проверяемых символов.</param>
-        /// <returns>
-        ///     В случае, если какой-либо символ является пробелом или ему подобным, возвращается значение
-        ///     <see langword="true" />, в противном случае, возвращается значение <see langword="false" />.
-        /// </returns>
-        static bool IsNull(char[,] words)
-        {
-            if (words == null || words.Length == 0)
-                return true;
-            for (int y = 0, my = words.GetLength(1); y < my; y++)
-                for (int x = 0, mx = words.GetLength(0); x < mx; x++)
-                    if (char.IsWhiteSpace(words[x, y]))
-                        return true;
-            return false;
         }
 
         /// <summary>
@@ -289,10 +234,6 @@ namespace DynamicReflector
                 throw new ArgumentException(
                     $"{nameof(Push)}: Шаблон распознавания не соответствует входной карте по высоте: ({matrix.GetLength(1) * MapHeight}) против ({proc.Height}).",
                     nameof(matrix));
-            if (IsNull(matrix))
-                throw new ArgumentException(
-                    $"{nameof(Push)}: Какой-либо элемент шаблона распознавания равен пробелу и ему подобному.",
-                    nameof(matrix));
             if (!ResearchByPieces(proc, matrix))
                 return null;
             int mx = _processorContainers.GetLength(0);
@@ -300,7 +241,7 @@ namespace DynamicReflector
             Processor[,] processors = new Processor[mx, my];
             for (int y = 0; y < my; y++)
                 for (int x = 0; x < mx; x++)
-                    processors[x, y] = GetMapByName(matrix[x, y]);
+                    processors[x, y] = _processors[char.ToUpper(matrix[x, y])];
             return new Processor(MergeMap(processors), proc.Tag);
         }
 
