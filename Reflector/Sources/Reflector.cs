@@ -8,10 +8,9 @@ using Processor = DynamicParser.Processor;
 namespace DynamicReflector
 {
     /// <summary>
-    ///     Синхронизирует несколькие параллельные процессы, каждый из которых будет выполнять свой запрос вне зависимости от
-    ///     других процессов.
+    ///     Позволяет распознать карту по частям, в соответствии с указанным запросом, и создать новую, из распознанных карт.
     /// </summary>
-    public class Reflector
+    public sealed class Reflector
     {
         /// <summary>
         ///     Карты для выборки результатов распознавания.
@@ -19,7 +18,7 @@ namespace DynamicReflector
         readonly Dictionary<char, Processor> _processors = new Dictionary<char, Processor>();
 
         /// <summary>
-        ///     Предназначены для процессов распознавания, которые будут происходить параллельно.
+        ///     Предназначен для процессов распознавания, которые будут происходить параллельно, в процессе выполнения запроса.
         /// </summary>
         readonly ProcessorContainer[,] _processorContainers;
 
@@ -80,7 +79,7 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Добавляет указанные карты в коллекцию, проверяя их на предмет совпадающих значений свойств <see cref="Processor.Tag" />.
+        ///     Добавляет указанные карты в коллекцию, проверяя их на предмет совпадающих первых букв значений свойств <see cref="Processor.Tag" />.
         ///     Для ускорения поиска, добавление карт производится в общую коллекцию.
         /// </summary>
         /// <param name="pc">Коллекция добавляемых карт.</param>
@@ -154,12 +153,12 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Объединяет указанные карты в единую карту, в соответствии с расположением карт в указанном массиве.
-        ///     При этом важно, чтобы все указанные карты были одного размера.
+        ///     Объединяет карты в единую карту, в соответствии с расположением карт в указанном массиве.
+        ///     При этом важно, чтобы все указанные карты были одного размера (<see cref="MapWidth"/>, <see cref="MapHeight"/>).
         ///     Карты со значением <see langword="null" /> должны отсутствовать.
         /// </summary>
         /// <param name="processors">Карты, которые необходимо объединить.</param>
-        /// <returns>Возвращает итоговую карту в виде массива <see cref="SignValue" />.</returns>
+        /// <returns>Возвращает итоговую карту в виде массива <see cref="SignValue" />[,].</returns>
         SignValue[,] MergeMap(Processor[,] processors)
         {
             int mx = ProcessorWidth, my = ProcessorHeight;
@@ -193,48 +192,48 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Распознаёт указанную карту, в соответствии с указанным шаблоном.
-        ///     В случае нахождения результатов, возвращает карту, составленную из тех карт, названия которых были указаны в
-        ///     параметре matrix, в противном случае, возвращает значение <see langword="null" />.
+        ///     Распознаёт указанную карту в соответствии с запросом.
+        ///     В случае выполнения запроса, возвращает карту, составленную из карт, названия которых были указаны в
+        ///     параметре <see cref="matrix"/>, в противном случае, возвращает значение <see langword="null" />.
         /// </summary>
-        /// <param name="proc">
+        /// <param name="processor">
         ///     Карта, которую требуется распознать. Её размеры должны соответствовать значению свойств
         ///     <see cref="ProcessorWidth" /> и <see cref="ProcessorHeight" />.
         /// </param>
         /// <param name="matrix">
-        ///     Шаблон распознавания. Его размеры (по ширине и высоте) равны размерам изначального массива
+        ///     Запрос для распознавания. Его размеры должны быть равны размерам изначального массива
         ///     <see cref="ProcessorContainer" />, подаваемого на вход конструктора.
         ///     Эти размеры вычисляются как <see cref="ProcessorWidth" /> <see langword="/" /> <see cref="MapWidth" /> и
         ///     <see cref="ProcessorHeight" /> <see langword="/" /> <see cref="MapHeight" />.
         /// </param>
         /// <returns>
-        ///     В случае нахождения результатов, возвращает карту, составленную из тех карт, названия которых были указаны в
-        ///     параметре matrix. В противном случае, возвращает значение <see langword="null" />.
+        ///     В случае выполнения запроса, возвращает карту, составленную из карт, названия которых были указаны в
+        ///     параметре <see cref="matrix"/>, в противном случае, возвращает значение <see langword="null" />.
         /// </returns>
-        public Processor Push(Processor proc, char[,] matrix)
+        public Processor Push(Processor processor, char[,] matrix)
         {
-            if (proc == null)
-                throw new ArgumentNullException(nameof(proc), $"{nameof(Push)}: Распознаваемая карта равна null.");
-            if (proc.Width != ProcessorWidth)
+            if (processor == null)
+                throw new ArgumentNullException(nameof(processor), $"{nameof(Push)}: Распознаваемая карта равна null.");
+            if (processor.Width != ProcessorWidth)
                 throw new ArgumentException(
-                    $"{nameof(Push)}: Распознаваемая карта не соответствует по ширине: ({proc.Width}) против ({ProcessorWidth}).",
-                    nameof(proc));
-            if (proc.Height != ProcessorHeight)
+                    $"{nameof(Push)}: Распознаваемая карта не соответствует по ширине: ({processor.Width}) против ({ProcessorWidth}).",
+                    nameof(processor));
+            if (processor.Height != ProcessorHeight)
                 throw new ArgumentException(
-                    $"{nameof(Push)}: Распознаваемая карта не соответствует по высоте: ({proc.Height}) против ({ProcessorHeight}).",
-                    nameof(proc));
+                    $"{nameof(Push)}: Распознаваемая карта не соответствует по высоте: ({processor.Height}) против ({ProcessorHeight}).",
+                    nameof(processor));
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix),
-                    $"{nameof(Push)}: Шаблон распознавания отсутствует (null).");
-            if (matrix.GetLength(0) * MapWidth != proc.Width)
+                    $"{nameof(Push)}: Запрос для распознавания отсутствует (null).");
+            if (matrix.GetLength(0) * MapWidth != processor.Width)
                 throw new ArgumentException(
-                    $"{nameof(Push)}: Шаблон распознавания не соответствует входной карте по ширине: ({matrix.GetLength(0) * MapWidth}) против ({proc.Width}).",
+                    $"{nameof(Push)}: Запрос для распознавания не соответствует входной карте по ширине: ({matrix.GetLength(0) * MapWidth}) против ({processor.Width}).",
                     nameof(matrix));
-            if (matrix.GetLength(1) * MapHeight != proc.Height)
+            if (matrix.GetLength(1) * MapHeight != processor.Height)
                 throw new ArgumentException(
-                    $"{nameof(Push)}: Шаблон распознавания не соответствует входной карте по высоте: ({matrix.GetLength(1) * MapHeight}) против ({proc.Height}).",
+                    $"{nameof(Push)}: Запрос для распознавания не соответствует входной карте по высоте: ({matrix.GetLength(1) * MapHeight}) против ({processor.Height}).",
                     nameof(matrix));
-            if (!ResearchByPieces(proc, matrix))
+            if (!ResearchByQuery(processor, matrix))
                 return null;
             int mx = _processorContainers.GetLength(0);
             int my = _processorContainers.GetLength(1);
@@ -242,17 +241,17 @@ namespace DynamicReflector
             for (int y = 0; y < my; y++)
                 for (int x = 0; x < mx; x++)
                     processors[x, y] = _processors[char.ToUpper(matrix[x, y])];
-            return new Processor(MergeMap(processors), proc.Tag);
+            return new Processor(MergeMap(processors), processor.Tag);
         }
 
         /// <summary>
-        /// Исследует указанную карту по частям, применяя к ней указанный запрос.
-        /// Если в каком-либо запросе происходит ошибка его выполнения, процесс завершается с результатом <see langword="false"/>.
+        /// Находит на заданной карте указанные в запросе карты.
+        /// Если хотя бы одна запрашиваемая карта не распознается, поиск завершится с отрицательным результатом.
         /// </summary>
-        /// <param name="proc">Карта, которую требуется исследовать.</param>
-        /// <param name="matrix">Названия карт, которые требуется найти на указанной карте.</param>
-        /// <returns>В случае успешного выполнения запроса возвращается значение <see langword="true"/>, в противном случае - <see langword="false"/>.</returns>
-        bool ResearchByPieces(Processor proc, char[,] matrix)
+        /// <param name="processor">Карта, на которой осуществляется поиск.</param>
+        /// <param name="matrix">Запрос, состоящий из первых букв названий карт, которые требуется найти.</param>
+        /// <returns>В случае успеха возвращается значение <see langword="true"/>, в противном случае - <see langword="false"/>.</returns>
+        bool ResearchByQuery(Processor processor, char[,] matrix)
         {
             Exception exThrown = null;
             ParallelLoopResult result = Parallel.For(0, _processorContainers.Length, (k, state) =>
@@ -261,13 +260,13 @@ namespace DynamicReflector
                 {
                     int mx = _processorContainers.GetLength(0);
                     int x = k % mx, y = k / mx;
-                    SignValue[,] mapPiece = GetMapPiece(proc, x * MapWidth, y * MapHeight);
+                    SignValue[,] mapPiece = GetMapPiece(processor, x * MapWidth, y * MapHeight);
                     if (state.IsStopped)
                         return;
-                    Processor processor = new Processor(mapPiece, proc.Tag);
+                    Processor processorPiece = new Processor(mapPiece, processor.Tag);
                     if (state.IsStopped)
                         return;
-                    SearchResults searchResults = processor.GetEqual(_processorContainers[x, y]);
+                    SearchResults searchResults = processorPiece.GetEqual(_processorContainers[x, y]);
                     if (state.IsStopped)
                         return;
                     if (!searchResults.FindRelation(matrix[x, y].ToString()))

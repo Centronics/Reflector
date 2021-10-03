@@ -7,33 +7,25 @@ using DynamicParser;
 namespace DynamicReflector
 {
     /// <summary>
-    ///     Позволяет распознавать карту с помощью всех возможных вариантов запроса.
-    ///     Присутствует генератор запросов. Этот класс можно сравнить с компьютером, в котором присутствует тактовый
-    ///     генератор.
-    ///     Этот класс реализует функциональность тактового генератора, формируя запросы, которые обрабатываются классом
-    ///     <see cref="Reflector" />.
-    ///     Класс <see cref="Reflector" /> является остальной частью компьютера, состоящей из микросхем, которые срабатывают на
-    ///     импульсы от генератора.
+    ///     Позволяет распознавать карту с помощью различных вариантов запроса.
+    ///     Этот класс реализует функциональность генератора запросов, формируя запросы, которые обрабатываются классом <see cref="Reflector" />.
     /// </summary>
-    public class Reflection
+    public sealed class Reflection
     {
         /// <summary>
-        ///     Содержит варианты разбора приходящих карт. Включает в себя все возможные комбинации запросов для разбора, которые
-        ///     используются в методе <see cref="Reflector.Push" />.
+        ///     Включает в себя все возможные запросы для разбора указанной карты, используется для вызова метода <see cref="Reflector.Push" />.
         /// </summary>
-        char[][,] Queries { get; }
+        char[][,] Matrixes { get; }
 
         /// <summary>
-        ///     Предназначен для распознавания указанной карты. Каждый элемент массива принимает свой запрос и отрабатывает его в
-        ///     параллельном режиме, независимо от других.
+        ///     Предназначен для распознавания указанной карты.
+        ///     Каждый элемент массива принимает свой запрос, и отрабатывает его в параллельном режиме.
+        ///     Используется в методе <see cref="Push" />.
         /// </summary>
-        Reflector[] Reflections { get; }
+        Reflector[] Reflectors { get; }
 
         /// <summary>
-        ///     Инициализирует текущий экземпляр класса, инициализируя внутренние объекты <see cref="Reflector" /> для
-        ///     распознавания указанных карт.
-        ///     Остальные правила те же, что и для класса <see cref="Reflector" />, т.к. этот класс использует
-        ///     его.
+        ///     Инициализирует внутренние объекты <see cref="Reflector" /> для распознавания указанных карт.
         /// </summary>
         /// <param name="processors">Карты, которые требуется узнать на входной карте.</param>
         public Reflection(ProcessorContainer[,] processors)
@@ -47,10 +39,9 @@ namespace DynamicReflector
             if (processors.GetLength(1) <= 0)
                 throw new ArgumentException($"{nameof(Reflection)}: Массив искомых карт пустой (ось Y).",
                     nameof(processors));
-            Queries = Matrixes(processors).ToArray();
-            Reflections = new Reflector[Queries.Length];
-            for (int k = 0; k < Reflections.Length; k++)
-                Reflections[k] = new Reflector(processors);
+            Reflectors = new Reflector[(Matrixes = GetMatrixes(processors).ToArray()).Length];
+            for (int k = 0; k < Reflectors.Length; k++)
+                Reflectors[k] = new Reflector(processors);
             MapWidth = processors[0, 0].Width * processors.GetLength(0);
             MapHeight = processors[0, 0].Height * processors.GetLength(1);
         }
@@ -70,66 +61,60 @@ namespace DynamicReflector
         ///     пустой массив, в случае их отсутствия.
         ///     Каждый запрос выполняется параллельно, и никак не влияет на другие.
         /// </summary>
-        /// <param name="proc">Карта, которую требуется распознать.</param>
+        /// <param name="processor">Карта, которую требуется распознать.</param>
         /// <returns>
         ///     Возвращает варианты распознавания (восприятия) одной и той же карты, путём подачи на неё различных запросов,
         ///     или пустой массив, в случае их отсутствия.
         /// </returns>
-        public IEnumerable<Processor> Push(Processor proc)
+        public IEnumerable<Processor> Push(Processor processor)
         {
-            if (proc == null)
-                throw new ArgumentNullException(nameof(proc), $"{nameof(Push)}: Распознаваемая карта равна null.");
-            if (proc.Width != MapWidth)
+            if (processor == null)
+                throw new ArgumentNullException(nameof(processor), $"{nameof(Push)}: Распознаваемая карта равна null.");
+            if (processor.Width != MapWidth)
                 throw new ArgumentException(
-                    $"{nameof(Push)}: Распознаваемая карта не соответствует по ширине: ({proc.Width}), должно быть ({MapWidth}).",
-                    nameof(proc));
-            if (proc.Height != MapHeight)
+                    $"{nameof(Push)}: Распознаваемая карта не соответствует по ширине: ({processor.Width}), должно быть ({MapWidth}).",
+                    nameof(processor));
+            if (processor.Height != MapHeight)
                 throw new ArgumentException(
-                    $"{nameof(Push)}: Распознаваемая карта не соответствует по высоте: ({proc.Height}), должно быть ({MapHeight}).",
-                    nameof(proc));
-            string errString = string.Empty, errStopped = string.Empty;
-            bool exThrown = false, exStopped = false;
-            Processor[] result = new Processor[Reflections.Length];
-            Parallel.For(0, Queries.Length, (i, state) =>
+                    $"{nameof(Push)}: Распознаваемая карта не соответствует по высоте: ({processor.Height}), должно быть ({MapHeight}).",
+                    nameof(processor));
+            
+            Processor[] result = new Processor[Reflectors.Length];
+
+            Exception exThrown = null;
+            Parallel.For(0, Matrixes.Length, (i, state) =>
             {
                 try
                 {
-                    result[i] = Reflections[i].Push(proc, Queries[i]);
+                    result[i] = Reflectors[i].Push(processor, Matrixes[i]);
                 }
                 catch (Exception ex)
                 {
-                    try
-                    {
-                        errString = ex.Message;
-                        exThrown = true;
-                        state.Stop();
-                    }
-                    catch (Exception ex1)
-                    {
-                        errStopped = ex1.Message;
-                        exStopped = true;
-                    }
+                    state.Stop();
+                    exThrown = ex;
                 }
             });
-            if (exThrown)
-                throw new Exception(exStopped ? $@"{errString}{Environment.NewLine}{errStopped}" : errString);
+
+            if (exThrown != null)
+                throw exThrown;
+
             return result.Where(r => r != null).Distinct(new ProcessorSame());
         }
 
         /// <summary>
-        ///     Возвращает все варианты запросов для распознавания какой-либо карты.
+        ///     Возвращает все возможные варианты запросов для распознавания какой-либо карты.
         /// </summary>
         /// <param name="processors">Массив карт для чтения первых символов их названий, остальные символы игнорируются.</param>
-        /// <returns>Возвращает все варианты запросов для распознавания какой-либо карты.</returns>
-        static IEnumerable<char[,]> Matrixes(ProcessorContainer[,] processors)
+        /// <returns>Возвращает все возможные варианты запросов для распознавания какой-либо карты.</returns>
+        static IEnumerable<char[,]> GetMatrixes(ProcessorContainer[,] processors)
         {
             if (processors == null)
-                throw new ArgumentNullException(nameof(processors), $"{nameof(Matrixes)}: Массив карт равен null.");
+                throw new ArgumentNullException(nameof(processors), $"{nameof(GetMatrixes)}: Массив карт равен null.");
             int mx = processors.GetLength(0), my = processors.GetLength(1);
             if (mx <= 0)
-                throw new ArgumentException($"{nameof(Matrixes)}: Массив карт пустой (ось X).", nameof(processors));
+                throw new ArgumentException($"{nameof(GetMatrixes)}: Массив карт пустой (ось X).", nameof(processors));
             if (my <= 0)
-                throw new ArgumentException($"{nameof(Matrixes)}: Массив карт пустой (ось Y).", nameof(processors));
+                throw new ArgumentException($"{nameof(GetMatrixes)}: Массив карт пустой (ось Y).", nameof(processors));
             int[] count = new int[processors.Length];
             do
             {
@@ -140,7 +125,7 @@ namespace DynamicReflector
                     ProcessorContainer pc = processors[x, y];
                     if (pc == null)
                         throw new ArgumentNullException(nameof(processors),
-                            $"{nameof(Matrixes)}: Элемент массива карт отсутствует (null).");
+                            $"{nameof(GetMatrixes)}: Элемент массива карт отсутствует (null).");
                     ch[x, y] = pc[count[cy * mx + cx]].Tag[0];
                 }
                 yield return ch;
@@ -148,7 +133,7 @@ namespace DynamicReflector
         }
 
         /// <summary>
-        ///     Увеличивает значение младших разрядов счётчика букв, если это возможно.
+        ///     Увеличивает значение младших разрядов счётчика, если это возможно.
         ///     Если увеличение было произведено, возвращается значение <see langword="true" />, в противном случае -
         ///     <see langword="false" />.
         /// </summary>
@@ -182,7 +167,8 @@ namespace DynamicReflector
             for (int k = count.Length - 1; k >= 0; k--)
             {
                 int cx = k % mx, cy = k / mx, ix = mx - (cx + 1), iy = my - (cy + 1);
-                if (count[k] >= processors[ix, iy].Count - 1) continue;
+                if (count[k] >= processors[ix, iy].Count - 1)
+                    continue;
                 count[k]++;
                 for (int x = k + 1; x < count.Length; x++)
                     count[x] = 0;
