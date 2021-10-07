@@ -15,14 +15,14 @@ namespace DynamicReflector
         /// <summary>
         ///     Включает в себя все возможные запросы для разбора указанной карты, используется для вызова метода <see cref="Reflector.Push" />.
         /// </summary>
-        char[][,] Matrixes { get; }
+        readonly char[][,] _matrixes;
 
         /// <summary>
         ///     Предназначен для распознавания указанной карты.
         ///     Каждый элемент массива принимает свой запрос, и отрабатывает его в параллельном режиме.
         ///     Используется в методе <see cref="Push" />.
         /// </summary>
-        Reflector[] Reflectors { get; }
+        readonly Reflector[] _reflectors;
 
         /// <summary>
         ///     Инициализирует внутренние объекты <see cref="Reflector" /> для распознавания указанных карт.
@@ -39,9 +39,9 @@ namespace DynamicReflector
             if (processors.GetLength(1) <= 0)
                 throw new ArgumentException($"{nameof(Reflection)}: Массив искомых карт пустой (ось Y).",
                     nameof(processors));
-            Reflectors = new Reflector[(Matrixes = GetMatrixes(processors).ToArray()).Length];
-            for (int k = 0; k < Reflectors.Length; k++)
-                Reflectors[k] = new Reflector(processors);
+            _reflectors = new Reflector[(_matrixes = GetMatrixes(processors).ToArray()).Length];
+            for (int k = 0; k < _reflectors.Length; k++)
+                _reflectors[k] = new Reflector(processors);
             MapWidth = processors[0, 0].Width * processors.GetLength(0);
             MapHeight = processors[0, 0].Height * processors.GetLength(1);
         }
@@ -78,15 +78,15 @@ namespace DynamicReflector
                 throw new ArgumentException(
                     $"{nameof(Push)}: Распознаваемая карта не соответствует по высоте: ({processor.Height}), должно быть ({MapHeight}).",
                     nameof(processor));
-            
-            Processor[] result = new Processor[Reflectors.Length];
+
+            Processor[] result = new Processor[_reflectors.Length];
 
             Exception exThrown = null;
-            Parallel.For(0, Matrixes.Length, (i, state) =>
+            Parallel.For(0, _matrixes.Length, (i, state) =>
             {
                 try
                 {
-                    result[i] = Reflectors[i].Push(processor, Matrixes[i]);
+                    result[i] = _reflectors[i].Push(processor, _matrixes[i]);
                 }
                 catch (Exception ex)
                 {
@@ -120,14 +120,14 @@ namespace DynamicReflector
             {
                 char[,] ch = new char[mx, my];
                 for (int y = 0, cy = my - 1; y < my; y++, cy--)
-                for (int x = 0, cx = mx - 1; x < mx; x++, cx--)
-                {
-                    ProcessorContainer pc = processors[x, y];
-                    if (pc == null)
-                        throw new ArgumentNullException(nameof(processors),
-                            $"{nameof(GetMatrixes)}: Элемент массива карт отсутствует (null).");
-                    ch[x, y] = pc[count[cy * mx + cx]].Tag[0];
-                }
+                    for (int x = 0, cx = mx - 1; x < mx; x++, cx--)
+                    {
+                        ProcessorContainer pc = processors[x, y];
+                        if (pc == null)
+                            throw new ArgumentNullException(nameof(processors),
+                                $"{nameof(GetMatrixes)}: Элемент массива карт отсутствует (null).");
+                        ch[x, y] = pc[count[cy * mx + cx]].Tag[0];
+                    }
                 yield return ch;
             } while (ChangeCount(count, processors));
         }
@@ -201,9 +201,9 @@ namespace DynamicReflector
                 if (p1.Height != p2.Height)
                     return false;
                 for (int y = 0; y < p1.Height; y++)
-                for (int x = 0; x < p1.Width; x++)
-                    if (p1[x, y] != p2[x, y])
-                        return false;
+                    for (int x = 0; x < p1.Width; x++)
+                        if (p1[x, y] != p2[x, y])
+                            return false;
                 return true;
             }
 
