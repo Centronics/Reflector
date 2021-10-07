@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using DynamicParser;
 using DynamicProcessor;
 using Processor = DynamicParser.Processor;
@@ -74,15 +75,15 @@ namespace DynamicReflector
             if (_hashProcs.Add(tTag))
                 return p;
 
-            string t = p.Tag;
+            StringBuilder sb = new StringBuilder(p.Tag, 1024);
 
             do
             {
                 tTag += '0';
-                t += '0';
+                sb.Append('0');
             } while (!_hashProcs.Add(tTag));
 
-            return ChangeProcessorTag(p, t);
+            return ChangeProcessorTag(p, sb.ToString());
         }
 
         /// <summary>
