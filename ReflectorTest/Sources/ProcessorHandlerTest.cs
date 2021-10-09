@@ -28,6 +28,19 @@ namespace ReflectorTest
             Assert.AreEqual("ABC", ph.ToString());
         }
 
+        static ProcessorContainer CheckProcessorContainer(ProcessorHandler ph)
+        {
+            ProcessorContainer procs = ph.Processors;
+            Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
+            Assert.AreEqual(1, procs.Count);
+            Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
+            Assert.AreEqual("A", procs[0].Tag);
+            Assert.AreEqual("A", ph.ToString());
+            return procs;
+        }
+
         [TestMethod]
         public void PHTest()
         {
@@ -50,14 +63,9 @@ namespace ReflectorTest
 
             ph.Add(new Processor(new[] { new SignValue(2) }, "A"));
 
-            ProcessorContainer procs = ph.Processors;
-            Assert.AreNotEqual(null, procs);
-            Assert.AreEqual(procs.Width, 1);
-            Assert.AreEqual(procs.Height, 1);
-            Assert.AreEqual(1, procs.Count);
-            Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
-            Assert.AreEqual("A", procs[0].Tag);
-            Assert.AreEqual("A", ph.ToString());
+            ProcessorContainer procs = CheckProcessorContainer(ph);
+            procs.Add(new Processor(new[] { new SignValue(2000) }, "w"));
+            CheckProcessorContainer(ph);
 
             ph.Add(new Processor(new[] { new SignValue(3) }, "b"));
 
