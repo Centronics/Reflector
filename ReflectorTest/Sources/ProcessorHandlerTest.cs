@@ -16,6 +16,8 @@ namespace ReflectorTest
 
             ProcessorContainer procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(3, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -50,6 +52,8 @@ namespace ReflectorTest
 
             ProcessorContainer procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(1, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -59,6 +63,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(2, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -110,6 +116,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(4, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -125,6 +133,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(5, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -142,6 +152,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(6, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -161,6 +173,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(7, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -216,6 +230,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(8, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -239,6 +255,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(9, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -264,6 +282,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(10, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -291,6 +311,8 @@ namespace ReflectorTest
 
             procs = ph.Processors;
             Assert.AreNotEqual(null, procs);
+            Assert.AreEqual(procs.Width, 1);
+            Assert.AreEqual(procs.Height, 1);
             Assert.AreEqual(11, procs.Count);
             Assert.AreEqual(new SignValue(2), procs[0][0, 0]);
             Assert.AreEqual("A", procs[0].Tag);
@@ -320,13 +342,15 @@ namespace ReflectorTest
             Assert.AreNotEqual(null, renameProcessor2);
             Assert.AreEqual("zZz", renameProcessor2.Tag);
             Assert.AreEqual(SignValue.MaxValue, renameProcessor2[0, 0]);
-            Assert.AreEqual(1, renameProcessor2.Length);
+            Assert.AreEqual(1, renameProcessor2.Width);
+            Assert.AreEqual(1, renameProcessor2.Height);
 
             Processor renameProcessor3 = ProcessorHandler.ChangeProcessorTag(new Processor(new[] { SignValue.MaxValue }, "mmM"), "mmM");
             Assert.AreNotEqual(null, renameProcessor3);
             Assert.AreEqual("mmM", renameProcessor3.Tag);
             Assert.AreEqual(SignValue.MaxValue, renameProcessor3[0, 0]);
-            Assert.AreEqual(1, renameProcessor3.Length);
+            Assert.AreEqual(1, renameProcessor3.Width);
+            Assert.AreEqual(1, renameProcessor3.Height);
         }
 
         [TestMethod]
