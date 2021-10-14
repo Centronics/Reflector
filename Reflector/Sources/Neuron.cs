@@ -143,7 +143,7 @@ namespace DynamicReflector
         /// Проверяет запрос на соответствие следующим правилам.
         /// 1) Карта не должна быть <see langword="null" />.
         /// 2) Запрос не может быть пустым, <see langword="null" /> или белым полем.
-        /// 3) Размеры карт должна соответствовать размерам карт, принятом в текущем экземпляре.
+        /// 3) Размеры карт должны соответствовать размерам карт, принятым в текущем экземпляре.
         /// 4) Длина запроса должна быть равна единице.
         /// 5) В запросах не может быть повторений (без учёта регистра).
         /// 6) Содержимое карт не может повторяться.
@@ -151,7 +151,7 @@ namespace DynamicReflector
         /// 8) Названия запрашиваемых карт должны полностью соответствовать тем, что есть в текущем экземпляре.
         /// </summary>
         /// <param name="queries">Пары, содержащие карту и запрос, который необходимо для неё выполнить.</param>
-        void CheckQuery(IEnumerable<(Processor, string queryString)> queries)
+        void CheckQuery(IEnumerable<(Processor, string)> queries)
         {
             Dictionary<int, Processor> chi = new Dictionary<int, Processor>();
             HashSet<char> chs = new HashSet<char>();
@@ -193,7 +193,7 @@ namespace DynamicReflector
         /// Проверка правильности запроса выполняется по следующим правилам.
         /// 1) Карта не должна быть <see langword="null" />.
         /// 2) Запрос не может быть пустым, <see langword="null" /> или белым полем.
-        /// 3) Размеры карт должна соответствовать размерам карт, принятом в текущем экземпляре.
+        /// 3) Размеры карт должны соответствовать размерам карт, принятым в текущем экземпляре.
         /// 4) Длина запроса должна быть равна единице.
         /// 5) В запросах не может быть повторений (без учёта регистра).
         /// 6) Содержимое карт не может повторяться.
@@ -202,17 +202,17 @@ namespace DynamicReflector
         /// </summary>
         /// <param name="queryPairs">Пары, содержащие карту и запрос, который необходимо для неё выполнить.</param>
         /// <returns>Возвращает новый <see cref="Neuron"/>, содержащий новые карты, взятые из результатов выполнения запросов, или <see langword="null" />, в случае ошибки.</returns>
-        public Neuron FindRelation(IEnumerable<(Processor, string query)> queryPairs)
+        public Neuron FindRelation(IEnumerable<(Processor, string)> queryPairs)
         {
             if (queryPairs == null)
                 throw new ArgumentNullException(nameof(queryPairs), "Последовательность запросов равна null.");
-            (Processor, string queryString)[] queries = queryPairs as (Processor, string)[] ?? queryPairs.ToArray();
+            (Processor, string)[] queries = queryPairs as (Processor, string)[] ?? queryPairs.ToArray();
 
             CheckQuery(queries);
 
             Exception exThrown = null;
 
-            ProcessorContainer result = new ProcessorContainer();
+            List<Processor> result = new List<Processor>();
 
             //Parallel.ForEach(queries, ((Processor p, string q), ParallelLoopState state) =>
             foreach ((Processor p, string q) in queries)
@@ -239,7 +239,7 @@ namespace DynamicReflector
             if (exThrown != null)
                 throw exThrown;
 
-            return new Neuron(result);
+            return new Neuron(new ProcessorContainer(result));
         }
 
         /// <summary>
