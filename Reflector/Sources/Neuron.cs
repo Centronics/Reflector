@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DynamicMosaic;
 using DynamicParser;
@@ -92,12 +91,8 @@ namespace DynamicReflector
         /// <returns>Карта с новым значением свойства <see cref="Processor.Tag"/>.</returns>
         static Processor ChangeProcessorTag(Processor processor, string newTag)
         {
-            if (processor == null)
-                throw new ArgumentNullException(nameof(processor), $@"{nameof(ChangeProcessorTag)}: карта равна null.");
             if (processor.Tag == newTag)
                 return processor;
-            if (string.IsNullOrWhiteSpace(newTag))
-                throw new ArgumentException($"{nameof(ChangeProcessorTag)}: \"{nameof(newTag)}\" не может быть пустым или содержать только пробел.", nameof(newTag));
 
             SignValue[,] sv = new SignValue[processor.Width, processor.Height];
             for (int i = 0; i < processor.Width; i++)
@@ -144,31 +139,28 @@ namespace DynamicReflector
         /// 1) Карта не должна быть <see langword="null" />.
         /// 2) Запрос не может быть пустым, <see langword="null" /> или белым полем.
         /// 3) Размеры карт должны соответствовать размерам карт, принятым в текущем экземпляре.
-        /// 4) Длина запроса должна быть равна единице.
-        /// 5) В запросах не может быть повторений (без учёта регистра).
-        /// 6) Содержимое карт не может повторяться.
-        /// 7) Количество запросов должно быть равно количеству карт в текущем экземпляре.
-        /// 8) Названия запрашиваемых карт должны полностью соответствовать тем, что есть в текущем экземпляре.
+        /// 4) В запросах не может быть повторений (без учёта регистра).
+        /// 5) Содержимое карт не может повторяться.
+        /// 6) Количество запросов должно быть равно количеству карт в текущем экземпляре.
+        /// 7) Названия запрашиваемых карт должны полностью соответствовать тем, что есть в текущем экземпляре.
         /// </summary>
         /// <param name="queries">Пары, содержащие карту и запрос, который необходимо для неё выполнить.</param>
-        void CheckQuery(IEnumerable<(Processor, string)> queries)
+        void CheckQuery(IEnumerable<(Processor, char)> queries)
         {
             Dictionary<int, Processor> chi = new Dictionary<int, Processor>();
             HashSet<char> chs = new HashSet<char>();
-            foreach ((Processor p, string q) in queries)
+            foreach ((Processor p, char c) in queries)
             {
                 if (p == null)
                     throw new ArgumentNullException(nameof(queries), "Карта равна null.");
-                if (string.IsNullOrWhiteSpace(q))
+                if (char.IsWhiteSpace(c))
                     throw new ArgumentException("Запрос не может быть пустым, null или белым полем.", nameof(queries));
                 if (p.Size != _mainSize)
                     throw new ArgumentException("Размеры входящих карт должны совпадать с размерами карт в текущем экземпляре.", nameof(queries));
-                if (q.Length != 1)
-                    throw new ArgumentException("Запрос может состоять только из одной буквы.", nameof(queries));
-                if (!chs.Add(char.ToUpper(q[0])))
+                if (!chs.Add(char.ToUpper(c)))
                     throw new ArgumentException("Содержимое запросов не может дублироваться.", nameof(queries));
                 int hash = HashCreator.GetHash(p);
-                if (!chi.TryGetValue(hash, out Processor proc))
+                if (!chi.TryGetValue(hash, out Processor proc))//можно ли реализовать красивее?
                 {
                     chi.Add(hash, p);
                     continue;
@@ -194,19 +186,18 @@ namespace DynamicReflector
         /// 1) Карта не должна быть <see langword="null" />.
         /// 2) Запрос не может быть пустым, <see langword="null" /> или белым полем.
         /// 3) Размеры карт должны соответствовать размерам карт, принятым в текущем экземпляре.
-        /// 4) Длина запроса должна быть равна единице.
-        /// 5) В запросах не может быть повторений (без учёта регистра).
-        /// 6) Содержимое карт не может повторяться.
-        /// 7) Количество запросов должно быть равно количеству карт в текущем экземпляре.
-        /// 8) Названия запрашиваемых карт должны полностью соответствовать тем, что есть в текущем экземпляре.
+        /// 4) В запросах не может быть повторений (без учёта регистра).
+        /// 5) Содержимое карт не может повторяться.
+        /// 6) Количество запросов должно быть равно количеству карт в текущем экземпляре.
+        /// 7) Названия запрашиваемых карт должны полностью соответствовать тем, что есть в текущем экземпляре.
         /// </summary>
         /// <param name="queryPairs">Пары, содержащие карту и запрос, который необходимо для неё выполнить.</param>
         /// <returns>Возвращает новый <see cref="Neuron"/>, содержащий новые карты, взятые из результатов выполнения запросов, или <see langword="null" />, в случае ошибки.</returns>
-        public Neuron FindRelation(IEnumerable<(Processor, string)> queryPairs)
+        public Neuron FindRelation(IEnumerable<(Processor, char)> queryPairs)
         {
             if (queryPairs == null)
                 throw new ArgumentNullException(nameof(queryPairs), "Последовательность запросов равна null.");
-            (Processor, string)[] queries = queryPairs as (Processor, string)[] ?? queryPairs.ToArray();
+            (Processor, char)[] queries = queryPairs as (Processor, char)[] ?? queryPairs.ToArray();
 
             CheckQuery(queries);
 
@@ -215,11 +206,11 @@ namespace DynamicReflector
             List<Processor> result = new List<Processor>();
 
             //Parallel.ForEach(queries, ((Processor p, string q), ParallelLoopState state) =>
-            foreach ((Processor p, string q) in queries)
+            foreach ((Processor p, char c) in queries)
             {
                 try
                 {
-                    Reflex finish = _workReflex.FindRelation(p, q);
+                    Reflex finish = _workReflex.FindRelation(p, c.ToString());
                     //if (state.IsStopped)
                     //return;
 
@@ -227,7 +218,7 @@ namespace DynamicReflector
                         throw new Exception("При выполнении запроса проиошла ошибка - результат отсутствует.");
 
                     lock (result)
-                        result.Add(GetNewProcessor(finish, q[0]));
+                        result.Add(GetNewProcessor(finish, c));
                 }
                 catch (Exception ex)
                 {
