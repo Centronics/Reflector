@@ -950,6 +950,255 @@ namespace ReflectorTest
             }
         }
 
+        static IEnumerable<(Processor, char)> IncorrectQuery43
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "1"), '1');
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "2"), '2');
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "3"), '3');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3338);
+                yield return (new Processor(sv, "4"), '4');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery44
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "1"), '4');
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "2"), '3');
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "3"), '2');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3338);
+                yield return (new Processor(sv, "4"), '1');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery45
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "s1"), '1');
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "r2"), '2');
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "t3"), '3');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3338);
+                yield return (new Processor(sv, "d4"), '4');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery46
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "z1"), '1');
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "x2"), '2');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery47
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3338);
+                yield return (new Processor(sv, "m1"), '1');
+                sv[0, 0] = new SignValue(3339);
+                yield return (new Processor(sv, "n2"), '1');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery48
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3342);
+                yield return (new Processor(sv, "i1"), '3');
+                sv[0, 0] = new SignValue(3343);
+                yield return (new Processor(sv, "o2"), '3');
+                sv[0, 0] = new SignValue(3344);
+                yield return (new Processor(sv, "t3"), '1');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3345);
+                yield return (new Processor(sv, "d4"), '4');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery49
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3342);
+                yield return (new Processor(sv, "i1"), '2');
+                sv[0, 0] = new SignValue(3343);
+                yield return (new Processor(sv, "o2"), '3');
+                sv[0, 0] = new SignValue(3344);
+                yield return (new Processor(sv, "t3"), '3');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3345);
+                yield return (new Processor(sv, "d4"), '4');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery50
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3342);
+                yield return (new Processor(sv, "i1"), '2');
+                sv[0, 0] = new SignValue(3343);
+                yield return (new Processor(sv, "o2"), '3');
+                sv[0, 0] = new SignValue(3344);
+                yield return (new Processor(sv, "t3"), '4');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3345);
+                yield return (new Processor(sv, "d4"), '4');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery51
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3346);
+                yield return (new Processor(sv, "t1"), 'a');
+                sv[0, 0] = new SignValue(3347);
+                yield return (new Processor(sv, "y2"), '3');
+                sv[0, 0] = new SignValue(3348);
+                yield return (new Processor(sv, "u3"), '4');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3349);
+                yield return (new Processor(sv, "i4"), '4');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery52
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3346);
+                yield return (new Processor(sv, "t1"), '2');
+                sv[0, 0] = new SignValue(3347);
+                yield return (new Processor(sv, "y2"), '3');
+                sv[0, 0] = new SignValue(3348);
+                yield return (new Processor(sv, "u3"), '4');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3349);
+                yield return (new Processor(sv, "i4"), 'b');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery53
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(3346);
+                yield return (new Processor(sv, "t1"), 'q');
+                sv[0, 0] = new SignValue(3347);
+                yield return (new Processor(sv, "y2"), 'w');
+                sv[0, 0] = new SignValue(3348);
+                yield return (new Processor(sv, "u3"), 'e');
+                sv[0, 0] = new SignValue();
+                sv[0, 1] = new SignValue(3349);
+                yield return (new Processor(sv, "i4"), 'r');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery54
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(2233);
+                yield return (new Processor(sv, "p1"), '1');
+                sv[0, 0] = new SignValue(3333);
+                yield return (new Processor(sv, "p1"), '2');
+                sv[0, 0] = new SignValue();
+                sv[1, 0] = new SignValue(1111);
+                yield return (new Processor(sv, "p3"), '3');
+                sv[1, 0] = new SignValue();
+                sv[1, 1] = new SignValue(1111);
+                yield return (new Processor(sv, "p4"), '4');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery55
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(2233);
+                yield return (new Processor(sv, "p1"), '2');
+                sv[0, 0] = new SignValue(3333);
+                yield return (new Processor(sv, "p1"), '3');
+                sv[0, 0] = new SignValue();
+                sv[1, 0] = new SignValue(1111);
+                yield return (new Processor(sv, "p3"), '1');
+                sv[1, 0] = new SignValue();
+                sv[1, 1] = new SignValue(1111);
+                yield return (new Processor(sv, "p4"), '4');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery56
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(2233);
+                yield return (new Processor(sv, "p1"), '2');
+                sv[0, 0] = new SignValue(3333);
+                yield return (new Processor(sv, "p1"), '1');
+                sv[0, 0] = new SignValue();
+                sv[1, 0] = new SignValue(1111);
+                yield return (new Processor(sv, "p3"), '4');
+                sv[1, 0] = new SignValue();
+                sv[1, 1] = new SignValue(1111);
+                yield return (new Processor(sv, "p4"), '3');
+            }
+        }
+
+        static IEnumerable<(Processor, char)> IncorrectQuery57
+        {
+            get
+            {
+                SignValue[,] sv = new SignValue[2, 2];
+                sv[0, 0] = new SignValue(2233);
+                yield return (new Processor(sv, "p1"), '4');
+                sv[0, 0] = new SignValue(3333);
+                yield return (new Processor(sv, "p1"), '1');
+                sv[0, 0] = new SignValue();
+                sv[1, 0] = new SignValue(1111);
+                yield return (new Processor(sv, "p3"), '3');
+                sv[1, 0] = new SignValue();
+                sv[1, 1] = new SignValue(1111);
+                yield return (new Processor(sv, "p4"), '2');
+            }
+        }
+
         #endregion //Incorrect
 
         #endregion //Tests
@@ -1080,6 +1329,35 @@ namespace ReflectorTest
                         CheckCurrentState();
                         CheckException(() => parentNeuron.FindRelation(IncorrectQuery42));
                         CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery43));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery44));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery45));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery46));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery47));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery48));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery49));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery50));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery51));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery52));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery53));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery54));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery55));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery56));
+                        CheckCurrentState();
+                        CheckException(() => parentNeuron.FindRelation(IncorrectQuery57));
                     }
                 })
                 { IsBackground = true, Priority = ThreadPriority.AboveNormal, Name = $"Number: {thrIndex}" };
@@ -1107,13 +1385,13 @@ namespace ReflectorTest
         public void NeuronTest2() => CheckNeuronValue(new Neuron(new ProcessorContainer(Processors17.ToArray())), Processors17Result, 2, 2);
 
         [TestMethod]
-        public void NeuronTest3() => CheckNeuronValue(new Neuron(new ProcessorContainer(Processors19.ToArray())), Processors19Result, 2,2);
+        public void NeuronTest3() => CheckNeuronValue(new Neuron(new ProcessorContainer(Processors19.ToArray())), Processors19Result, 2, 2);
 
         [TestMethod]
-        public void NeuronTest4() => CheckNeuronValue(new Neuron(new ProcessorContainer(Processors20.ToArray())), Processors20Result,2,2);
+        public void NeuronTest4() => CheckNeuronValue(new Neuron(new ProcessorContainer(Processors20.ToArray())), Processors20Result, 2, 2);
 
         [TestMethod]
-        public void NeuronTest5() => CheckNeuronValue(new Neuron(new ProcessorContainer(Processors18.ToArray())), Processors18Result,2,2);
+        public void NeuronTest5() => CheckNeuronValue(new Neuron(new ProcessorContainer(Processors18.ToArray())), Processors18Result, 2, 2);
 
         [TestMethod]
         public void NeuronTest6()
@@ -1137,6 +1415,30 @@ namespace ReflectorTest
                 CheckNeuronValue(neuron.FindRelation(CorrectGlobalProcessorQuery), CorrectGlobalProcessorQueryResult, 1, 1);
                 CheckNeuronValue(neuron, ProcessorsForNeuronGlobal, 1, 1);
             }
+        }
+
+        [TestMethod]
+        public void NeuronTest8()
+        {
+            Neuron neuron = new Neuron(new ProcessorContainer(Processors1.ToArray()));
+
+            int exCount = 0;
+            for (int k = 0; k < 10; k++)
+            {
+                try
+                {
+                    neuron.FindRelation(null);
+                }
+                catch (ArgumentNullException)
+                {
+                    exCount++;
+                }
+                CheckNeuronValue(neuron.FindRelation(CorrectQuery2), CorrectQuery2Result, 1, 1);
+                CheckNeuronValue(neuron, Processors1, 1, 1);
+            }
+
+            if (exCount != 10)
+                throw new Exception($@"exCount = {exCount}");
         }
 
         [TestMethod]
