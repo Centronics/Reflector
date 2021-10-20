@@ -29,12 +29,6 @@ namespace DynamicReflector
         readonly HashSet<char> _hashSetOriginalUniqueQuery = new HashSet<char>();
 
         /// <summary>
-        /// Служит для хранения всех присутствующих карт и быстрого доступа к ним.
-        /// Это требуется в случае, когда надо получить оригинальную карту, если новая карта, по причине совпадения содержимого, отсутствует в полученном объекте <see cref="Reflex"/>.
-        /// </summary>
-        readonly Dictionary<char, Processor> _dicProcessors;
-
-        /// <summary>
         /// Хранит размер карт, содержащихся в текущем экземпляре.
         /// Этот размер задаётся при инициализации и является константным.
         /// </summary>
@@ -51,7 +45,6 @@ namespace DynamicReflector
                 throw new ArgumentNullException(nameof(pc), $"{nameof(Neuron)}: Загружаемый контейнер равен null.");
             if (pc.Count < 2)
                 throw new ArgumentException("Количество карт во входном контейнере должно быть два и более.", nameof(pc));
-            _dicProcessors = new Dictionary<char, Processor>(pc.Count);
             _mainSize = new Size(pc.Width, pc.Height);
             _workReflex = new Reflex(new ProcessorContainer(ParseInitData(pc).ToArray()));
         }
@@ -68,16 +61,13 @@ namespace DynamicReflector
             for (int k = 0; k < pc.Count; k++)
             {
                 Processor p = pc[k];
-                char cTag = char.ToUpper(p.Tag[0]);
-                p = ChangeProcessorTag(p, cTag.ToString());
-                if (!_hashSetOriginalUniqueQuery.Add(cTag))
+                if (!_hashSetOriginalUniqueQuery.Add(char.ToUpper(p.Tag[0])))
                     throw new ArgumentException("Требуется, чтобы первые буквы названий карт, были уникальными, без учёта регистра.", nameof(pc));
                 int hash = HashCreator.GetHash(p);
                 if (!chi.TryGetValue(hash, out Processor proc))
                     chi.Add(hash, p);
                 else if (ProcessorCompare(proc, p))
                     throw new ArgumentException("Одинаковое содержимое карт недопустимо.", nameof(pc));
-                _dicProcessors.Add(cTag, p);
                 yield return p;
             }
         }
@@ -118,20 +108,6 @@ namespace DynamicReflector
                     if (p1[i, j] != p2[i, j])
                         return false;
             return true;
-        }
-
-        /// <summary>
-        /// Считывает новую карту из массива результатов или из внутреннего хранилища, в случае отсутствия их в массиве, в соответствии с запросом.
-        /// Запрос должен относиться к одной из карт, содержащейся в текущем экземпляре.
-        /// </summary>
-        /// <param name="finish"><see cref="Reflex"/>, который содержит столько же или на одну карту больше, чем <see cref="_workReflex"/>.</param>
-        /// <param name="query">Запрос символа, который требуется извлечь.</param>
-        /// <returns>Возвращает требуемую карту.</returns>
-        Processor GetNewProcessor(Reflex finish, char query)
-        {
-            query = char.ToUpper(query);
-            Processor result = finish.Count == _workReflex.Count + 1 ? finish[_workReflex.Count] : _dicProcessors[query];
-            return ChangeProcessorTag(result, query.ToString());
         }
 
         /// <summary>
@@ -204,22 +180,13 @@ namespace DynamicReflector
 
             Exception exThrown = null;
 
-            List<Processor> result = new List<Processor>();
-
             //Parallel.ForEach(queries, ((Processor p, string q), ParallelLoopState state) =>
             foreach ((Processor p, char c) in queries)
             {
                 try
                 {
-                    Reflex finish = _workReflex.FindRelation(p, c.ToString());
-                    //if (state.IsStopped)
-                    //return;
-
-                    if (finish == null)
-                        throw new ArgumentException("При выполнении запроса проиошла ошибка - результат отсутствует.", nameof(queryPairs));
-
-                    lock (result)
-                        result.Add(GetNewProcessor(finish, c));
+                    if (_workReflex.FindRelation(p, c.ToString()) == null)
+                        throw new ArgumentException("При выполнении запроса произошла ошибка - результат отсутствует.", nameof(queryPairs));
                 }
                 catch (Exception ex)
                 {
@@ -232,7 +199,7 @@ namespace DynamicReflector
             if (exThrown != null)
                 throw exThrown;
 
-            return new Neuron(new ProcessorContainer(result));
+            return new Neuron(new ProcessorContainer(queries.Select(((Processor p, char c) e) => ChangeProcessorTag(e.p, e.c.ToString())).ToArray()));
         }
 
         /// <summary>

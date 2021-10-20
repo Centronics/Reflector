@@ -286,7 +286,7 @@ namespace ReflectorTest
             {
                 SignValue[,] sv = new SignValue[2, 2];
                 sv[0, 0] = new SignValue(3333);
-                yield return new Processor(sv, "1");
+                yield return new Processor(sv, "10");
                 sv[0, 0] = new SignValue(2222);
                 yield return new Processor(sv, "2");
                 sv[0, 0] = new SignValue(1111);
@@ -322,7 +322,7 @@ namespace ReflectorTest
                 sv[0, 0] = new SignValue(3333);
                 yield return new Processor(sv, "1");
                 sv[0, 0] = new SignValue(2222);
-                yield return new Processor(sv, "2");
+                yield return new Processor(sv, "20");
                 sv[0, 0] = new SignValue(1111);
                 yield return new Processor(sv, "3");
                 sv[0, 0] = new SignValue();
@@ -358,7 +358,7 @@ namespace ReflectorTest
                 sv[0, 0] = new SignValue(2222);
                 yield return new Processor(sv, "2");
                 sv[0, 0] = new SignValue(1111);
-                yield return new Processor(sv, "3");
+                yield return new Processor(sv, "30");
                 sv[0, 0] = new SignValue();
                 sv[0, 1] = new SignValue(1111);
                 yield return new Processor(sv, "4");
@@ -390,12 +390,12 @@ namespace ReflectorTest
                 sv[0, 0] = new SignValue(3333);
                 yield return new Processor(sv, "1");
                 sv[0, 0] = new SignValue(2222);
-                yield return new Processor(sv, "2");
+                yield return new Processor(sv, "20");
                 sv[0, 0] = new SignValue(1111);
                 yield return new Processor(sv, "3");
                 sv[0, 0] = new SignValue();
                 sv[0, 1] = new SignValue(1111);
-                yield return new Processor(sv, "4");
+                yield return new Processor(sv, "40");
             }
         }
 
@@ -452,8 +452,8 @@ namespace ReflectorTest
         {
             get
             {
-                yield return new Processor(new[] { new SignValue(12451382) }, "A");
-                yield return new Processor(new[] { new SignValue(8418581) }, "B");
+                yield return new Processor(new[] { new SignValue(12451382) }, "a");
+                yield return new Processor(new[] { new SignValue(8418581) }, "b");
             }
         }
 
@@ -470,8 +470,8 @@ namespace ReflectorTest
         {
             get
             {
-                yield return new Processor(new[] { new SignValue(12451893) }, "A");
-                yield return new Processor(new[] { new SignValue(8418982) }, "B");
+                yield return new Processor(new[] { new SignValue(12451893) }, "a");
+                yield return new Processor(new[] { new SignValue(8418982) }, "b");
             }
         }
 
