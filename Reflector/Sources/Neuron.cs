@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using DynamicMosaic;
 using DynamicParser;
 using DynamicProcessor;
 using Processor = DynamicParser.Processor;
@@ -18,9 +17,9 @@ namespace DynamicReflector
     public sealed class Neuron
     {
         /// <summary>
-        /// Выполняет запрос на поиск данных и выгрузку текущих данных наружу.
+        /// Служит для выполнения запроса на поиск данных.
         /// </summary>
-        readonly Reflex _workReflex;
+        readonly ProcessorContainer _workProcessorContainer;
 
         /// <summary>
         /// Служит для контроля за уникальностью входных данных.
@@ -46,7 +45,7 @@ namespace DynamicReflector
             if (pc.Count < 2)
                 throw new ArgumentException("Количество карт во входном контейнере должно быть два и более.", nameof(pc));
             _mainSize = new Size(pc.Width, pc.Height);
-            _workReflex = new Reflex(new ProcessorContainer(ParseInitData(pc).ToArray()));
+            _workProcessorContainer = new ProcessorContainer(ParseInitData(pc).ToArray());
         }
 
         /// <summary>
@@ -185,7 +184,7 @@ namespace DynamicReflector
             {
                 try
                 {
-                    if (_workReflex.FindRelation(p, c.ToString()) == null)
+                    if (!p.GetEqual(_workProcessorContainer).FindRelation(c.ToString()))
                         throw new ArgumentException("При выполнении запроса произошла ошибка - результат отсутствует.", nameof(queryPairs));
                 }
                 catch (Exception ex)
@@ -209,8 +208,8 @@ namespace DynamicReflector
         {
             get
             {
-                for (int k = 0; k < _workReflex.Count; k++)
-                    yield return _workReflex[k];
+                for (int k = 0; k < _workProcessorContainer.Count; k++)
+                    yield return _workProcessorContainer[k];
             }
         }
     }

@@ -37,9 +37,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DynamicMosaic">
-      <HintPath>Z:\Documents\ДИС\DynamicMosaic.dll</HintPath>
-    </Reference>
     <Reference Include="DynamicParser">
       <HintPath>Z:\Documents\ДИС\DynamicParser.dll</HintPath>
     </Reference>

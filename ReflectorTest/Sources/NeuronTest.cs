@@ -443,7 +443,7 @@ namespace ReflectorTest
         {
             get
             {
-                yield return (new Processor(new[] { new SignValue(12451382) }, "pA"), 'a');
+                yield return (new Processor(new[] { new SignValue(12451382) }, "pA"), 'A');
                 yield return (new Processor(new[] { new SignValue(8418581) }, "pB"), 'b');
             }
         }
@@ -452,7 +452,7 @@ namespace ReflectorTest
         {
             get
             {
-                yield return new Processor(new[] { new SignValue(12451382) }, "a");
+                yield return new Processor(new[] { new SignValue(12451382) }, "A");
                 yield return new Processor(new[] { new SignValue(8418581) }, "b");
             }
         }
@@ -462,7 +462,7 @@ namespace ReflectorTest
             get
             {
                 yield return (new Processor(new[] { new SignValue(12451893) }, "qA"), 'a');
-                yield return (new Processor(new[] { new SignValue(8418982) }, "qB"), 'b');
+                yield return (new Processor(new[] { new SignValue(8418982) }, "qB"), 'B');
             }
         }
 
@@ -471,7 +471,7 @@ namespace ReflectorTest
             get
             {
                 yield return new Processor(new[] { new SignValue(12451893) }, "a");
-                yield return new Processor(new[] { new SignValue(8418982) }, "b");
+                yield return new Processor(new[] { new SignValue(8418982) }, "B");
             }
         }
 
